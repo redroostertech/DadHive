@@ -135,6 +135,13 @@ extension String {
         }
         return isEqual
     }
+
+    func toDate(_ format: CustomDateFormat = .timeDate) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format.rawValue
+        print(dateFormatter.date(from: self))
+        return dateFormatter.date(from: self) ?? Date()
+    }
 }
 
 //  MARK:- Validation

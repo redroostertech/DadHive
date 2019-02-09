@@ -23,7 +23,8 @@ class CurrentUser {
         do {
             try Auth.auth().signOut()
             user = nil
-            UserDefaults.standard.set(nil, forKey: "authorizedUser")
+            UserDefaults.standard.set(nil, forKey: kLastUser)
+            UserDefaults.standard.set(nil, forKey: kAuthorizedUser)
             completion(true)
         } catch {
             completion(false)
@@ -35,7 +36,7 @@ class CurrentUser {
             retrieveUser(withId: firUser.uid, completion: {
                 (user, error, data) in
                 if let user = user, let data = data {
-                    UserDefaults.standard.setValue(NSKeyedArchiver.archivedData(withRootObject: data), forKey: "authorizedUser")
+                UserDefaults.standard.setValue(NSKeyedArchiver.archivedData(withRootObject: data), forKey: kAuthorizedUser)
                     self.user = user
                     completion?()
                 } else {
@@ -51,7 +52,7 @@ class CurrentUser {
 
     func updateUser(withData data: [String: Any], completion: @escaping (Error?) -> Void) {
         guard let user = self.user else {
-            completion(Errors.EmptyAPIResponse)
+            completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]))
             return
         }
         FIRFirestoreDB.shared.update(withData: data, from: kUsers, at: user.userKey) {
@@ -78,7 +79,7 @@ class CurrentUser {
                         let user = User(JSON: userData)
                         completion(user, nil, userData)
                     } else {
-                        completion(nil, Errors.EmptyAPIResponse, nil)
+                        completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]), nil)
                     }
                 } else {
                     FIRAuthentication.shared.signout()

@@ -17,7 +17,7 @@ class FIRAuthentication {
     func performLogin(credentials: AuthCredentials?,
                       completion: @escaping (Error?) -> Void) {
         guard let credentials = credentials else {
-            return completion(Errors.InvalidCredentials)
+            return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.invalidCredentials.rawValue]))
         }
         Auth.auth().signIn(withEmail: credentials.email ?? "",
                            password: credentials.password ?? "") { (results, error) in
@@ -25,7 +25,7 @@ class FIRAuthentication {
                 completion(error)
             } else {
                 guard let _ = results else {
-                    return completion(Errors.JSONResponseError)
+                    return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                 }
                 completion(nil)
             }
@@ -35,7 +35,7 @@ class FIRAuthentication {
     func performRegisteration(usingCredentials credentials: AuthCredentials?,
                               completion: @escaping (Error?) -> Void) {
         guard let credentials = credentials else {
-            return completion(Errors.InvalidCredentials)
+            return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.invalidCredentials.rawValue]))
         }
         
         Auth.auth().createUser(withEmail: credentials.email ?? "",
@@ -44,7 +44,7 @@ class FIRAuthentication {
                 completion(error)
             } else {
                 guard let results = results else {
-                    return completion(Errors.JSONResponseError)
+                    return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                 }
                 let userData: [String: Any] = [
                     "email": credentials.email ?? "",
@@ -65,7 +65,7 @@ class FIRAuthentication {
                     self.createUser(withData: user, completion: {
                         user in
                         guard let _ = user else {
-                            return completion(Errors.JSONResponseError)
+                            return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                         }
                         completion(nil)
                     })
@@ -83,13 +83,7 @@ class FIRAuthentication {
                     return
                 }
                 let vc = sb.instantiateViewController(withIdentifier: "CustomTabBar")
-                if window == nil {
-                    UIApplication.shared.keyWindow?.rootViewController = vc
-                    UIApplication.shared.keyWindow?.makeKeyAndVisible()
-                } else {
-                    window?.rootViewController = vc
-                    window?.makeKeyAndVisible()
-                }
+                self.goTo(vc: vc, forWindow: window)
             }
         } else {
             self.signout(window)
@@ -98,27 +92,25 @@ class FIRAuthentication {
     
     func signout(_ window: UIWindow? = nil) {
         CurrentUser.shared.signout { (success) in
-
             let sb = UIStoryboard(name: "Main", bundle: nil)
             let vc = sb.instantiateViewController(withIdentifier: "ViewController")
+            self.goTo(vc: vc, forWindow: window)
+        }
+    }
 
-            if window == nil {
-                UIApplication.shared.keyWindow?.rootViewController = vc
-                UIApplication.shared.keyWindow?.makeKeyAndVisible()
-            } else {
-                window?.rootViewController = vc
-                window?.makeKeyAndVisible()
-            }
+    private func goTo(vc: UIViewController, forWindow window: UIWindow? = nil) {
+        if window == nil {
+            UIApplication.shared.keyWindow?.rootViewController = vc
+            UIApplication.shared.keyWindow?.makeKeyAndVisible()
+        } else {
+            window?.rootViewController = vc
+            window?.makeKeyAndVisible()
         }
     }
 }
 
 extension FIRAuthentication {
     func createUser(withData data: User, completion: @escaping(User?) -> Void) {
-//        ModuleHandler.shared.firebaseRepository.db.add(data: data.toJSON(), atChild: kUsers) { (success, result, error) in
-//                    completion(data)
-//        }
-
         ModuleHandler.shared.firebaseRepository.firestore.add(data: data.toJSON(), to: kUsers) { (success, result, error) in
             completion(data)
         }

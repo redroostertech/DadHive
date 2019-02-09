@@ -47,7 +47,7 @@ class TestDataGrabberModule {
                 completion(nil)
             } else {
                 guard let json = json as? [String:Any] else {
-                    print(Errors.JSONResponseError.localizedDescription)
+                    print(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                     completion(nil)
                     return
                 }

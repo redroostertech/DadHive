@@ -23,13 +23,13 @@ class AuthenticationModule {
                         let resultsDict = results as? [String: Any],
                         let results = resultsDict["data"] as? [String: Any] else
                     {
-                        return completion(nil, Errors.JSONResponseError)
+                        return completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                     }
                     completion(results, nil)
                 }
             }
         } else {
-            completion(nil, Errors.JSONResponseError)
+            completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
         }
     }
     
@@ -51,13 +51,13 @@ class AuthenticationModule {
                         let results = resultsDict["data"] as? [String: Any],
                         let user: User = User(JSON: results) else
                     {
-                        return completion(nil, Errors.JSONResponseError)
+                        return completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                     }
                     completion(user, nil)
                 }
             }
         } else {
-            completion(nil, Errors.JSONResponseError)
+            completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
         }
     }
 

@@ -24,7 +24,8 @@ class User: Mappable, CustomStringConvertible {
     var userDetails: [Info]?
     var profilePictures: [Media]?
     var profileCreation: Bool?
-    var userCanSwipe: Bool?
+    private var nextSwipeDate: String?
+    private var userCanSwipe: Bool?
     private var paymentMethod: PaymentMethod?
     private var settings: Settings?
 
@@ -121,7 +122,11 @@ class User: Mappable, CustomStringConvertible {
         refCode <- map["refCode"]
         profileCreation <- map["profileCreation"]
         userCanSwipe <- map["canSwipe"]
+        nextSwipeDate <- map["nextSwipeDate"]
+        profilePictures <- map["userProfilePictures"]
     }
+
+    //  MARK:- Model getter properties
 
     var userKey: String {
         return (self.key as? String) ?? ""
@@ -141,6 +146,26 @@ class User: Mappable, CustomStringConvertible {
 
     var userSettings: Settings? {
         return self.settings ?? nil
+    }
+
+    var swipeDate: Date {
+        return self.nextSwipeDate?.toDate() ?? Date()
+    }
+
+    var maxSwipes: Int {
+        if userType == 1 {
+            return 10
+        } else {
+            return Int.max
+        }
+    }
+
+    var canSwipe: Bool {
+        if userType == 1 {
+            return true
+        } else {
+            return (self.nextSwipeDate == nil) ? true : Date().isGreaterThanDate(swipeDate)
+        }
     }
 
     var userCreatedDate: Date? {
@@ -306,7 +331,9 @@ class User: Mappable, CustomStringConvertible {
         let result = results.first
         return result?.userInfo ?? ""
     }
-    
+
+    //  MARK:- Model modification methods
+
     func setInformation(_ data: [String:Any]) {
         let info = Info(JSON: data)
         if self.userInformation == nil {
@@ -321,14 +348,6 @@ class User: Mappable, CustomStringConvertible {
                 print("Didnot update user data.")
             }
         }
-//        FIRRealtimeDB.shared.update(withData: [info?.userInfoType ?? "" : data], atChild: "users/\(CurrentUser.shared.user?.userKey ?? "")/userInformation") {
-//            (success, results, error) in
-//            if error == nil {
-//                print("Successfully updated user data")
-//            } else {
-//                print("Didnot update user data.")
-//            }
-//        }
     }
 
     func setDetails(_ data: [String:Any]) {
@@ -345,51 +364,33 @@ class User: Mappable, CustomStringConvertible {
                 print("Didnot update user data.")
             }
         }
-//        FIRRealtimeDB.shared.update(withData: data, atChild: "users/\(CurrentUser.shared.user?.userKey ?? "")/userDetails") {
-//            (success, results, error) in
-//            if error == nil {
-//                print("Successfully updated user data")
-//            } else {
-//                print("Didnot update user data.")
-//            }
-//        }
     }
 
-//    var userNextSwipeDate: Date? {
-//        let formatter = DateFormatter()
-//        formatter.locale = Locale(identifier: "en_US_POSIX")
-//        formatter.timeZone = TimeZone.current
-//        formatter.dateFormat = CustomDateFormat.regular.rawValue
-//        guard let createdDate = self.nextSwipeDate as? String, let date = formatter.date(from: createdDate) else {
-//            return nil
-//        }
-//        return date
-//    }
-//
-//    func setNextActiveDate() {
-//        let calendar = Calendar.current
-//        let dateComponents = calendar.dateComponents([.year, .month, .day, .hour, .weekOfMonth, .weekOfYear, .weekday, .minute, .second],
-//                                                     from: date)
-//        let newComponents = DateComponents(calendar: calendar,
-//                                           timeZone: .current,
-//                                           year: dateComponents.year,
-//                                           month: dateComponents.month,
-//                                           day: dateComponents.day,
-//                                           hour: dateComponents.hour,
-//                                           minute: dateComponents.minute,
-//                                           second: dateComponents.second,
-//                                           weekday: dateComponents.weekday,
-//                                           weekOfMonth: dateComponents.weekOfMonth,
-//                                           weekOfYear: dateComponents.weekOfYear)
-//
-//    }
+    var userNextSwipeDate: String {
+        return Date().add(days: 1)?.toString() ?? ""
+    }
 
     func disableSwiping() {
         if self.userCanSwipe == nil {
             self.userCanSwipe = Bool()
         }
         self.userCanSwipe = false
-        FIRFirestoreDB.shared.update(withData: ["canSwipe" : false], from: kUsers, at: "\(CurrentUser.shared.user?.userKey ?? "")") {
+        FIRFirestoreDB.shared.update(withData: ["canSwipe" : false, "nextSwipeDate" : userNextSwipeDate], from: kUsers, at: "\(CurrentUser.shared.user?.userKey ?? "")") {
+            (success, error) in
+            if error == nil {
+                print("Successfully updated user data")
+            } else {
+                print("Didnot update user data.")
+            }
+        }
+    }
+
+    func enableSwiping() {
+        if self.userCanSwipe == nil {
+            self.userCanSwipe = Bool()
+        }
+        self.userCanSwipe = true
+        FIRFirestoreDB.shared.update(withData: ["canSwipe" : true, "nextSwipeDate" : nil], from: kUsers, at: "\(CurrentUser.shared.user?.userKey ?? "")") {
             (success, error) in
             if error == nil {
                 print("Successfully updated user data")

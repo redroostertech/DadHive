@@ -55,6 +55,8 @@ public let kLiveURL = kLiveBaseURL + "/api/v1/"
 
 public let kConversation = "conversations"
 public let kUsers = "users"
+public let kLastUser = "lastUserKey"
+public let kAuthorizedUser = "authorizedUser"
 
 public var isLive = false
 public var appColors: [UIColor] {

@@ -95,7 +95,7 @@ class ViewController: UIViewController {
                 credentials.isValid() {
                 login(withCredentials: credentials)
             } else {
-                showErrorAlert(message: Errors.SignInCredentialsError.localizedDescription)
+                showErrorAlert(message: DadHiveError.signInCredentialsError.rawValue)
             }
         } else {
             if let credentials = AuthCredentials(JSON: ["email": txtEmail.text ?? "",
@@ -105,14 +105,19 @@ class ViewController: UIViewController {
                 credentials.isValid() == true {
                 signup(withCredentials: credentials)
             } else {
-                showErrorAlert(message: Errors.SignUpCredentialsError.localizedDescription)
+                showErrorAlert(message: DadHiveError.signUpCredentialsError.rawValue)
             }
         }
     }
 
     @IBAction func generate(_ sender: UIButton) {
-        generateFakeAccounts()
+        FakeDataGenerator().generateFakeUserAccounts(50)
     }
+
+    @IBAction func deleteAllUsers(_ sender: UIButton) {
+        FakeDataGenerator().deleteFakeUsers()
+    }
+
 
     func login(withCredentials credentials: AuthCredentials) {
         APESuperHUD.showOrUpdateHUD(icon: .email,
@@ -145,67 +150,6 @@ class ViewController: UIViewController {
             } else {
                 ModuleHandler.shared.firebaseRepository.auth.sessionCheck()
             }
-        }
-    }
-
-    var x = 1
-
-    func generateFakeAccounts(){
-        let userData: [String: Any] = [
-            "email": "test\(x)@gmail.com",
-            "name": [
-                "fullName" : "Test User \(x)"
-            ],
-            "uid": Utilities.randomString(length: 25),
-            "createdAt": Date().toString(format: CustomDateFormat.timeDate.rawValue),
-            "type": 1,
-            "settings": [
-                "notifications" : false,
-                "location" : nil,
-                "maxDistance" : 25
-            ],
-            "profileCreation" : false,
-            "userInformation" : [
-                "age" : [
-                    "info": Int.random(in: 22...42),
-                    "title": "Age",
-                    "type": "age"
-                ],
-                "bio" : [
-                    "info": "Random bio",
-                    "title": "About Me",
-                    "type": "bio"
-                ],
-                "jobTitle" : [
-                    "info": "Random Job Title",
-                    "title": "Job Title",
-                    "type": "jobTitle"
-                ],
-                "kidsNames" : [
-                    "info": "Christian and Jack",
-                    "title": "Kids Names",
-                    "type": "kidsNames"
-                ],
-                "location" : [
-                    "info": "Random City, State",
-                    "title": "Location",
-                    "type": "location"
-                ]
-            ]
-        ]
-        if let user = User(JSON: userData) {
-            FIRFirestoreDB.shared.add(data: user.toJSON(), to: kUsers) {
-                (success, results, error) in
-                if let error = error {
-                    print("Couldn't create user \(self.x)")
-                    self.x += 1
-                } else {
-                    print("Created user \(self.x)")
-                    self.x += 1
-                }
-            }
-        } else {
-            x += 1
         }
     }
 

@@ -125,6 +125,21 @@
                                     <action selector="generate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="f2u-M4-kNo"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TSd-02-q9m">
+                                <rect key="frame" x="234" y="20" width="125" height="36"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="El6-vC-muK"/>
+                                    <constraint firstAttribute="width" constant="125" id="YTV-FB-P0N"/>
+                                </constraints>
+                                <state key="normal" title="Delete Users">
+                                    <color key="titleColor" red="0.98039215690000003" green="0.0" blue="0.1019607843" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="deleteAllUsers:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3in-0m-WmT"/>
+                                    <action selector="generate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QlY-o0-cMF"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -133,6 +148,7 @@
                             <constraint firstItem="0Qc-m0-Lcx" firstAttribute="trailing" secondItem="gu0-y0-8dp" secondAttribute="trailing" id="8OZ-HG-BY4"/>
                             <constraint firstItem="H6G-br-6Vb" firstAttribute="leading" secondItem="xXh-dA-Gtc" secondAttribute="leading" id="8rD-az-zMD"/>
                             <constraint firstItem="xV3-Zb-9OV" firstAttribute="top" secondItem="0Qc-m0-Lcx" secondAttribute="bottom" constant="40" id="C9R-Vi-CKK"/>
+                            <constraint firstItem="TSd-02-q9m" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="CDc-dC-sI8"/>
                             <constraint firstItem="4nE-qL-2P6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="EVn-Zg-9HQ"/>
                             <constraint firstItem="LhU-J1-bkL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="64" id="Htv-qW-lPp"/>
                             <constraint firstItem="D5v-AH-ctB" firstAttribute="leading" secondItem="xXh-dA-Gtc" secondAttribute="leading" id="I2H-Pa-u1m"/>
@@ -148,6 +164,7 @@
                             <constraint firstItem="gu0-y0-8dp" firstAttribute="top" secondItem="LhU-J1-bkL" secondAttribute="bottom" constant="30" id="PyF-R9-3Ni"/>
                             <constraint firstItem="dPt-Na-LSA" firstAttribute="top" secondItem="D5v-AH-ctB" secondAttribute="bottom" id="TgG-4T-sqf"/>
                             <constraint firstItem="xV3-Zb-9OV" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Vxb-Mp-yOa"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="TSd-02-q9m" secondAttribute="trailing" constant="16" id="Wgk-r4-u0M"/>
                             <constraint firstItem="dPt-Na-LSA" firstAttribute="trailing" secondItem="xXh-dA-Gtc" secondAttribute="trailing" id="XjI-sR-SCE"/>
                             <constraint firstItem="D5v-AH-ctB" firstAttribute="trailing" secondItem="xXh-dA-Gtc" secondAttribute="trailing" id="Yz5-xv-fb0"/>
                             <constraint firstItem="dPt-Na-LSA" firstAttribute="height" secondItem="xXh-dA-Gtc" secondAttribute="height" id="dg5-dV-PPH"/>
@@ -1459,7 +1476,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qxS-U1-qgS" customClass="TitleLabel" customModule="DadHive" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="11" width="343" height="30"/>
+                                                    <rect key="frame" x="8" y="8" width="359" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="KNu-og-Rg9"/>
                                                     </constraints>
@@ -1468,7 +1485,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0uh-3c-SlY" customClass="ValueLabel" customModule="DadHive" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="49" width="343" height="47.5"/>
+                                                    <rect key="frame" x="8" y="46" width="359" height="53"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -2216,7 +2233,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete Account" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vGM-vb-6qp" customClass="TitleLabel" customModule="DadHive" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="27" width="343" height="21"/>
+                                                    <rect key="frame" x="8" y="27" width="359" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>

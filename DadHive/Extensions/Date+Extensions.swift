@@ -124,6 +124,12 @@ extension Date {
         dateFormatter.dateFormat = format
         return dateFormatter.string(from: self)
     }
+
+    func toString(_ format: CustomDateFormat = .timeDate) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format.rawValue
+        return dateFormatter.string(from: self) 
+    }
     
     public func firstOfTheMonth() throws -> Date {
         let startOfDay = Calendar.current.startOfDay(for: self)

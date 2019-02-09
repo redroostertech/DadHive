@@ -33,6 +33,7 @@
 		BA864B0321D9E9C600A97BFA /* EditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA864B0221D9E9C600A97BFA /* EditVC.swift */; };
 		BA864B0721DA6C7F00A97BFA /* EditAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA864B0621DA6C7E00A97BFA /* EditAccountVC.swift */; };
 		BA864B0921DBB70400A97BFA /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA864B0821DBB70400A97BFA /* Int+Extensions.swift */; };
+		BA8D4F722207D63500754053 /* FakeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8D4F712207D63500754053 /* FakeData.swift */; };
 		BA8D932221CF0188003A76FC /* UserProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8D930D21CF0181003A76FC /* UserProfileVC.swift */; };
 		BA8D932321CF0188003A76FC /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8D930E21CF0182003A76FC /* Date+Extensions.swift */; };
 		BA8D932421CF0188003A76FC /* Strings+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8D930F21CF0182003A76FC /* Strings+Extensions.swift */; };
@@ -105,6 +106,9 @@
 		BA8D93CB21D18E90003A76FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BA8D93CA21D18E90003A76FC /* GoogleService-Info.plist */; };
 		BA8D93CD21D1EF00003A76FC /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8D93CC21D1EF00003A76FC /* AppColors.swift */; };
 		BA8D93D021D3D9B5003A76FC /* AnimatedSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8D93CF21D3D9B5003A76FC /* AnimatedSwitch.swift */; };
+		BA9CCC42220E078C000C47E3 /* LocationManagerModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9CCC41220E078C000C47E3 /* LocationManagerModule.swift */; };
+		BA9CCC44220E1AF7000C47E3 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9CCC43220E1AF7000C47E3 /* Location.swift */; };
+		BA9CCC46220E1C86000C47E3 /* NotificationsManagerModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9CCC45220E1C86000C47E3 /* NotificationsManagerModule.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -138,6 +142,7 @@
 		BA864B0221D9E9C600A97BFA /* EditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVC.swift; sourceTree = "<group>"; };
 		BA864B0621DA6C7E00A97BFA /* EditAccountVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountVC.swift; sourceTree = "<group>"; };
 		BA864B0821DBB70400A97BFA /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
+		BA8D4F712207D63500754053 /* FakeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeData.swift; sourceTree = "<group>"; };
 		BA8D930D21CF0181003A76FC /* UserProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileVC.swift; sourceTree = "<group>"; };
 		BA8D930E21CF0182003A76FC /* Date+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		BA8D930F21CF0182003A76FC /* Strings+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Strings+Extensions.swift"; sourceTree = "<group>"; };
@@ -211,6 +216,9 @@
 		BA8D93CC21D1EF00003A76FC /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
 		BA8D93CE21D2894C003A76FC /* DadHive.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DadHive.entitlements; sourceTree = "<group>"; };
 		BA8D93CF21D3D9B5003A76FC /* AnimatedSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedSwitch.swift; sourceTree = "<group>"; };
+		BA9CCC41220E078C000C47E3 /* LocationManagerModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerModule.swift; sourceTree = "<group>"; };
+		BA9CCC43220E1AF7000C47E3 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		BA9CCC45220E1C86000C47E3 /* NotificationsManagerModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsManagerModule.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -262,6 +270,7 @@
 				BA8D934321CF0212003A76FC /* ModuleHandler.swift */,
 				9BAEE41D1FC309920034356D /* LaunchScreen.storyboard */,
 				9BAEE4151FC309920034356D /* Main.storyboard */,
+				BA8D4F712207D63500754053 /* FakeData.swift */,
 				BA864B0021D9AD3200A97BFA /* ChatVC.swift */,
 				BA63D2E921D7D948002BD8CF /* LaunchVC.swift */,
 				BA63D2C921D4096A002BD8CF /* ProfileSetup.swift */,
@@ -340,6 +349,8 @@
 				BA8D934C21CF0250003A76FC /* WowzaService.swift */,
 				BA8D93C621D1813F003A76FC /* SDWebImageManagerExt.swift */,
 				BA8D93C821D1815E003A76FC /* GoogleAdMobManager.swift */,
+				BA9CCC41220E078C000C47E3 /* LocationManagerModule.swift */,
+				BA9CCC45220E1C86000C47E3 /* NotificationsManagerModule.swift */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -361,6 +372,7 @@
 				BA8D933C21CF01CD003A76FC /* API.swift */,
 				BA8D933D21CF01CD003A76FC /* Error.swift */,
 				BA8D933E21CF01CD003A76FC /* UserType.swift */,
+				BA9CCC43220E1AF7000C47E3 /* Location.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -719,11 +731,13 @@
 				BA864B0721DA6C7F00A97BFA /* EditAccountVC.swift in Sources */,
 				9B6F8FF51FC35F8D0050B25D /* RegisterViewController.swift in Sources */,
 				BA63D2F221D81839002BD8CF /* AccountVC.swift in Sources */,
+				BA9CCC44220E1AF7000C47E3 /* Location.swift in Sources */,
 				BA8D932721CF0188003A76FC /* Array+Extensions.swift in Sources */,
 				BA8D939021CFE264003A76FC /* UIApplication+Extensions.swift in Sources */,
 				BA8D93A321CFEB14003A76FC /* DHCarouselItem.swift in Sources */,
 				BA8D932321CF0188003A76FC /* Date+Extensions.swift in Sources */,
 				9BAEE4141FC309920034356D /* ViewController.swift in Sources */,
+				BA8D4F722207D63500754053 /* FakeData.swift in Sources */,
 				BA8D933421CF0188003A76FC /* UIColors+Extensions.swift in Sources */,
 				BA8D93B821D11EB8003A76FC /* Info.swift in Sources */,
 				9BAEE4121FC309920034356D /* AppDelegate.swift in Sources */,
@@ -748,6 +762,7 @@
 				BA8D935521CF0251003A76FC /* TestDataGrabberModule.swift in Sources */,
 				BA8D93AF21D02AAF003A76FC /* DHCarouselImage.swift in Sources */,
 				BA8D934021CF01CD003A76FC /* Error.swift in Sources */,
+				BA9CCC42220E078C000C47E3 /* LocationManagerModule.swift in Sources */,
 				BA8D937721CFDD9B003A76FC /* DHQuestionCell.swift in Sources */,
 				BA63D2EA21D7D948002BD8CF /* LaunchVC.swift in Sources */,
 				BA8D936B21CF2FC3003A76FC /* CurrentUser.swift in Sources */,
@@ -770,6 +785,7 @@
 				BA8D933321CF0188003A76FC /* DateFormatter+Extensions.swift in Sources */,
 				BA864B0321D9E9C600A97BFA /* EditVC.swift in Sources */,
 				BA8D939B21CFE272003A76FC /* JSONStringToStringTransform.swift in Sources */,
+				BA9CCC46220E1C86000C47E3 /* NotificationsManagerModule.swift in Sources */,
 				BA8D93AB21D00045003A76FC /* DHCarousel.swift in Sources */,
 				BA8D93B421D11E85003A76FC /* Settings.swift in Sources */,
 				BA864B0921DBB70400A97BFA /* Int+Extensions.swift in Sources */,

@@ -66,7 +66,7 @@ class APIRepository {
                                    nil)
                     } else {
                         completion(nil,
-                                   Errors.JSONResponseError)
+                                   NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                     }
                 case .failure(let error):
                     print(error)

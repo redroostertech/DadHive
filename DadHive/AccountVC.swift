@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class AccountVC: UITableViewController {
 
@@ -24,6 +25,7 @@ class AccountVC: UITableViewController {
 
     @IBAction func toggleNotifications(_ sender: UISwitch) {
         CurrentUser.shared.user?.userSettings?.setNotificationToggle(sender.isOn)
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {

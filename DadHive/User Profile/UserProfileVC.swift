@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import SVProgressHUD
 
-class UserProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipingDelegate {
+var count = 0
+
+class UserProfileVC: UIViewController {
 
     @IBOutlet var tblMain: UITableView!
     @IBOutlet var btnNext: UIButton!
@@ -20,19 +23,12 @@ class UserProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
     var users = [User]()
     var currentUser: User?
-    var count = 0
+    var locationModule = LocationManagerModule()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.btnNext.applyCornerRadius()
-
-//        let nextDateString = DefaultsManager().retrieveStringDefault(forKey: "nextActiveDate")
-//        let nextDateFormatter = DateFormatter()
-//        nextDateFormatter.locale = Locale(identifier: "en_US_POSIX")
-//        nextDateFormatter.timeZone = TimeZone.current
-//        nextDateFormatter.dateFormat = CustomDateFormat.regular.rawValue
-//        self.nextActiveDate = nextDateFormatter.date(from: nextDateString ?? "")
 
         self.tblMain.delegate = self
         self.tblMain.dataSource = self
@@ -43,23 +39,142 @@ class UserProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         self.tblMain.register(UINib(nibName: "DHInfoCell", bundle: nil), forCellReuseIdentifier: "DHInfoCell")
         self.tblMain.register(UINib(nibName: "DHQuestionCell", bundle: nil), forCellReuseIdentifier: "DHQuestionCell")
 
-        loadUsers {
-            self.tblMain.reloadData()
+        locationModule.requestLocation()
+        locationModule.getUserLocation {
+            (location) in
+            if let location = location {
+                loadUsers {
+                    self.tblMain.reloadData()
+                }
+            } else {
+
+            }
+        }
+//        locationModule.getUserLocation {
+//            self.updateUser(withData: ["userLocation": location.toDict], completion: {
+//                (error) in
+//                if let _ = error {
+//                    print(error!)
+//                    completion()
+//                } else {
+//                    completion()
+//                }
+//            })
+//        } else {
+//            completion()
+//        }
+    }
+
+    func loadUsers(_ completion: @escaping () -> Void) {
+        FIRFirestoreDB.shared.retrieveUsers {
+            (success, snapshot, error) in
+            if let error = error {
+                print(error)
+                completion()
+            } else {
+                guard let documents = snapshot?.filter({
+                    (result) -> Bool in
+                    let user = User(JSON: result.data())
+                    return user?.userId != CurrentUser.shared.user?.userId
+                }) else {
+                    completion()
+                    return
+                }
+                if documents.count > 0 {
+                    self.load(user: User(JSON: documents[0].data())!)
+                    for document in documents {
+                        var rawData: [String: Any] = document.data()
+                        rawData["snapshotKey"] = document.documentID
+                        self.users.append(User(JSON: rawData)!)
+                    }
+                    completion()
+                } else {
+                    completion()
+                }
+            }
         }
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return totalRowCount()
+    func load(user: User) {
+        self.currentUser = user
+
+        //  Save last user
+        DefaultsManager().setDefault(withData: user.userId, forKey: kLastUser)
+
+        tblMain.reloadData()
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return configureCell(forTable: tableView, atIndexPath: indexPath)
+    func goToNextUser() {
+        guard let currentUser = CurrentUser.shared.user else {
+            print("User is no longer signed in. Sign them out.")
+            FIRAuthentication.shared.signout()
+            return
+        }
+        guard currentUser.canSwipe == true else {
+            print("No more swiping. Please purchase a new plan.")
+            self.showErrorAlert(DadHiveError.maximumSwipesReached)
+            return
+        }
+
+        guard count < (users.count - 1) else {
+            print("No more users.")
+            self.showErrorAlert(DadHiveError.noMoreUsersAvailable)
+            return
+        }
+
+        guard count < currentUser.maxSwipes else {
+            print("No more swiping. Please purchase a new plan.")
+            CurrentUser.shared.user?.disableSwiping()
+            self.showErrorAlert(DadHiveError.maximumSwipesReached)
+            return
+        }
+
+        count += 1
+        load(user: users[count])
+
+        if count % 3 == 0 {
+            DispatchQueue.global(qos: .background).async {
+                print("In background")
+                FIRFirestoreDB.shared.retrieveNextUsers {
+                    (success, snapshot, error) in
+                    if let error = error {
+                        print(error)
+                    } else {
+                        guard let documents = snapshot?.filter({
+                            (result) -> Bool in
+                            let user = User(JSON: result.data())
+                            return user?.userId != CurrentUser.shared.user?.userId
+                        }) else {
+                            return
+                        }
+                        if documents.count > 0 {
+                            for document in documents {
+                                var rawData: [String: Any] = document.data()
+                                rawData["snapshotKey"] = document.documentID
+                                self.users.append(User(JSON: rawData)!)
+                            }
+                            print("Count of users array is \(self.users.count)")
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+    @IBAction func goToNext(_ sender: UIButton) {
+        goToNextUser()
     }
 
+    func showErrorAlert(_ error: DadHiveError) {
+        SVProgressHUD.showError(withStatus: error.rawValue)
+        SVProgressHUD.setDefaultStyle(.dark)
+        SVProgressHUD.setDefaultMaskType(.gradient)
+        SVProgressHUD.setMinimumDismissTimeInterval(1)
+    }
+}
+
+extension UserProfileVC: UITableViewDelegate, UITableViewDataSource {
     func totalRowCount() -> Int {
         return self.currentUser?.countForTable ?? 0
     }
@@ -94,88 +209,25 @@ class UserProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         }
     }
 
-    func loadUsers(_ completion: @escaping () -> Void) {
-        FIRFirestoreDB.shared.retrieveUsers {
-            (success, snapshot, error) in
-            if let error = error {
-                print(error)
-                completion()
-            } else {
-                guard let documents = snapshot?.filter({
-                    (result) -> Bool in
-                    let user = User(JSON: result.data())
-                    return user?.userId != CurrentUser.shared.user?.userId
-                }) else {
-                    completion()
-                    return
-                }
-                if documents.count > 0 {
-                    self.load(user: User(JSON: documents[0].data())!)
-                    for document in documents {
-                        self.users.append(User(JSON: document.data())!)
-                    }
-                    completion()
-                } else {
-                    completion()
-                }
-            }
-        }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return totalRowCount()
     }
 
-    func load(user: User) {
-        self.currentUser = user
-        tblMain.reloadData()
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return configureCell(forTable: tableView, atIndexPath: indexPath)
     }
 
-    func goToNextUser() {
-        if (CurrentUser.shared.user?.userCanSwipe ?? true) {
-            if count < users.count - 1 {
-                if count < 10 {
-                    count += 1
-                    load(user: users[count])
-                    if count % 3 == 0 {
-                        DispatchQueue.global(qos: .background).async {
-                            print("In background")
-                            FIRFirestoreDB.shared.retrieveNextUsers {
-                                (success, snapshot, error) in
-                                if let error = error {
-                                    print(error)
-                                } else {
-                                    guard let documents = snapshot?.filter({
-                                        (result) -> Bool in
-                                        let user = User(JSON: result.data())
-                                        return user?.userId != CurrentUser.shared.user?.userId
-                                    }) else {
-                                        return
-                                    }
-                                    if documents.count > 0 {
-                                        for document in documents {
-                                            self.users.append(User(JSON: document.data())!)
-                                        }
-                                        print("Count of users array is \(self.users.count)")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    print("No more swiping. Please purchase a new plan.")
-                    CurrentUser.shared.user?.disableSwiping()
-                }
-            } else {
-                print("No more users.")
-            }
-        } else {
-            print("No more swiping. Please purchase a new plan.")
-        }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
+}
 
-    @IBAction func goToNext(_ sender: UIButton) {
-        goToNextUser()
-    }
-
+extension UserProfileVC: SwipingDelegate {
     func didLikeUser() {
         goToNextUser()
     }
 
+    func didNotLikeUser() {
+        goToNextUser()
+    }
 }

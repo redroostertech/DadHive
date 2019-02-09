@@ -10,6 +10,7 @@ import UIKit
 
 protocol SwipingDelegate {
     func didLikeUser()
+    func didNotLikeUser()
 }
 
 class DHImageCell: UITableViewCell {

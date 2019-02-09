@@ -55,7 +55,7 @@ class FIRRealtimeDB {
                 if snapshot.childrenCount > 0 {
                     completion(true, snapshot, nil)
                 } else {
-                    completion(false, nil, Errors.EmptyAPIResponse)
+                    completion(false, nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]))
                 }
         }
     }
@@ -77,7 +77,7 @@ class FIRRealtimeDB {
                                     if snapshot.childrenCount > 0 {
                                         completion(true, snapshot, nil)
                                     } else {
-                                        completion(false, nil, Errors.EmptyAPIResponse)
+                                        completion(false, nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]))
                                     }
                                     
         }){
@@ -105,7 +105,7 @@ class FIRRealtimeDB {
                                     if snapshot.childrenCount > 0 {
                                         completion(true, snapshot, nil)
                                     } else {
-                                        completion(false, nil, Errors.EmptyAPIResponse)
+                                        completion(false, nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]))
                                     }
 
             }){
@@ -131,7 +131,7 @@ class FIRRealtimeDB {
                 if snapshot.childrenCount > 0 {
                     completion(true, snapshot, nil)
                 } else {
-                    completion(false, nil, Errors.EmptyAPIResponse)
+                    completion(false, nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]))
                 }
 
             }){

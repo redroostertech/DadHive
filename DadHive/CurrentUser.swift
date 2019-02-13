@@ -68,19 +68,16 @@ class CurrentUser {
     
     private func retrieveUser(withId id: String, completion: @escaping (User?, Error?, [String: Any]?) -> Void) {
         FIRFirestoreDB.shared.retrieveUser(withId: id, completion: {
-            (success, snapshot, error) in
+            (success, document, error) in
             if let error = error {
                 print(error)
                 completion(nil, error, nil)
             } else {
-                if snapshot?.count ?? 0 > 0 {
-                    if var userData = snapshot?[0].data() {
-                        userData["snapshotKey"] = snapshot![0].documentID
-                        let user = User(JSON: userData)
-                        completion(user, nil, userData)
-                    } else {
-                        completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]), nil)
-                    }
+                if let document = document {
+                    var userData = document.data()
+                    userData["snapshotKey"] = document.documentID
+                    let user = User(JSON: userData)
+                    completion(user, nil, userData)
                 } else {
                     FIRAuthentication.shared.signout()
                 }

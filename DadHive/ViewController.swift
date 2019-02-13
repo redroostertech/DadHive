@@ -34,21 +34,24 @@ class ViewController: UIViewController {
         setupSwitch()
         loadGDPR()
 
-        txtFullname.addLeftPadding(withWidth: 10.0)
-        txtPassword.addLeftPadding(withWidth: 10.0)
-        txtPasswordConfirm.addLeftPadding(withWidth: 10.0)
-        txtEmail.addLeftPadding(withWidth: 10.0)
+        for view in self.view.subviews {
+            if let textField = view as? UITextField {
+                textField.delegate = self
+                textField.addLeftPadding(withWidth: kTextFieldPadding)
+            }
+        }
+
         btnAuthenticate.applyCornerRadius()
         btnAuthenticate.addGradientLayer(using: kAppCGColors)
 
         if authenticationSwitch!.selectedIndex == 0 {
             txtPasswordConfirm.isHidden = true
             txtFullname.isHidden = true
-            btnAuthenticate.setText("Login")
+            btnAuthenticate.setText(kLoginText)
         } else {
             txtPasswordConfirm.isHidden = false
             txtFullname.isHidden = false
-            btnAuthenticate.setText("Sign Up")
+            btnAuthenticate.setText(kSignUpText)
         }
         
     }
@@ -78,11 +81,11 @@ class ViewController: UIViewController {
         if authenticationSwitch!.selectedIndex == 0 {
             txtPasswordConfirm.isHidden = true
             txtFullname.isHidden = true
-            btnAuthenticate.setText("Login")
+            btnAuthenticate.setText(kLoginText)
         } else {
             txtPasswordConfirm.isHidden = false
             txtFullname.isHidden = false
-            btnAuthenticate.setText("Sign Up")
+            btnAuthenticate.setText(kSignUpText)
         }
     }
 
@@ -131,7 +134,7 @@ class ViewController: UIViewController {
                 APESuperHUD.removeHUD(animated: true, presentingView: self.view)
                 self.showAlertErrorIfNeeded(error: err)
             } else {
-                ModuleHandler.shared.firebaseRepository.auth.sessionCheck()
+                ModuleHandler.shared.firebaseRepository.auth.checkSession(nil)
             }
         }
     }
@@ -148,7 +151,7 @@ class ViewController: UIViewController {
                 APESuperHUD.removeHUD(animated: true, presentingView: self.view)
                 self.showAlertErrorIfNeeded(error: err)
             } else {
-                ModuleHandler.shared.firebaseRepository.auth.sessionCheck()
+                ModuleHandler.shared.firebaseRepository.auth.checkSession(nil)
             }
         }
     }
@@ -196,7 +199,7 @@ extension ViewController {
         authenticationSwitch!.titleColor = AppColors.lightGreen
         authenticationSwitch!.font = UIFont(name: kFontButton, size: kFontSizeButton)
         authenticationSwitch!.thumbColor = AppColors.lightGreen
-        authenticationSwitch!.items = ["Login", "Sign Up"]
+        authenticationSwitch!.items = [kLoginSwitchText, kSignUpSwitchText]
         authenticationSwitch!.addTarget(self, action: #selector(switchAuthenticationType), for: .valueChanged)
         vwAuthenticationTypeContainer.addSubview(authenticationSwitch!)
     }
@@ -246,5 +249,12 @@ extension ViewController {
         } else {
             SVProgressHUD.dismiss()
         }
+    }
+}
+
+extension ViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

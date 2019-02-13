@@ -9,6 +9,8 @@
 import Foundation
 import Firebase
 import FirebaseFirestore
+import Geofirestore
+import CoreLocation
 
 class FIRFirestoreDB {
     static let shared = FIRFirestoreDB()
@@ -16,9 +18,11 @@ class FIRFirestoreDB {
     private var docRef: DocumentReference?
     private var colRef: CollectionReference?
     private var lastUser: QueryDocumentSnapshot?
-    
+    var geoFire: GeoFirestore!
+
     private init() {
         self.dbRef = Firestore.firestore()
+        self.geoFire = GeoFirestore(collectionRef: self.dbRef.collection(kUsers))
     }
 
     func add(data: [String: Any], to collection: String, completion: @escaping(Bool, String?, Error?) -> Void) {
@@ -91,14 +95,16 @@ class FIRFirestoreDB {
     }
 
     func update(withData data: [String: Any], from collection: String, at document: String, completion: @escaping(Bool, Error?) -> Void) {
-        self.dbRef.collection(collection).document(document).setData(data, options: SetOptions.merge(), completion: {
-            (error) in
+        self.dbRef.collection(collection).document(document).setData(data, merge: true) { (error) in
             if error == nil {
+                if let data = data["settings"] as? [String:Any], let location = data["location"] as? [String: Any], let loc = Location(JSON: location), let lat = loc.latitude as? Double, let lon = loc.longitude as? Double {
+                    self.geoFire.setLocation(geopoint: GeoPoint(latitude: lat, longitude:  lon), forDocumentWithID: document)
+                }
                 completion(true, nil)
             } else {
                 completion(false, error)
             }
-        })
+        }
     }
 
     private func clearDocReference() {

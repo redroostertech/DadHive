@@ -10,11 +10,12 @@ import Foundation
 import ObjectMapper
 
 class Settings: Mappable, CustomStringConvertible {    
-    private var preferredCurrency: Any?
-    private var notifications: Any?
-    private var location: Any?
-    private var maxDistance: Any?
-    private var ageRange: Any?
+    private var preferredCurrency: String?
+    private var notifications: Bool?
+    private var location: Location?
+    private var maxDistance: Double?
+    private var ageRange: AgeRange?
+    private var initialSetup: Bool?
 
     required init?(map: Map) { }
 
@@ -24,104 +25,66 @@ class Settings: Mappable, CustomStringConvertible {
         location <- map["location"]
         maxDistance <- map["maxDistance"]
         ageRange <- map["ageRange"]
+        initialSetup <- map["initialSetup"]
     }
 
     var userCurrency: String {
-        guard let preferredCurrency = self.preferredCurrency as? String else {
-            return "USD"
-        }
-        return preferredCurrency
+        return self.preferredCurrency ?? "USD"
     }
 
     var userNotifications: Bool {
-        guard let notifications = self.notifications as? Bool else {
-            return false
-        }
-        return notifications
+        return self.notifications ?? false
     }
 
-    var userLocation : String {
-        guard let userLocation = self.location as? String else {
-            return ""
-        }
-        return userLocation
+    var userMaximumDistancePreferences: Double {
+        return self.maxDistance ?? 0
     }
 
-    var userAgeRangePreferences: String {
-        guard let ageRange = self.ageRange as? [String : Any] else {
-            return ""
-        }
-        return "\(ageRange["min"] ?? 0) to \(ageRange["max"] ?? 0) years old"
+    var userAgeRange: AgeRange? {
+        return self.ageRange ?? nil
     }
 
-    var userMaximumDistancePreferences: Int {
-        guard let maxDistance = self.maxDistance as? Int else {
-            return 0
-        }
-        return maxDistance
+    var userLocation: Location? {
+        return self.location ?? nil
+    }
+
+    var userInitialState: Bool {
+        return self.initialSetup ?? false
     }
 
     func setNotificationToggle(_ state: Bool) {
         self.notifications = state
-        FIRFirestoreDB.shared.update(withData: ["settings" : ["notifications" : state]], from: kUsers, at: "\(CurrentUser.shared.user?.userKey ?? "")") {
-            (success, error) in
+        CurrentUser.shared.updateUser(withData: ["settings" : ["notifications" : state]]) { (error) in
             if error == nil {
                 print("Successfully updated user data")
             } else {
                 print("Didnot update user data.")
             }
         }
-
-//        FIRRealtimeDB.shared.update(withData: ["notifications" : state], atChild: "users/\(CurrentUser.shared.user?.userKey ?? "")/settings") {
-//            (success, results, error) in
-//            if error == nil {
-//                print("Successfully updated user data")
-//            } else {
-//                print("Didnot update user data.")
-//            }
-//        }
     }
 
-    func setMaximumDistance(_ distance: Int) {
+    func setMaximumDistance(_ distance: Double) {
         self.maxDistance = distance
-        FIRFirestoreDB.shared.update(withData: ["settings" : ["maxDistance" : distance]], from: kUsers, at: "\(CurrentUser.shared.user?.userKey ?? "")") {
-            (success, error) in
+        CurrentUser.shared.updateUser(withData: ["settings" : ["maxDistance" : distance]]) { (error) in
             if error == nil {
                 print("Successfully updated user data")
             } else {
                 print("Didnot update user data.")
             }
         }
-
-        //        FIRRealtimeDB.shared.update(withData: ["notifications" : state], atChild: "users/\(CurrentUser.shared.user?.userKey ?? "")/settings") {
-        //            (success, results, error) in
-        //            if error == nil {
-        //                print("Successfully updated user data")
-        //            } else {
-        //                print("Didnot update user data.")
-        //            }
-        //        }
     }
 
-    func setAgeRange(_ ageRange: [String: Any]) {
-        self.ageRange = ageRange
-        FIRFirestoreDB.shared.update(withData: ["settings" : ["ageRange" : ageRange]], from: kUsers, at: "\(CurrentUser.shared.user?.userKey ?? "")") {
-            (success, error) in
+    func setInitialState(_ state: Bool, _ completion: @escaping(Error?) -> Void) {
+        self.initialSetup = state
+        CurrentUser.shared.updateUser(withData: ["settings" : ["initialSetup" : state]]) { (error) in
             if error == nil {
                 print("Successfully updated user data")
+                completion(nil)
             } else {
-                print("Didnot update user data.")
+                print("Did not update user data.")
+                completion(error)
             }
         }
-
-        //        FIRRealtimeDB.shared.update(withData: ["notifications" : state], atChild: "users/\(CurrentUser.shared.user?.userKey ?? "")/settings") {
-        //            (success, results, error) in
-        //            if error == nil {
-        //                print("Successfully updated user data")
-        //            } else {
-        //                print("Didnot update user data.")
-        //            }
-        //        }
     }
 
 }

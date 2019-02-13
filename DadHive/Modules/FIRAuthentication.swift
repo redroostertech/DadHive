@@ -46,19 +46,41 @@ class FIRAuthentication {
                 guard let results = results else {
                     return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                 }
+                //  MARK:- Move this function to the server
                 let userData: [String: Any] = [
                     "email": credentials.email ?? "",
                     "name": [
                         "fullName" : (credentials.fullname ?? "")
                     ],
-                    "uid": results.uid,
-                    "createdAt": results.metadata.creationDate?.toString(format: CustomDateFormat.timeDate.rawValue),
+                    "uid": results.user.uid,
+                    "createdAt": results.user.metadata.creationDate?.toString(format: CustomDateFormat.timeDate.rawValue),
                     "type": 1,
                     "settings": [
+                        "preferredCurrency": "USD",
                         "notifications" : false,
                         "location" : nil,
-                        "maxDistance" : 25
+                        "maxDistance" : 25.0,
+                        "ageRange" : [
+                            "index": 0
+                        ],
+                        "initialSetup" : false
                     ],
+                    "userProfilePictures": [
+                        "index": 0
+                    ],
+                    "mediaArray": [
+                        "index": 0
+                    ],
+                    "userInformation": [
+                        "index": 0
+                    ],
+                    "userDetails": [
+                        "index": 0
+                    ],
+                    "paymentMethod": [
+                        "index": 0
+                    ],
+                    "canSwipe": true,
                     "profileCreation" : false
                 ]
                 if let user = User(JSON: userData) {
@@ -73,16 +95,26 @@ class FIRAuthentication {
             }
         }
     }
+
+    func checkSession(_ window: UIWindow? = nil) {
+        CurrentUser.shared.refreshCurrentUser {
+            if let initialSetup = CurrentUser.shared.user?.userSettings?.userInitialState, initialSetup == false {
+                self.sessionCheck(window, goToVC: "PermissionsVC")
+            } else {
+                self.sessionCheck(window)
+            }
+        }
+    }
     
-    func sessionCheck(_ window: UIWindow? = nil) {
+    func sessionCheck(_ window: UIWindow? = nil, goToVC vcID: String = "CustomTabBar") {
         let sb = UIStoryboard(name: "Main", bundle: nil)
         if let _ = Auth.auth().currentUser {
-            CurrentUser.shared.refreshCurrentUser {
+             CurrentUser.shared.refreshCurrentUser {
                 guard let _ = CurrentUser.shared.user else {
                     self.signout(window)
                     return
                 }
-                let vc = sb.instantiateViewController(withIdentifier: "CustomTabBar")
+                let vc = sb.instantiateViewController(withIdentifier: vcID)
                 self.goTo(vc: vc, forWindow: window)
             }
         } else {
@@ -90,10 +122,10 @@ class FIRAuthentication {
         }
     }
     
-    func signout(_ window: UIWindow? = nil) {
+    func signout(_ window: UIWindow? = nil, goToVC vcID: String = "ViewController") {
         CurrentUser.shared.signout { (success) in
             let sb = UIStoryboard(name: "Main", bundle: nil)
-            let vc = sb.instantiateViewController(withIdentifier: "ViewController")
+            let vc = sb.instantiateViewController(withIdentifier: vcID)
             self.goTo(vc: vc, forWindow: window)
         }
     }

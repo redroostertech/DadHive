@@ -8,6 +8,7 @@
 
 import UIKit
 import SVProgressHUD
+import APESuperHUD
 
 var count = 0
 
@@ -23,12 +24,12 @@ class UserProfileVC: UIViewController {
     }
     var users = [User]()
     var currentUser: User?
-    var locationModule = LocationManagerModule()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.btnNext.applyCornerRadius()
+
+        setupUI()
+        setupSuperHUD()
 
         self.tblMain.delegate = self
         self.tblMain.dataSource = self
@@ -39,30 +40,24 @@ class UserProfileVC: UIViewController {
         self.tblMain.register(UINib(nibName: "DHInfoCell", bundle: nil), forCellReuseIdentifier: "DHInfoCell")
         self.tblMain.register(UINib(nibName: "DHQuestionCell", bundle: nil), forCellReuseIdentifier: "DHQuestionCell")
 
-        locationModule.requestLocation()
-        locationModule.getUserLocation {
+        APESuperHUD.showOrUpdateHUD(icon: .happyFace,
+                                    message: "Finding Users",
+                                    duration: 1000.0,
+                                    particleEffectFileName: "FireFliesParticle",
+                                    presentingView: self.view,
+                                    completion: nil)
+
+        LocationManagerModule.shared.getUserLocation {
             (location) in
-            if let location = location {
-                loadUsers {
+            APESuperHUD.removeHUD(animated: true, presentingView: self.view)
+            if let _ = location {
+                self.loadUsers {
                     self.tblMain.reloadData()
                 }
             } else {
-
+                self.showErrorAlert(DadHiveError.noMoreUsersAvailable)
             }
         }
-//        locationModule.getUserLocation {
-//            self.updateUser(withData: ["userLocation": location.toDict], completion: {
-//                (error) in
-//                if let _ = error {
-//                    print(error!)
-//                    completion()
-//                } else {
-//                    completion()
-//                }
-//            })
-//        } else {
-//            completion()
-//        }
     }
 
     func loadUsers(_ completion: @escaping () -> Void) {
@@ -229,5 +224,29 @@ extension UserProfileVC: SwipingDelegate {
 
     func didNotLikeUser() {
         goToNextUser()
+    }
+}
+
+extension UserProfileVC {
+    func setupSuperHUD() {
+        APESuperHUD.appearance.cornerRadius = 10
+        APESuperHUD.appearance.animateInTime = 1.0
+        APESuperHUD.appearance.animateOutTime = 1.0
+        APESuperHUD.appearance.backgroundBlurEffect = .light
+        APESuperHUD.appearance.iconColor = UIColor.flatGreen
+        APESuperHUD.appearance.textColor =  UIColor.flatGreen
+        APESuperHUD.appearance.loadingActivityIndicatorColor = UIColor.flatGreen
+        APESuperHUD.appearance.defaultDurationTime = 4.0
+        APESuperHUD.appearance.cancelableOnTouch = true
+        APESuperHUD.appearance.iconWidth = kIconSizeWidth
+        APESuperHUD.appearance.iconHeight = kIconSizeHeight
+        APESuperHUD.appearance.messageFontName = kFontBody
+        APESuperHUD.appearance.titleFontName = kFontTitle
+        APESuperHUD.appearance.titleFontSize = kFontSizeTitle
+        APESuperHUD.appearance.messageFontSize = kFontSizeBody
+    }
+
+    func setupUI() {
+        self.btnNext.applyCornerRadius()
     }
 }

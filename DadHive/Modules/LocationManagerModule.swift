@@ -11,10 +11,11 @@ import CoreLocation
 import SVProgressHUD
 
 class LocationManagerModule: NSObject {
-    private var locationManager = CLLocationManager()
+    static let shared = LocationManagerModule()
+    private var locationManager: CLLocationManager!
     private var geoCoder = CLGeocoder()
     private var userLocationData: [String: Any]?
-    var accessGranted: Bool!
+    var accessGranted = false
 
     private var userLocation: CLLocation? {
         didSet {
@@ -22,7 +23,7 @@ class LocationManagerModule: NSObject {
             if self.userLocationData == nil {
                 self.userLocationData = [String: Any]()
             }
-            self.userLocationData!["dateString"] = Date().toString(.timeDate)
+            //  self.userLocationData!["dateString"] = Date().toString(.timeDate)
             self.userLocationData!["latitude"] = userLocation.coordinate.latitude
             self.userLocationData!["longitude"] = userLocation.coordinate.longitude
         }
@@ -40,38 +41,51 @@ class LocationManagerModule: NSObject {
         }
     }
 
-    override init() {
-        super.init()
-        checkLocationPermissions { (access) in
-            self.locationManager.startMonitoringVisits()
-            self.locationManager.delegate = self
-            self.locationManager.distanceFilter = 35
-            self.accessGranted = access
+    private override init() { }
+
+    func checkLocationPermissions(_ completion: @escaping(DadHiveError?)->Void) {
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        getAccess { (access) in
+            if access == false {
+                completion(DadHiveError.locationAccessDisabled)
+            } else {
+                completion(nil)
+            }
         }
     }
 
-    func requestLocation() {
-        if (self.accessGranted) {
-            self.locationManager.requestLocation()
+    func getLocationAccess (_ completion: ((Bool) -> Void)? = nil) {
+        if CLLocationManager.authorizationStatus() == .denied || CLLocationManager.authorizationStatus() == .notDetermined {
+            completion?(false)
+        } else {
+            completion?(CLLocationManager.locationServicesEnabled())
+        }
+    }
+
+    func getAccess (_ completion: ((Bool) -> Void)? = nil) {
+        if CLLocationManager.authorizationStatus() == .denied {
+            completion?(false)
+        } else {
+            completion?(CLLocationManager.locationServicesEnabled())
+        }
+    }
+
+    func requestLocation(){
+        if CLLocationManager.locationServicesEnabled() {
+            self.locationManager.startUpdatingLocation()
         } else {
             self.showErrorAlert(DadHiveError.locationAccessDisabled)
         }
     }
 
-    func checkLocationPermissions(_ completion: @escaping (Bool) -> Void) {
-        switch CLLocationManager.authorizationStatus() {
-        case .authorized: completion(true)
-        case .denied: completion(false)
-        case .notDetermined:
-            CLLocationManager().requestWhenInUseAuthorization()
-            completion(true)
-        default: completion(false)
-        }
-    }
-
     func getUserLocation(_ completion: @escaping(Location?)->Void) {
         if let data = self.userLocationData, let location = Location(JSON: data) {
-            completion(location)
+            location.setLocation { (error) in
+                completion(location)
+            }
         } else {
             completion(nil)
         }
@@ -80,27 +94,26 @@ class LocationManagerModule: NSObject {
 
 extension LocationManagerModule: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedAlways || status == .authorizedWhenInUse {
-            self.locationManager.startMonitoringVisits()
+        if status == .denied || status == .restricted {
+         NotificationCenter.default.post(name: Notification.Name(rawValue: kLocationAccessCheckObservationKey), object: nil, userInfo: ["access": false])
+        } else {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: kLocationAccessCheckObservationKey), object: nil, userInfo: ["access": CLLocationManager.locationServicesEnabled()])
         }
-    }
-
-    func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
-        // create CLLocation from the coordinates of CLVisit
-        let location = CLLocation(latitude: visit.coordinate.latitude, longitude: visit.coordinate.longitude)
-        reverseGeocode(usingLocation: location)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let loc = locations.last else {
+        guard let loc = locations.first else {
             return
         }
-        let location = CLLocation(latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude)
-        reverseGeocode(usingLocation: location)
+        if self.userLocation == nil {
+            self.userLocation = CLLocation()
+        }
+        self.userLocation! = CLLocation(latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude)
+        manager.stopUpdatingLocation()
+        reverseGeocode(usingLocation: userLocation!)
     }
 
     func reverseGeocode(usingLocation location: CLLocation) {
-        self.userLocation = location
         self.geoCoder.reverseGeocodeLocation(location) { (placemarks, error) in
             if let _ = error {
                 print("Error reverse geocoding location")
@@ -112,9 +125,15 @@ extension LocationManagerModule: CLLocationManagerDelegate {
                     self.userLocationDescription!["city"] = place.subLocality ?? ""
                     self.userLocationDescription!["state"] = place.administrativeArea ?? ""
                     self.userLocationDescription!["country"] = place.country ?? ""
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: kSaveLocationObservationKey), object: nil, userInfo: ["access": false])
+                    kSaveLocationObservationKey
                 }
             }
         }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error.localizedDescription)
     }
 }
 

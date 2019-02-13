@@ -47,32 +47,32 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
     ]
     var pickerType = 0
     var maxDistancePicker: UIPickerView!
-    var distance = [10, 25, 50]
+    var distance = [10.0, 25.0, 50.0, 75.0, 100.0]
     var ageRange = [
         [
             "id": 0,
-            "min": 1,
-            "max": 2
+            "min": 1.0,
+            "max": 2.0
         ],[
             "id": 1,
-            "min": 2,
-            "max": 4
+            "min": 2.0,
+            "max": 4.0
         ],[
             "id": 2,
-            "min": 4,
-            "max": 7
+            "min": 4.0,
+            "max": 7.0
         ],[
             "id": 3,
-            "min": 7,
-            "max": 10
+            "min": 7.0,
+            "max": 10.0
         ],[
             "id": 4,
-            "min": 10,
-            "max": 13
+            "min": 10.0,
+            "max": 13.0
         ],[
             "id": 5,
-            "min": 13,
-            "max": 20
+            "min": 13.0,
+            "max": 20.0
         ],
     ]
 
@@ -168,7 +168,12 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
     @objc func pickerViewDone() {
         let row = maxDistancePicker.selectedRow(inComponent: 0)
         if pickerType == 0 {
-            CurrentUser.shared.user?.userSettings?.setAgeRange(ageRange[row])
+            if let ageRangeObj = AgeRange(JSON: [
+                "min" : ageRange[row]["min"],
+                "max": ageRange[row]["max"]
+                ]) {
+                ageRangeObj.setAgeRange()
+            }
         } else {
             CurrentUser.shared.user?.userSettings?.setMaximumDistance(distance[row])
         }
@@ -185,7 +190,7 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
 
 extension PreferencesVC {
     func setupUI() {
-        lblAgeRangeValue.text = String(describing: CurrentUser.shared.user?.userSettings?.userAgeRangePreferences ?? "No Response")
+        lblAgeRangeValue.text = String(describing: CurrentUser.shared.user?.userSettings?.userAgeRange?.userAgeRangePreferences ?? "No Response")
         lblMaximumDistanceValue.text = String(describing: CurrentUser.shared.user?.userSettings?.userMaximumDistancePreferences ?? 0)
 //        lblMeetingLocationOne.text = String(describing: CurrentUser.shared.user?.userMeetingLocationPreferences ?? "No Response")
 //        lblMeetingLocationTwo.text = String(describing: CurrentUser.shared.user?.userMeetingLocationPreferences ?? "No Response")

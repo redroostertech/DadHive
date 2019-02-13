@@ -12,7 +12,6 @@
 		9B6F8FF31FC35C3F0050B25D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6F8FF21FC35C3F0050B25D /* LoginViewController.swift */; };
 		9B6F8FF51FC35F8D0050B25D /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6F8FF41FC35F8D0050B25D /* RegisterViewController.swift */; };
 		9B6F8FF91FC375D80050B25D /* FireFliesParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9B6F8FF81FC3752D0050B25D /* FireFliesParticle.sks */; };
-		9B6F8FFB1FC37A800050B25D /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6F8FFA1FC37A800050B25D /* HomeViewController.swift */; };
 		9B6F8FFE1FC37D460050B25D /* HomeCellCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6F8FFC1FC37D460050B25D /* HomeCellCollectionViewCell.swift */; };
 		9B6F8FFF1FC37D460050B25D /* HomeCellCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9B6F8FFD1FC37D460050B25D /* HomeCellCollectionViewCell.xib */; };
 		9BAEE4121FC309920034356D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAEE4111FC309920034356D /* AppDelegate.swift */; };
@@ -109,6 +108,9 @@
 		BA9CCC42220E078C000C47E3 /* LocationManagerModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9CCC41220E078C000C47E3 /* LocationManagerModule.swift */; };
 		BA9CCC44220E1AF7000C47E3 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9CCC43220E1AF7000C47E3 /* Location.swift */; };
 		BA9CCC46220E1C86000C47E3 /* NotificationsManagerModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9CCC45220E1C86000C47E3 /* NotificationsManagerModule.swift */; };
+		BA9CCC48221053FD000C47E3 /* PermissionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9CCC47221053FD000C47E3 /* PermissionsVC.swift */; };
+		BAC8E76A2211A4880003651E /* AgeRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC8E7692211A4880003651E /* AgeRange.swift */; };
+		BAC8E76E2213D4030003651E /* FakeGeoPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC8E76D2213D4030003651E /* FakeGeoPoints.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -118,7 +120,6 @@
 		9B6F8FF21FC35C3F0050B25D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9B6F8FF41FC35F8D0050B25D /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		9B6F8FF81FC3752D0050B25D /* FireFliesParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = FireFliesParticle.sks; sourceTree = "<group>"; };
-		9B6F8FFA1FC37A800050B25D /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		9B6F8FFC1FC37D460050B25D /* HomeCellCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCellCollectionViewCell.swift; sourceTree = "<group>"; };
 		9B6F8FFD1FC37D460050B25D /* HomeCellCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeCellCollectionViewCell.xib; sourceTree = "<group>"; };
 		9BAEE40E1FC309920034356D /* DadHive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DadHive.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -219,6 +220,9 @@
 		BA9CCC41220E078C000C47E3 /* LocationManagerModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerModule.swift; sourceTree = "<group>"; };
 		BA9CCC43220E1AF7000C47E3 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		BA9CCC45220E1C86000C47E3 /* NotificationsManagerModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsManagerModule.swift; sourceTree = "<group>"; };
+		BA9CCC47221053FD000C47E3 /* PermissionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsVC.swift; sourceTree = "<group>"; };
+		BAC8E7692211A4880003651E /* AgeRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeRange.swift; sourceTree = "<group>"; };
+		BAC8E76D2213D4030003651E /* FakeGeoPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeGeoPoints.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -270,7 +274,9 @@
 				BA8D934321CF0212003A76FC /* ModuleHandler.swift */,
 				9BAEE41D1FC309920034356D /* LaunchScreen.storyboard */,
 				9BAEE4151FC309920034356D /* Main.storyboard */,
+				BA9CCC47221053FD000C47E3 /* PermissionsVC.swift */,
 				BA8D4F712207D63500754053 /* FakeData.swift */,
+				BAC8E76D2213D4030003651E /* FakeGeoPoints.swift */,
 				BA864B0021D9AD3200A97BFA /* ChatVC.swift */,
 				BA63D2E921D7D948002BD8CF /* LaunchVC.swift */,
 				BA63D2C921D4096A002BD8CF /* ProfileSetup.swift */,
@@ -280,7 +286,6 @@
 				9BAEE4131FC309920034356D /* ViewController.swift */,
 				9B6F8FF41FC35F8D0050B25D /* RegisterViewController.swift */,
 				9B6F8FF21FC35C3F0050B25D /* LoginViewController.swift */,
-				9B6F8FFA1FC37A800050B25D /* HomeViewController.swift */,
 				9B6F8FFC1FC37D460050B25D /* HomeCellCollectionViewCell.swift */,
 				BA63D2C721D3FC77002BD8CF /* CustomTabBar.swift */,
 				9B6F8FFD1FC37D460050B25D /* HomeCellCollectionViewCell.xib */,
@@ -360,6 +365,7 @@
 			children = (
 				BA8D936221CF2FBE003A76FC /* Conversation.swift */,
 				BA8D936121CF2FBC003A76FC /* CurrentUser.swift */,
+				BAC8E7692211A4880003651E /* AgeRange.swift */,
 				BA8D935F21CF2FB9003A76FC /* User.swift */,
 				BA8D93C421D1676F003A76FC /* Media.swift */,
 				BA8D93B721D11EB8003A76FC /* Info.swift */,
@@ -571,6 +577,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-DadHive/Pods-DadHive-resources.sh",
 				"${PODS_ROOT}/FirebaseInvites/Resources/GINInviteResources.bundle",
 				"${PODS_ROOT}/FirebaseInvites/Resources/GPPACLPickerResources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAnonymousAuthUI.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAuthUI.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseFacebookAuthUI.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseGoogleAuthUI.bundle",
@@ -586,6 +593,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GINInviteResources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GPPACLPickerResources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseAnonymousAuthUI.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseAuthUI.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseFacebookAuthUI.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseGoogleAuthUI.bundle",
@@ -615,13 +623,13 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/BoringSSL-GRPC/openssl_grpc.framework",
-				"${BUILT_PRODUCTS_DIR}/BouncyLayout/BouncyLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/CVCalendar/CVCalendar.framework",
 				"${BUILT_PRODUCTS_DIR}/Cachable/Cachable.framework",
 				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
-				"${BUILT_PRODUCTS_DIR}/DropDown/DropDown.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FontAwesome.swift/FontAwesome_swift.framework",
+				"${BUILT_PRODUCTS_DIR}/Fuse/Fuse.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleAPIClientForREST/GoogleAPIClientForREST.framework",
@@ -632,7 +640,6 @@
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
-				"${BUILT_PRODUCTS_DIR}/SelectableTextView/SelectableTextView.framework",
 				"${BUILT_PRODUCTS_DIR}/SkyFloatingLabelTextField/SkyFloatingLabelTextField.framework",
 				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
 				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
@@ -651,13 +658,13 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl_grpc.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BouncyLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CVCalendar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cachable.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DropDown.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontAwesome_swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Fuse.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleAPIClientForREST.framework",
@@ -668,7 +675,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SelectableTextView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SkyFloatingLabelTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
@@ -717,6 +723,7 @@
 				9B6F8FF31FC35C3F0050B25D /* LoginViewController.swift in Sources */,
 				BA8D933021CF0188003A76FC /* UILabel+Extensions.swift in Sources */,
 				BA8D932D21CF0188003A76FC /* UIView+Extensions.swift in Sources */,
+				BAC8E76A2211A4880003651E /* AgeRange.swift in Sources */,
 				BA63D2EE21D8107C002BD8CF /* MyProfileVC.swift in Sources */,
 				BA8D932821CF0188003A76FC /* Dictionary+Extensions.swift in Sources */,
 				BA8D935121CF0251003A76FC /* WowzaConfigurationLayer.swift in Sources */,
@@ -750,6 +757,7 @@
 				BA8D932421CF0188003A76FC /* Strings+Extensions.swift in Sources */,
 				BA8D93C921D1815E003A76FC /* GoogleAdMobManager.swift in Sources */,
 				BA8D93A721CFEE1F003A76FC /* DHIntroCell.swift in Sources */,
+				BA9CCC48221053FD000C47E3 /* PermissionsVC.swift in Sources */,
 				BA8D932C21CF0188003A76FC /* URL+Extensions.swift in Sources */,
 				BA8D939D21CFE272003A76FC /* Utilities.swift in Sources */,
 				9BAEE41A1FC309920034356D /* DadHive.xcdatamodeld in Sources */,
@@ -771,7 +779,6 @@
 				BA63D2F021D81814002BD8CF /* PreferencesVC.swift in Sources */,
 				BA8D937F21CFDDBE003A76FC /* DHCarouselCell.swift in Sources */,
 				BA8D935821CF0251003A76FC /* FIRRepository.swift in Sources */,
-				9B6F8FFB1FC37A800050B25D /* HomeViewController.swift in Sources */,
 				9B6F8FFE1FC37D460050B25D /* HomeCellCollectionViewCell.swift in Sources */,
 				BA8D936C21CF2FC3003A76FC /* Conversation.swift in Sources */,
 				BA8D93CD21D1EF00003A76FC /* AppColors.swift in Sources */,
@@ -785,6 +792,7 @@
 				BA8D933321CF0188003A76FC /* DateFormatter+Extensions.swift in Sources */,
 				BA864B0321D9E9C600A97BFA /* EditVC.swift in Sources */,
 				BA8D939B21CFE272003A76FC /* JSONStringToStringTransform.swift in Sources */,
+				BAC8E76E2213D4030003651E /* FakeGeoPoints.swift in Sources */,
 				BA9CCC46220E1C86000C47E3 /* NotificationsManagerModule.swift in Sources */,
 				BA8D93AB21D00045003A76FC /* DHCarousel.swift in Sources */,
 				BA8D93B421D11E85003A76FC /* Settings.swift in Sources */,

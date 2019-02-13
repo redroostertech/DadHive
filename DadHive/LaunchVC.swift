@@ -10,6 +10,10 @@ import UIKit
 
 class LaunchVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
-        ModuleHandler.shared.firebaseRepository.auth.sessionCheck()
+        if let _ = DefaultsManager().retrieveAnyDefault(forKey: kAuthorizedUser) {
+            ModuleHandler.shared.firebaseRepository.auth.sessionCheck()
+        } else {
+            ModuleHandler.shared.firebaseRepository.auth.signout()
+        }
     }
 }

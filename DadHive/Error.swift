@@ -52,5 +52,6 @@ enum DadHiveError: String {
     case signInCredentialsError = "1 or more of your credentials is incorrect. Please check if your email is a valid email address and both fields are not empty."
     case maximumSwipesReached = "You have reached the maximum numbebr of swipes today. Either upgrade for unlimited swipes or come back tomorrow."
     case noMoreUsersAvailable = "No more users in your area."
-    case locationAccessDisabled = "Please provide access to your location to find users in your area."
+    case locationAccessDisabled = "Please provide access to your location to find users in your area. You can do this by going to your settings."
+    case notificationAccessDisabled = "Please provide access to your notifications to receive immediate community updates."
 }

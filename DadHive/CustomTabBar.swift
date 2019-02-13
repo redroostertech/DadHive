@@ -8,7 +8,6 @@
 
 import UIKit
 import ChameleonFramework
-import UserNotifications
 
 class CustomTabBar:
     UITabBarController,
@@ -24,16 +23,6 @@ class CustomTabBar:
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBarItems()
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .badge, .sound]) {
-            (granted, error) in
-            if let error = error {
-                print("There was an error granting permissions to notifications.")
-                print(error)
-            } else {
-                print("Successfully granted permissions to notifications.")
-            }
-        }
     }
 
     override func didReceiveMemoryWarning() {

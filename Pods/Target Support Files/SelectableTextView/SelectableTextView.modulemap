@@ -1,6 +1,0 @@
-framework module SelectableTextView {
-  umbrella header "SelectableTextView-umbrella.h"
-
-  export *
-  module * { export * }
-}

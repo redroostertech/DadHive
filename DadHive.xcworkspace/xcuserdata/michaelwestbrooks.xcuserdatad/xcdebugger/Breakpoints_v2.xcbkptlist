@@ -20,7 +20,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DadHive/User.swift"
-            timestampString = "571362983.501844"
+            timestampString = "571675467.195809"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "152"
@@ -35,46 +35,30 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DadHive/Modules/FIRFirestoreDB.swift"
-            timestampString = "571362983.50193"
+            filePath = "DadHive/PermissionsVC.swift"
+            timestampString = "571723221.765813"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
-            landmarkName = "delete(atID:from:completion:)"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "saveLocation(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DadHive.FIRFirestoreDB.delete(atID: Swift.String, from: Swift.String, completion: (Swift.Bool, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "DadHive"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/michaelwestbrooks/Documents/Projects/DadHive/Mobile/DadHive/DadHive/Modules/FIRFirestoreDB.swift"
-                  timestampString = "571362283.567008"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "36"
-                  endingLineNumber = "36"
-                  offsetFromSymbolStart = "64">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Error&gt;) -&gt; () in DadHive.FIRFirestoreDB.delete(atID: Swift.String, from: Swift.String, completion: (Swift.Bool, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "DadHive"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/michaelwestbrooks/Documents/Projects/DadHive/Mobile/DadHive/DadHive/Modules/FIRFirestoreDB.swift"
-                  timestampString = "571362283.569604"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "38"
-                  endingLineNumber = "38"
-                  offsetFromSymbolStart = "40">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DadHive/Modules/LocationManagerModule.swift"
+            timestampString = "571723221.765888"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "locationManager(_:didUpdateLocations:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

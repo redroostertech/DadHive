@@ -15,7 +15,6 @@ class Location: Mappable, CustomStringConvertible {
     var longitude: Any?
     var city: Any?
     var state: Any?
-    var dateString: Any?
     var description: Any?
     var country: Any?
 
@@ -26,7 +25,6 @@ class Location: Mappable, CustomStringConvertible {
         longitude <- map["longitude"]
         city <- map["city"]
         state <- map["state"]
-        dateString <- map["dateString"]
         description <- map["description"]
         country <- map["country"]
     }
@@ -40,6 +38,24 @@ class Location: Mappable, CustomStringConvertible {
             }
         }
         return dictionary
+    }
+
+    var userLocation: String {
+        return "\(city ?? ""), \(state ?? "")"
+    }
+
+    func setLocation(_ completion: @escaping(Error?)->Void) {
+        CurrentUser.shared.updateUser(withData: ["settings" : ["location" : self.toDict]]) {
+            (error) in
+            if error == nil {
+                print("Successfully updated user data")
+                completion(nil)
+            } else {
+                print(error!.localizedDescription)
+                completion(error!)
+            }
+        }
+
     }
 
 }

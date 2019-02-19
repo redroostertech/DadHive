@@ -19,14 +19,14 @@ class DHInfoCell: UITableViewCell {
         didSet {
             guard
                 let user = self.loadUser,
-                let infoArray = user.userInformation?.filter({
+                let infoArray = user.infoSectionOne?.filter({
                     (info) -> Bool in
-                    return info.userInfoType != "bio"
+                    return info.type ?? "" != "bio"
                 })
                 else { return }
             if DHInfoCell.infoIndex < (infoArray.count - 1) {
                 let info = infoArray[DHInfoCell.infoIndex]
-                self.lblInfo.text = info.userInfo
+                self.lblInfo.text = info.info ?? "No information"
                 DHInfoCell.infoIndex += 1
                 return
             } else {

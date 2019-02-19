@@ -16,8 +16,8 @@ class DHIntroCell: UITableViewCell {
     var loadUser: User? {
         didSet {
             guard let user = self.loadUser else { return }
-            self.lblName.text = user.name?.userFullName
-            self.lblKids.text = user.userKidsNames
+            self.lblName.text = user.name?.fullName ?? "No Name"
+            self.lblKids.text = user.kidsNames ?? "No Kids"
         }
     }
     override func awakeFromNib() {

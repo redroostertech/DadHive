@@ -47,6 +47,17 @@ extension Date {
     public func add(months: Int, days: Int, years: Int) -> Date? {
         return Calendar.current.date(byAdding: DateComponents(year: years, month: months, day: days), to: self)
     }
+
+    func calcAge(birthday: String) -> Int {
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "MM/dd/yyyy"
+        let birthdayDate = dateFormater.date(from: birthday)
+        let calendar: NSCalendar! = NSCalendar(calendarIdentifier: .gregorian)
+        let now = Date()
+        let calcAge = calendar.components(.year, from: birthdayDate!, to: now, options: [])
+        let age = calcAge.year
+        return age!
+    }
 }
 
 //  MARK:- Date comparisons

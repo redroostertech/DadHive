@@ -14,9 +14,11 @@ class CurrentUser {
     static let shared = CurrentUser()
     var defaults: DefaultsManager!
     var user: User?
+    var apiRepo: APIRepository!
 
     private init() {
         self.defaults = DefaultsManager()
+        self.apiRepo = ModuleHandler.shared.apiRepository
     }
 
     func signout(_ completion: @escaping(Bool) -> Void) {
@@ -55,7 +57,7 @@ class CurrentUser {
             completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]))
             return
         }
-        FIRFirestoreDB.shared.update(withData: data, from: kUsers, at: user.userKey) {
+        FIRFirestoreDB.shared.update(withData: data, from: kUsers, at: user.key ?? "") {
             (success, error) in
             if let err = error {
                 completion(err)
@@ -67,22 +69,37 @@ class CurrentUser {
     }
     
     private func retrieveUser(withId id: String, completion: @escaping (User?, Error?, [String: Any]?) -> Void) {
-        FIRFirestoreDB.shared.retrieveUser(withId: id, completion: {
-            (success, document, error) in
-            if let error = error {
-                print(error)
-                completion(nil, error, nil)
+        let parameters: [String: String] = [
+            "userId": id
+        ]
+        apiRepo.performRequest(path: Api.Endpoint.getUser, method: .post, parameters: parameters) { (response, error) in
+            if let err = error {
+                print(err)
+                completion(nil, err, nil)
             } else {
-                if let document = document {
-                    var userData = document.data()
-                    userData["snapshotKey"] = document.documentID
-                    let user = User(JSON: userData)
+                if let res = response as? [String: Any], let data = res["data"] as? [String: Any], let userData = data["user"] as? [String: Any], let user = User(JSON: userData) {
                     completion(user, nil, userData)
                 } else {
                     FIRAuthentication.shared.signout()
                 }
             }
-        })
+        }
+//        FIRFirestoreDB.shared.retrieveUser(withId: id, completion: {
+//            (success, document, error) in
+//            if let error = error {
+//                print(error)
+//                completion(nil, error, nil)
+//            } else {
+//                if let document = document {
+//                    var userData = document.data()
+//                    userData["snapshotKey"] = document.documentID
+//                    let user = User(JSON: userData)
+//                    completion(user, nil, userData)
+//                } else {
+//                    FIRAuthentication.shared.signout()
+//                }
+//            }
+//        })
     }
 }
 

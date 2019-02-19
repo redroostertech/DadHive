@@ -28,57 +28,57 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
     @IBOutlet var lblAgeRangeValue: ValueLabel!
     @IBOutlet var lblMaximumDistance: TitleLabel!
     @IBOutlet var lblMaximumDistanceValue: ValueLabel!
+    @IBOutlet var sliderMaximumDistanceValue: UISlider!
     @IBOutlet var lblPreferredMeetingLocations: TitleLabel!
     @IBOutlet var lblMeetingLocationOne: ValueLabel!
     @IBOutlet var lblMeetingLocationTwo: ValueLabel!
-
     var textField: UITextField!
-    var userInfo: [String: Any]?
-    var userDetailsSectionOne: [[String: Any]] = [
-        [
-            "type": "ageRange",
-            "title": "Age Range",
-            "info": ""
-        ],[
-            "type": "maxDistance",
-            "title": "Maximum Distance",
-            "info": ""
-        ]
-    ]
-    var pickerType = 0
     var maxDistancePicker: UIPickerView!
+
+    var maxDistanceInterval: Double = 0
+    var userInfo: Info?
+    var pickerType = 0
     var distance = [10.0, 25.0, 50.0, 75.0, 100.0]
-    var ageRange = [
-        [
-            "id": 0,
-            "min": 1.0,
-            "max": 2.0
-        ],[
-            "id": 1,
-            "min": 2.0,
-            "max": 4.0
-        ],[
-            "id": 2,
-            "min": 4.0,
-            "max": 7.0
-        ],[
-            "id": 3,
-            "min": 7.0,
-            "max": 10.0
-        ],[
-            "id": 4,
-            "min": 10.0,
-            "max": 13.0
-        ],[
-            "id": 5,
-            "min": 13.0,
-            "max": 20.0
-        ],
-    ]
+    var ageRange = [AgeRange]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        DispatchQueue.global(qos: .background).async {
+            FIRFirestoreDB.shared.retrieve(from: kMaxDistance) { (success, documents, error) in
+                if let err = error {
+                    print("Was unable to get maxDistance")
+                } else {
+                    if let docs = documents, docs.count > 0, let maxDistance = MaxDistance(JSON: docs[0].data()) {
+                        self.sliderMaximumDistanceValue.minimumValue = Float(maxDistance.getMin)
+                        self.sliderMaximumDistanceValue.maximumValue = Float(maxDistance.getMax)
+                        self.maxDistanceInterval = maxDistance.getInterval
+                        self.sliderMaximumDistanceValue.value = Float(CurrentUser.shared.user?.settings?.maxDistance ?? 0)
+                    }
+                }
+            }
+        }
+
+        DispatchQueue.global(qos: .background).async {
+            FIRFirestoreDB.shared.retrieve(from: kAgeRange) { (success, documents, error) in
+                if let err = error {
+                    print("Was unable to get ageRanges")
+                } else {
+                    if let docs = documents, docs.count > 0 {
+                        for doc in docs {
+                            if let range = AgeRange(JSON: doc.data()) {
+                                self.ageRange.append(range)
+                                let sortedArray = self.ageRange.sorted { $0.min! < $1.min! }
+                                self.ageRange = sortedArray
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         hideNavigationBarHairline()
+
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
 
@@ -109,7 +109,6 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        print(CurrentUser.shared.user)
         setupUI()
     }
 
@@ -118,7 +117,7 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return userDetailsSectionOne.count
+        return CurrentUser.shared.user?.preferenceSection?.count ?? 0
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -135,14 +134,11 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
             pickerType = 0
             maxDistancePicker.reloadAllComponents()
             textField.becomeFirstResponder()
-        } else if indexPath.row == 1 {
-            pickerType = 1
-            maxDistancePicker.reloadAllComponents()
-            textField.becomeFirstResponder()
-        } else {
-            userInfo = userDetailsSectionOne[indexPath.row]
-            performSegue(withIdentifier: "goToEdit", sender: self)
         }
+//        } else {
+//            userInfo = userDetailsSectionOne[indexPath.row]
+//            performSegue(withIdentifier: "goToEdit", sender: self)
+//        }
     }
 
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -150,35 +146,18 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if pickerType == 0 {
-            return ageRange.count
-        } else {
-            return distance.count
-        }
+        return ageRange.count
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if pickerType == 0 {
-            return "\(ageRange[row]["min"] ?? 0) to \(ageRange[row]["max"] ?? 0) years old"
-        } else {
-            return String(describing: distance[row])
-        }
+        return "\(ageRange[row].getAgeRange ?? "")"
     }
 
     @objc func pickerViewDone() {
         let row = maxDistancePicker.selectedRow(inComponent: 0)
-        if pickerType == 0 {
-            if let ageRangeObj = AgeRange(JSON: [
-                "min" : ageRange[row]["min"],
-                "max": ageRange[row]["max"]
-                ]) {
-                ageRangeObj.setAgeRange()
-            }
-        } else {
-            CurrentUser.shared.user?.userSettings?.setMaximumDistance(distance[row])
-        }
+        CurrentUser.shared.user?.setAgeRange(ageRange[row])
         textField.resignFirstResponder()
-        viewWillAppear(true)
+        lblAgeRangeValue.text = "\(ageRange[row].getAgeRange ?? "")"
     }
 
     @objc func pickerViewCancel() {
@@ -186,13 +165,18 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
         viewWillAppear(true)
     }
 
+    @IBAction func maximumDistanceSlider(_ sender: UISlider) {
+        let roundedValue = round(sender.value / Float(maxDistanceInterval)) * Float(maxDistanceInterval)
+        sender.value = roundedValue
+        self.lblMaximumDistanceValue.text = "\(Int(roundedValue))"
+        CurrentUser.shared.user?.setMaximumDistance(Double(roundedValue))
+    }
+
 }
 
 extension PreferencesVC {
     func setupUI() {
-        lblAgeRangeValue.text = String(describing: CurrentUser.shared.user?.userSettings?.userAgeRange?.userAgeRangePreferences ?? "No Response")
-        lblMaximumDistanceValue.text = String(describing: CurrentUser.shared.user?.userSettings?.userMaximumDistancePreferences ?? 0)
-//        lblMeetingLocationOne.text = String(describing: CurrentUser.shared.user?.userMeetingLocationPreferences ?? "No Response")
-//        lblMeetingLocationTwo.text = String(describing: CurrentUser.shared.user?.userMeetingLocationPreferences ?? "No Response")
+        lblAgeRangeValue.text = String(describing: CurrentUser.shared.user?.settings?.ageRange?.getAgeRange ?? "No Response")
+        lblMaximumDistanceValue.text = String(describing: Int(CurrentUser.shared.user?.settings?.maxDistance ?? 0))
     }
 }

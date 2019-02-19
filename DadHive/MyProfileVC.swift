@@ -38,70 +38,8 @@ class MyProfileVC: UITableViewController {
     @IBOutlet var lblQuestionThree: TitleLabel!
     @IBOutlet var lblQuestionThreeValue: ValueLabel!
 
-    var userInfo: [String: Any]?
-    var userInformationSectionTwo: [[String: Any]] = [
-        [
-            "type": "name",
-            "title": "Name",
-            "info": ""
-        ],[
-            "type": "age",
-            "title": "Age",
-            "info": ""
-        ],[
-            "type": "location",
-            "title": "Location",
-            "info": ""
-        ],[
-            "type": "bio",
-            "title": "About Me",
-            "info": ""
-        ],[
-            "type": "work",
-            "title": "Work",
-            "info": ""
-        ],[
-            "type": "jobTitle",
-            "title": "Job Title",
-            "info": ""
-        ],[
-            "type": "school",
-            "title": "School / University",
-            "info": ""
-        ]
-    ]
-
-    var userInformationSectionThree: [[String: Any]] = [
-        [
-            "type": "kidsNames",
-            "title": "Kids Names",
-            "info": ""
-        ],[
-            "type": "kidsAges",
-            "title": "Kids Ages",
-            "info": ""
-        ],[
-            "type": "kidsBio",
-            "title": "About My Kids",
-            "info": ""
-        ]
-    ]
-
-    var userInformationSectionFour: [[String: Any]] = [
-        [
-            "type": "questionOne",
-            "title": "On our spare time, my kids and I like to...",
-            "info": ""
-        ],[
-            "type": "questionTwo",
-            "title": "Describe my kids in 3 words",
-            "info": ""
-        ],[
-            "type": "questionThree",
-            "title": "When I'm not with my kids, you will find me at...",
-            "info": ""
-        ]
-    ]
+    var userInfo: Info?
+    var currentUser = CurrentUser.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,8 +56,8 @@ class MyProfileVC: UITableViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        print(CurrentUser.shared.user)
         setupUI()
+        tableView.reloadData()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -129,9 +67,9 @@ class MyProfileVC: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return 1
-        case 1: return userInformationSectionTwo.count
-        case 2: return userInformationSectionThree.count
-        case 3: return userInformationSectionFour.count
+        case 1: return currentUser.user?.infoSectionOne?.count ?? 0
+        case 2: return currentUser.user?.infoSectionTwo?.count ?? 0
+        case 3: return currentUser.user?.infoSectionThree?.count ?? 0
         default: return 1
         }
     }
@@ -139,13 +77,22 @@ class MyProfileVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 1:
-            userInfo = userInformationSectionTwo[indexPath.row]
+            guard let data = currentUser.user?.infoSectionOne else {
+                return
+            }
+            userInfo = data[indexPath.row]
             performSegue(withIdentifier: "goToEdit", sender: self)
         case 2:
-            userInfo = userInformationSectionThree[indexPath.row]
+            guard let data = currentUser.user?.infoSectionTwo else {
+                return
+            }
+            userInfo = data[indexPath.row]
             performSegue(withIdentifier: "goToEdit", sender: self)
         case 3:
-            userInfo = userInformationSectionFour[indexPath.row]
+            guard let data = currentUser.user?.infoSectionThree else {
+                return
+            }
+            userInfo = data[indexPath.row]
             performSegue(withIdentifier: "goToEdit", sender: self)
         default:
             break
@@ -165,18 +112,22 @@ class MyProfileVC: UITableViewController {
 
 extension MyProfileVC {
     func setupUI() {
-        lblNameValue.text = String(describing: CurrentUser.shared.user?.name?.userFullName ?? "No Response")
-        lblAgeValue.text = String(describing: CurrentUser.shared.user?.userAge ?? 0)
-        lblLocationValue.text = String(describing: CurrentUser.shared.user?.userLocation ?? "No Response")
-        lblBioValue.text = String(describing: CurrentUser.shared.user?.userBio ?? "No Response")
-        lblWorkValue.text = String(describing: CurrentUser.shared.user?.userWork ?? "No Response")
-        lblJobTitleValue.text = String(describing: CurrentUser.shared.user?.userJobTitle ?? "No Response")
-        lblSchoolValue.text = String(describing: CurrentUser.shared.user?.userSchool ?? "No Response")
-        lblKidsNamesValue.text = String(describing: CurrentUser.shared.user?.userKidsNames ?? "No Response")
-        lblKidsAgesValue.text = String(describing: CurrentUser.shared.user?.userKidsAges ?? "No Response")
-        lblKidsBioValue.text = String(describing: CurrentUser.shared.user?.userKidsBio ?? "No Response")
-        lblQuestionOneValue.text = String(describing: CurrentUser.shared.user?.userQuestionOne ?? "No Response")
-        lblQuestionTwoValue.text = String(describing: CurrentUser.shared.user?.userQuestionTwo ?? "No Response")
-        lblQuestionThreeValue.text = String(describing: CurrentUser.shared.user?.userQuestionThree ?? "No Response")
+        lblNameValue.text = String(describing: currentUser.user?.name?.fullName ?? "No Response")
+        lblAgeValue.text = String(describing: currentUser.user?.age ?? 0)
+        lblLocationValue.text = String(describing: currentUser.user?.settings?.location?.getString ?? "No Response")
+        lblBioValue.text = String(describing: currentUser.user?.bio ?? "No Response")
+        lblWorkValue.text = String(describing: currentUser.user?.companyName ?? "No Response")
+        lblJobTitleValue.text = String(describing: currentUser.user?.jobTitle ?? "No Response")
+        lblSchoolValue.text = String(describing: currentUser.user?.schoolName ?? "No Response")
+        lblKidsNamesValue.text = String(describing: currentUser.user?.kidsNames ?? "No Response")
+        lblKidsAgesValue.text = String(describing: currentUser.user?.kidsAges ?? "No Response")
+        lblKidsBioValue.text = String(describing: currentUser.user?.kidsBio ?? "No Response")
+        lblQuestionOne.text = String(describing: currentUser.user?.questionOneTitle ?? "Select a question")
+        lblQuestionOneValue.text = String(describing: currentUser.user?.questionOneResponse ?? "No Response")
+        lblQuestionTwo.text = String(describing: currentUser.user?.questionTwoTitle ?? "Select a question")
+        lblQuestionTwoValue.text = String(describing: currentUser.user?.questionTwoResponse ?? "No Response")
+        lblQuestionThree.text = String(describing: currentUser.user?.questionThreeTitle ?? "Select a question")
+        lblQuestionThreeValue.text = String(describing: currentUser.user?.questionThreeResponse ?? "No Response")
+        tableView.reloadData()
     }
 }

@@ -14,7 +14,7 @@ class AccountVC: UITableViewController {
     @IBOutlet var lblEmail: TitleLabel!
     @IBOutlet var swPushNotifications: UISwitch!
 
-    var userInfo: [String: Any]?
+    var userInfo: Info?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,11 +24,10 @@ class AccountVC: UITableViewController {
     }
 
     @IBAction func toggleNotifications(_ sender: UISwitch) {
-        CurrentUser.shared.user?.userSettings?.setNotificationToggle(sender.isOn)
+        CurrentUser.shared.user?.setNotificationToggle(sender.isOn)
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        print(CurrentUser.shared.user)
         setupUI()
     }
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -82,7 +81,7 @@ class AccountVC: UITableViewController {
 
 extension AccountVC {
     func setupUI() {
-        lblEmail.text = String(describing: CurrentUser.shared.user?.userEmail ?? "No Response")
-        swPushNotifications.isOn = CurrentUser.shared.user?.userSettings?.userNotifications ?? false
+        lblEmail.text = String(describing: CurrentUser.shared.user?.email ?? "No Response")
+        swPushNotifications.isOn = CurrentUser.shared.user?.settings?.notifications ?? false
     }
 }

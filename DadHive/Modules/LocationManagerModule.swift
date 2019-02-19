@@ -41,10 +41,11 @@ class LocationManagerModule: NSObject {
         }
     }
 
-    private override init() { }
+    private override init() {
+        locationManager = CLLocationManager()
+    }
 
     func checkLocationPermissions(_ completion: @escaping(DadHiveError?)->Void) {
-        locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
@@ -83,9 +84,13 @@ class LocationManagerModule: NSObject {
 
     func getUserLocation(_ completion: @escaping(Location?)->Void) {
         if let data = self.userLocationData, let location = Location(JSON: data) {
-            location.setLocation { (error) in
-                completion(location)
-            }
+            CurrentUser.shared.user?.setLocation(location, { (error) in
+                if let error = error {
+                    completion(nil)
+                } else {
+                    completion(location)
+                }
+            })
         } else {
             completion(nil)
         }
@@ -126,7 +131,6 @@ extension LocationManagerModule: CLLocationManagerDelegate {
                     self.userLocationDescription!["state"] = place.administrativeArea ?? ""
                     self.userLocationDescription!["country"] = place.country ?? ""
                     NotificationCenter.default.post(name: Notification.Name(rawValue: kSaveLocationObservationKey), object: nil, userInfo: ["access": false])
-                    kSaveLocationObservationKey
                 }
             }
         }

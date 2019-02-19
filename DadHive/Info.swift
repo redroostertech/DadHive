@@ -10,22 +10,27 @@ import Foundation
 import ObjectMapper
 
 class Info: Mappable, CustomStringConvertible {
-    private var type: Any?
-    private var info: Any?
+    var type: String?
+    var info: String?
+    var title: String?
 
     required init?(map: Map) { }
 
     func mapping(map: Map) {
         type <- map["type"]
         info <- map["info"]
+        title <- map["title"]
     }
 
-    var userInfoType: String {
-        return (self.type as? String) ?? ""
-    }
-
-    var userInfo: String {
-        return (self.info as? String) ?? ""
+    public var toDict: [String: Any] {
+        var dictionary: [String: Any] = [String: Any]()
+        let selfMirror = Mirror(reflecting: self)
+        for child in selfMirror.children {
+            if let propertyName = child.label {
+                dictionary[propertyName] = child.value
+            }
+        }
+        return dictionary
     }
 }
 

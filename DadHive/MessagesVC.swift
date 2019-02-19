@@ -86,7 +86,7 @@ class MessagesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ConversationCell") as! ConversationCell
         let item = conversations[indexPath.row]
         cell.lblLastMessage.text = item.lastMessage?.message as? String ?? "Empty"
-        cell.lblRecipientName.text = item.otherUser?.name?.userFullName ?? "Empty"
+        cell.lblRecipientName.text = item.otherUser?.name?.fullName ?? "Empty"
         cell.lblMessageSentDate.text = item.lastMessage?.date ?? "ago"
         return cell
     }
@@ -94,7 +94,7 @@ class MessagesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func getConversations(_ completion: @escaping () -> Void) {
         var queue = 0
         DispatchQueue.main.async {
-            FIRRepository.shared.db.retrieveDataOnce(atChild: kConversation, whereKey: "senderId", isEqualTo: CurrentUser.shared.user!.userId) {
+            FIRRepository.shared.db.retrieveDataOnce(atChild: kConversations, whereKey: "senderId", isEqualTo: CurrentUser.shared.user!.uid ?? "") {
                 (success, data, error) in
                 if error != nil {
                     print("getConversations() | Sender Error " + String(describing: error?.localizedDescription))
@@ -117,7 +117,7 @@ class MessagesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             }
         }
         DispatchQueue.main.async {
-            FIRRepository.shared.db.retrieveDataOnce(atChild: kConversation, whereKey: "recipientId", isEqualTo: CurrentUser.shared.user!.userId) {
+            FIRRepository.shared.db.retrieveDataOnce(atChild: kConversations, whereKey: "recipientId", isEqualTo: CurrentUser.shared.user!.uid ?? "") {
                 (success, data, error) in
                 if error != nil {
                     print("getConversations() | Recipient Error " + String(describing: error?.localizedDescription))

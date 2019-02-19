@@ -114,7 +114,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func generate(_ sender: UIButton) {
-        FakeDataGenerator().generateFakeUserAccounts(50)
+        FakeDataGenerator().generateFakeUserAccounts(300)
     }
 
     @IBAction func deleteAllUsers(_ sender: UIButton) {

@@ -48,7 +48,7 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         tblMain.delegate = self
         tblMain.dataSource = self
         showHUD()
-        lblUserName.text = conversation?.otherUser?.name?.userFullName ?? ""
+        lblUserName.text = conversation?.otherUser?.name?.fullName ?? ""
         getMessages(conversationId: self.conversation?.id as? String ?? "")
     }
 
@@ -83,7 +83,7 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = messagesToDisplay[indexPath.row]
-        if item.senderId as? String ?? "" == CurrentUser.shared.user?.userId {
+        if item.senderId as? String ?? "" == CurrentUser.shared.user?.uid {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SenderCell") as! SenderCell
             cell.lblMessage.text = item.message as? String ?? "No Message"
             return cell
@@ -105,37 +105,37 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             "createdAt": Date().toString(format: CustomDateFormat.timeDate.rawValue),
             "id": Utilities.randomString(length: 25),
             "message": txtField.text,
-            "senderId": CurrentUser.shared.user?.userId ?? "",
+            "senderId": CurrentUser.shared.user?.uid ?? "",
             "sender": [
-                "email": CurrentUser.shared.user?.userEmail ?? "",
+                "email": CurrentUser.shared.user?.email ?? "",
                 "name": [
-                    "fullName": CurrentUser.shared.user?.name?.userFullName ?? ""
+                    "fullName": CurrentUser.shared.user?.name?.fullName ?? ""
                 ]
             ]
         ] as [String: Any]
         FIRRealtimeDB.shared.add(data: message, atChild: "messages", completion: {
             (success, results, error) in
             if error == nil {
-                let updateMessage: [String: Any] = [
+                let updateMessage = [
                     "createdAt": self.conversation?.createdAt as? String ?? "",
                     "id": self.conversation?.id as? String ?? "",
                     "recipient": [
-                        "email": self.conversation?.recipient?.userEmail as? String ?? "",
+                        "email": self.conversation?.recipient?.email as? String ?? "",
                         "name": [
-                            "fullName": self.conversation?.recipient?.name?.userFullName as? String ?? ""
-                        ]
+                            "fullName": self.conversation?.recipient?.name?.fullName as? String ?? ""
+                            ]
                     ],
                     "recipientId": self.conversation?.recipientId as? String ?? "",
                     "senderId": self.conversation?.senderId as? String ?? "",
                     "sender": [
-                        "email": self.conversation?.sender?.userEmail as? String ?? "",
+                        "email": self.conversation?.sender?.email as? String ?? "",
                         "name": [
-                            "fullName": self.conversation?.sender?.name?.userFullName as? String ?? ""
-                        ]
-                    ],
+                            "fullName": self.conversation?.sender?.name?.fullName as? String ?? ""
+                            ]
+                        ],
                     "lastMessage" : message,
                     "updatedAt": Date().toString(format: CustomDateFormat.timeDate.rawValue)
-                ]
+                ] as [String: Any]
                 FIRRealtimeDB.shared.update(withData: updateMessage, atChild: "conversations/\(self.conversation?.key as? String ?? "")", completion: {
                     (success, results, error) in
                     if error == nil {

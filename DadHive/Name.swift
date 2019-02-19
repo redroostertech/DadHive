@@ -11,35 +11,23 @@ import ObjectMapper
 
 class Name: Mappable {
     
-    private var firstName: Any?
-    private var lastName: Any?
-    private var fullName: Any?
-
-    var toDict: [String: Any] {
-        let dict = [
-            "fullName": self.fullName
-        ]
-        return dict
-    }
+    var fullName: String?
 
     required init?(map: Map) { }
 
     func mapping(map: Map) {
-        firstName <- map["firstName"]
-        lastName <- map["lastName"]
-        fullName <- map["fullName"]
+        fullName <- map["name"]
     }
 
-    var userFirstName: String {
-        return (self.firstName as? String) ?? ""
-    }
-
-    var userLastName: String {
-        return (self.lastName as? String) ?? ""
-    }
-
-    var userFullName: String {
-        return (self.fullName as? String) ?? ""
+    public var toDict: [String: Any] {
+        var dictionary: [String: Any] = [String: Any]()
+        let selfMirror = Mirror(reflecting: self)
+        for child in selfMirror.children {
+            if let propertyName = child.label {
+                dictionary[propertyName] = child.value
+            }
+        }
+        return dictionary
     }
 
 }

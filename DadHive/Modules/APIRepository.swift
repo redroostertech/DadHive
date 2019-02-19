@@ -28,12 +28,15 @@ class APIRepository {
         let apiKey = api
         let accessKey = access
         
+//        var headers = [
+//            "Accept": "application/json",
+//            "wsc-api-key": apiKey,
+//            "wsc-access-key": accessKey
+//        ]
         var headers = [
             "Accept": "application/json",
-            "wsc-api-key": apiKey,
-            "wsc-access-key": accessKey
         ]
-        
+
         for key in headers.keys {
             headers[key] = headers[key]
         }
@@ -62,16 +65,14 @@ class APIRepository {
                 switch response.result {
                 case .success:
                     if let json = response.result.value {
-                        completion(json,
-                                   nil)
+                        completion(json, nil)
                     } else {
                         completion(nil,
                                    NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                     }
                 case .failure(let error):
                     print(error)
-                    completion(nil,
-                               error)
+                    completion(nil, error)
                 }
         }
     }
@@ -170,5 +171,81 @@ class APIRepository {
         } else {
             completion(nil, NSError(domain:"Can't create URL", code: 500, userInfo:nil))
         }
+    }
+
+    func performMultiPartRequest(path: String = "",
+                                 method: HTTPMethod = .post,
+                                 parameters: Parameters = [:],
+                                 data: Data,
+                                 fileName: String,
+                                 apiKey api: String = "",
+                                 andAccessKey access: String = "",
+                                 headers: HTTPHeaders = [:],
+                                 completion: @escaping (Any?, Error?) -> Void)
+    {
+        let urlString = path
+        let method = method
+        let parameters = parameters
+
+        var headers = [
+            "content-type": "multipart/form-data"
+        ]
+
+        for key in headers.keys {
+            headers[key] = headers[key]
+        }
+
+        buildMultipartRequest(urlString: urlString,
+                              method: method,
+                              parameters: parameters,
+                              data: data,
+                              fileName: fileName,
+                              headers: headers) { (results, error) in
+
+                                completion(results, error)
+        }
+    }
+
+    private func buildMultipartRequest(urlString: String,
+                                       method: HTTPMethod,
+                                       parameters: Parameters,
+                                       data: Data,
+                                       fileName: String,
+                                       headers: HTTPHeaders,
+                                       completion: @escaping (Any?, Error?) -> Void)
+    {
+        Alamofire.upload(multipartFormData: { (multipartFormData) in
+            for (key, value) in parameters {
+                multipartFormData.append("\(value)".data(using: String.Encoding.utf8)!, withName: key as String)
+            }
+            multipartFormData.append(data, withName: fileName)
+
+            //            if let data = imageData{
+            //                multipartFormData.append(data, withName: "image", fileName: "image.png", mimeType: "image/png")
+            //            }
+
+        }, usingThreshold: UInt64.init(), to: urlString, method: .post, headers: headers) { (result) in
+            switch result{
+            case .success(let upload, _, _):
+                upload.responseJSON { response in
+                    print("Succesfully uploaded")
+                    //if let err = response.error{
+                    //onError?(err)
+                    //    return
+                    //}
+                    //completion(nil)
+                    print("\(response)")
+                    completion(response.value, nil)
+
+                    return
+                }
+            case .failure(let error):
+                print("Error in upload: \(error.localizedDescription)")
+                //onError?(error)
+            }
+        }
+
+
+
     }
 }

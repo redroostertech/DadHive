@@ -22,8 +22,10 @@ class UserProfileVC: UIViewController {
         cell.textLabel?.text = "No Data"
         return cell
     }
+    var uniqueUsers = Array<[String: Any]>()
     var users = [User]()
     var currentUser: User?
+    let notificationCenter = NotificationCenter.default
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +49,26 @@ class UserProfileVC: UIViewController {
                                     presentingView: self.view,
                                     completion: nil)
 
+        notificationCenter.addObserver(self,
+                                       selector: #selector(UserProfileVC.saveLocation(_:)),
+                                       name: Notification.Name(rawValue: kSaveLocationObservationKey),
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(UserProfileVC.addUser(_:)),
+                                       name: Notification.Name(rawValue: kAddUserObservationKey),
+                                       object: nil)
+
+        LocationManagerModule.shared.requestLocation()
+
+        self.loadUsers {
+            APESuperHUD.removeHUD(animated: true, presentingView: self.view)
+            self.tblMain.reloadData()
+        }
+
+    }
+
+    @objc
+    func saveLocation(_ notification: Notification) {
         LocationManagerModule.shared.getUserLocation {
             (location) in
             APESuperHUD.removeHUD(animated: true, presentingView: self.view)
@@ -60,31 +82,57 @@ class UserProfileVC: UIViewController {
         }
     }
 
+    @objc
+    func addUser(_ notification: Notification) {
+        if
+            let userData = notification.userInfo?["user"] as? [String: Any],
+            let u = User(JSON: userData),
+            u.uid != CurrentUser.shared.user?.uid ?? "",
+            self.users.contains(where: { (user) -> Bool in
+                return user.key == (userData["key"] as? String) ?? ""
+            }) == false
+        {
+            self.users.append(u)
+            if self.users.count == 1 {
+                self.load(user: self.users[0])
+            }
+        }
+    }
+
     func loadUsers(_ completion: @escaping () -> Void) {
-        FIRFirestoreDB.shared.retrieveUsers {
-            (success, snapshot, error) in
-            if let error = error {
-                print(error)
+        if let lat = CurrentUser.shared.user?.settings?.location?.latitude, let long = CurrentUser.shared.user?.settings?.location?.longitude, let radius = CurrentUser.shared.user?.settings?.maxDistance {
+
+            FIRFirestoreDB.shared.retrieveUsersByLocationWithPagination(atLat: lat, andLong: long, withRadius: radius) {
                 completion()
-            } else {
-                guard let documents = snapshot?.filter({
-                    (result) -> Bool in
-                    let user = User(JSON: result.data())
-                    return user?.userId != CurrentUser.shared.user?.userId
-                }) else {
-                    completion()
-                    return
-                }
-                if documents.count > 0 {
-                    self.load(user: User(JSON: documents[0].data())!)
-                    for document in documents {
-                        var rawData: [String: Any] = document.data()
-                        rawData["snapshotKey"] = document.documentID
-                        self.users.append(User(JSON: rawData)!)
-                    }
+            }
+
+        } else {
+
+            FIRFirestoreDB.shared.retrieveUsers {
+                (success, snapshot, error) in
+                if let error = error {
+                    print(error)
                     completion()
                 } else {
-                    completion()
+                    guard let documents = snapshot?.filter({
+                        (result) -> Bool in
+                        let user = User(JSON: result.data())
+                        return user?.uid != CurrentUser.shared.user?.uid ?? ""
+                    }) else {
+                        completion()
+                        return
+                    }
+                    if documents.count > 0 {
+                        self.load(user: User(JSON: documents[0].data())!)
+                        for document in documents {
+                            var rawData: [String: Any] = document.data()
+                            rawData["snapshotKey"] = document.documentID
+                            self.users.append(User(JSON: rawData)!)
+                        }
+                        completion()
+                    } else {
+                        completion()
+                    }
                 }
             }
         }
@@ -92,10 +140,7 @@ class UserProfileVC: UIViewController {
 
     func load(user: User) {
         self.currentUser = user
-
-        //  Save last user
-        DefaultsManager().setDefault(withData: user.userId, forKey: kLastUser)
-
+        DefaultsManager().setDefault(withData: user.uid ?? "", forKey: kLastUser)
         tblMain.reloadData()
     }
 
@@ -127,28 +172,35 @@ class UserProfileVC: UIViewController {
         count += 1
         load(user: users[count])
 
-        if count % 3 == 0 {
+        if count % 5 == 0 {
             DispatchQueue.global(qos: .background).async {
-                print("In background")
-                FIRFirestoreDB.shared.retrieveNextUsers {
-                    (success, snapshot, error) in
-                    if let error = error {
-                        print(error)
-                    } else {
-                        guard let documents = snapshot?.filter({
-                            (result) -> Bool in
-                            let user = User(JSON: result.data())
-                            return user?.userId != CurrentUser.shared.user?.userId
-                        }) else {
-                            return
-                        }
-                        if documents.count > 0 {
-                            for document in documents {
-                                var rawData: [String: Any] = document.data()
-                                rawData["snapshotKey"] = document.documentID
-                                self.users.append(User(JSON: rawData)!)
+                if let lat = CurrentUser.shared.user?.settings?.location?.latitude, let long = CurrentUser.shared.user?.settings?.location?.longitude, let radius = CurrentUser.shared.user?.settings?.maxDistance {
+
+                    FIRFirestoreDB.shared.retrieveUsersByLocationWithPagination(atLat: lat, andLong: long, withRadius: radius) {
+                        print("Done with retrieveUsersyLocationWithPagination")
+                    }
+                    
+                } else {
+                    FIRFirestoreDB.shared.retrieveNextUsers {
+                        (success, snapshot, error) in
+                        if let error = error {
+                            print(error)
+                        } else {
+                            guard let documents = snapshot?.filter({
+                                (result) -> Bool in
+                                let user = User(JSON: result.data())
+                                return user?.uid != CurrentUser.shared.user?.uid ?? ""
+                            }) else {
+                                return
                             }
-                            print("Count of users array is \(self.users.count)")
+                            if documents.count > 0 {
+                                for document in documents {
+                                    var rawData: [String: Any] = document.data()
+                                    rawData["snapshotKey"] = document.documentID
+                                    self.users.append(User(JSON: rawData)!)
+                                }
+                                print("Count of users array is \(self.users.count)")
+                            }
                         }
                     }
                 }
@@ -188,13 +240,13 @@ extension UserProfileVC: UITableViewDelegate, UITableViewDataSource {
             cell.loadUser = user
             return cell
         } else {
-            if indexPath.row < user.maxCountForInfo {
+            if indexPath.row < user.countForTable {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "DHInfoCell") as! DHInfoCell
                 cell.loadUser = user
                 return cell
             }
 
-            if indexPath.row >= user.maxCountForInfo {
+            if indexPath.row >= user.countForTable {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "DHQuestionCell") as! DHQuestionCell
                 cell.loadUser = user
                 return cell

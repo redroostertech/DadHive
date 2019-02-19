@@ -190,6 +190,7 @@ internal class GFSGeoHashQueryListener {
     var childAddedListener: ListenerRegistration?
     var childRemovedListener: ListenerRegistration?
     var childChangedListener: ListenerRegistration?
+    var childPaginateListener: ListenerRegistration?
 }
 
 
@@ -207,7 +208,7 @@ public class GFSQuery {
      * The GeoFirestore this GFSQuery object uses.
      */
     public var geoFirestore: GeoFirestore
-    
+
     internal var locationInfos = [String: GFSQueryLocationInfo]()
     internal var queries = Set<GFGeoHashQuery>()
     internal var handles = [GFGeoHashQuery: GFSGeoHashQueryListener]()
@@ -230,6 +231,26 @@ public class GFSQuery {
     
     internal func fireStoreQueryForGeoHashQuery(query: GFGeoHashQuery) -> Query {
         return self.geoFirestore.collectionRef.order(by: "g").whereField("g", isGreaterThanOrEqualTo: query.startValue).whereField("g", isLessThanOrEqualTo: query.endValue)
+    }
+
+    internal func fireStoreQueryForGeoHashQueryWithPagination(query: GFGeoHashQuery, startingAtDocument document: QueryDocumentSnapshot?, orderedByKey key: String, withPreferences preferences: [String: Any]?, limitedTo limit: Int = 5) -> Query {
+        if let doc = document {
+            print("Document exists.")
+            return self.geoFirestore.collectionRef
+                .order(by: "g")
+                .whereField("g", isGreaterThanOrEqualTo: query.startValue)
+                .whereField("g", isLessThanOrEqualTo: query.endValue)
+                .limit(to: limit)
+                .start(afterDocument: doc)
+            
+        } else {
+            print("Document does not exist.")
+            return self.geoFirestore.collectionRef
+                .order(by: "g")
+                .whereField("g", isGreaterThanOrEqualTo: query.startValue)
+                .whereField("g", isLessThanOrEqualTo: query.endValue)
+                .limit(to: limit)
+        }
     }
     
     //overriden
@@ -468,6 +489,126 @@ public class GFSQuery {
         checkAndFireReadyEvent()
     }
 
+    //  MARK:- Updating for pagination
+    internal func updateQueriesForPagination(startingAtDocument document: QueryDocumentSnapshot?, orderedByKey key: String, withPreferences preferences: [String: Any]?, limitedTo limit: Int = 50) {
+        let oldQueries = queries
+        let newQueries = queriesForCurrentCriteria()
+
+        var toDelete = (Set<AnyHashable>().union(oldQueries))
+        toDelete.subtract(newQueries)
+        var toAdd = (Set<AnyHashable>().union(newQueries))
+        toAdd.subtract(oldQueries)
+
+        for (offset: _, element: query) in toDelete.enumerated(){
+            if let query = query as? GFGeoHashQuery{
+
+                let handle: GFSGeoHashQueryListener? = handles[query]
+                if handle == nil {
+                    NSException.raise(.internalInconsistencyException, format: "Wanted to remove a geohash query that was not registered!", arguments: getVaList(["nil"]))
+                }
+
+
+                handle!.childAddedListener?.remove()
+                handle!.childRemovedListener?.remove()
+                handle!.childChangedListener?.remove()
+                handle!.childPaginateListener?.remove()
+
+                self.handles.removeValue(forKey: query)
+                self.outstandingQueries.remove(query)
+
+            }
+
+        }
+
+        for (offset: _, element: query) in toAdd.enumerated(){
+            if let query = query as? GFGeoHashQuery{
+
+                self.outstandingQueries.insert(query)
+                let handle = GFSGeoHashQueryListener()
+                let queryFirestore: Query = self.fireStoreQueryForGeoHashQueryWithPagination(query: query, startingAtDocument: document, orderedByKey: key, withPreferences: preferences, limitedTo: limit)
+
+                handle.childAddedListener = queryFirestore.addSnapshotListener { (querySnapshot: QuerySnapshot?, err) in
+                    if let snapshot = querySnapshot, err == nil {
+                        for docChange in snapshot.documentChanges {
+                            if docChange.type == DocumentChangeType.added {
+                                self.childAdded(docChange.document)
+                            }
+                        }
+                    }
+                }
+
+                handle.childChangedListener = queryFirestore.addSnapshotListener { (querySnapshot: QuerySnapshot?, err) in
+                    if let snapshot = querySnapshot, err == nil {
+                        for docChange in snapshot.documentChanges {
+                            if docChange.type == DocumentChangeType.modified {
+                                self.childChanged(docChange.document)
+                            }
+                        }
+                    }
+                }
+
+                handle.childRemovedListener = queryFirestore.addSnapshotListener { (querySnapshot: QuerySnapshot?, err) in
+                    if let snapshot = querySnapshot, err == nil {
+                        for docChange in snapshot.documentChanges {
+                            if docChange.type == DocumentChangeType.removed {
+                                self.childRemoved(docChange.document)
+                            }
+                        }
+                    }
+                }
+
+                handle.childPaginateListener = queryFirestore.addSnapshotListener { (querySnapshot: QuerySnapshot?, err) in
+                    if let snapshot = querySnapshot, err == nil, let lastSnapshot = snapshot.documents.last {
+                        let next = queryFirestore.getDocuments { (snapshot, error) in
+                            if let snapshot = querySnapshot, err == nil {
+                                for docChange in snapshot.documentChanges {
+                                    if docChange.type == DocumentChangeType.added {
+                                        self.childAdded(docChange.document)
+                                    }
+                                    if docChange.type == DocumentChangeType.modified {
+                                        self.childChanged(docChange.document)
+                                    }
+                                    if docChange.type == DocumentChangeType.removed {
+                                        self.childRemoved(docChange.document)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                self.handles[query] = handle
+
+                queryFirestore.getDocuments { (snapshot, error) in
+                    if error == nil {
+                        let lockQueue = DispatchQueue(label: "self")
+                        lockQueue.sync {
+                            while let elementIndex = self.outstandingQueries.index(of: query) { self.outstandingQueries.remove(at: elementIndex) }
+                            self.checkAndFireReadyEvent()
+                        }
+                    }
+                }
+
+            }
+        }
+
+        queries = newQueries as! Set<GFGeoHashQuery>
+        for (offset: _, element: (key: key, value: info)) in self.locationInfos.enumerated(){
+            if let location = info.location{
+                self.updateLocationInfo(location, forKey: key)
+            }
+        }
+        var oldLocations = [String]()
+        for (offset: _, element: (key: key, value: info)) in self.locationInfos.enumerated(){
+            if !self.queriesContain(info.geoHash) {
+                oldLocations.append(key)
+            }
+        }
+        for k in oldLocations { locationInfos.removeValue(forKey: k) }
+        checkAndFireReadyEvent()
+    }
+
+
     internal func reset() {
         if !queries.isEmpty {
             for query: GFGeoHashQuery? in queries {
@@ -480,6 +621,7 @@ public class GFSQuery {
                     handle?.childAddedListener?.remove()
                     handle?.childChangedListener?.remove()
                     handle?.childRemovedListener?.remove()
+                    handle?.childPaginateListener?.remove()
                 }
                 
             }
@@ -546,6 +688,62 @@ public class GFSQuery {
             }
             if self.queries.isEmpty {
                 self.updateQueries()
+            }
+        }
+        return firebaseHandle
+
+    }
+
+    /*!
+     Adds an observer for an event type WITH pagination.
+     The following event types are supported:
+     typedef NS_ENUM(NSUInteger, GFEventType) {
+     GFSEventType.documentEntered, // A document entered the search area
+     GFSEventType.documentExited,  // A document exited the search area
+     GFSEventType.documentMoved    // A document moved within the search area
+     };
+     The block is called for each event and document.
+     Use removeObserver:withHandle: to stop receiving callbacks.
+     @param startingAtDocument the document to start paginating from
+     @param orderedByKey the key used to order the results
+     @param limit the amount of objects to return back
+     @param eventType The event type to receive updates for
+     @param block The block that is called for updates
+     @return A handle to remove the observer with
+     */
+    public func observeWithPagination(startingAtDocument document: QueryDocumentSnapshot?, orderedByKey key: String, withPreferences preferences: [String: Any]?, limitedTo limit: Int = 50, _ eventType: GFSEventType, with block: @escaping GFSQueryResultBlock) -> GFSQueryHandle {
+        let lockQueue = DispatchQueue(label: "self")
+        var firebaseHandle: GFSQueryHandle = 0
+        lockQueue.sync {
+
+            currentHandle += 1
+            firebaseHandle = currentHandle
+
+            switch eventType {
+            case .documentEntered:
+                keyEnteredObservers[firebaseHandle] = block
+                currentHandle += 1
+
+                geoFirestore.callbackQueue.async(execute: {
+                    lockQueue.sync {
+                        for (offset: _, element: (key: key, value: info)) in self.locationInfos.enumerated(){
+                            if info.isInQuery != nil{
+                                block(key, info.location)
+                            }
+                        }
+                    }
+                })
+            case .documentExited:
+                keyExitedObservers[firebaseHandle] = block
+                currentHandle += 1
+            case .documentMoved:
+                keyMovedObservers[firebaseHandle] = block
+                currentHandle += 1
+            default:
+                NSException.raise(.invalidArgumentException, format: "Event type was not a GFEventType!", arguments: getVaList(["nil"]))
+            }
+            if self.queries.isEmpty {
+                self.updateQueriesForPagination(startingAtDocument: document, orderedByKey: key, withPreferences: preferences, limitedTo: limit)
             }
         }
         return firebaseHandle

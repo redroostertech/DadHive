@@ -51,12 +51,18 @@ let kBarBtnPoint = CGPoint(x: 0.0, y: 0.0)
 let kTextFieldPadding: CGFloat = 10.0
 
 public let kTestBaseURL = "https://dadhive-test.herokuapp.com/"
-public let kTestURL = kTestBaseURL + "/api/v1/"
+public let kTestURL = kTestBaseURL + "api/v1/"
 public let kLiveBaseURL = "https://dadhive.herokuapp.com/"
-public let kLiveURL = kLiveBaseURL + "/api/v1/"
+public let kLiveURL = kLiveBaseURL + "api/v1/"
 
-public let kConversation = "conversations"
+//  MARK:- Collections
+public let kConversations = "conversations"
 public let kUsers = "users"
+public let kMessages = "messages"
+public let kMatches = "matches"
+public let kMaxDistance = "maxDistance"
+public let kAgeRange = "ageRange"
+
 public let kLastUser = "lastUserKey"
 public let kAuthorizedUser = "authorizedUser"
 public let kNotificationsAccessCheck = "notificationsAccessCheck"
@@ -87,6 +93,8 @@ public var kFontSizeButton: CGFloat { return 16 }
 let kLocationAccessCheckObservationKey = "observeLocationAccessCheck"
 let kSaveLocationObservationKey = "saveLocationObservationKey"
 let kNotificationAccessCheckObservationKey = "observeNotificationAccessCheck"
+let kAddUserObservationKey = "addUserObservationKey"
+let kLoadFirstUserObservationKey = "loadFirstUserObservationKey"
 
 //  MARK:- Other Strings
 let kLocationEnabled = "Location services enabled"

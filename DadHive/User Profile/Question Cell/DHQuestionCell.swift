@@ -19,11 +19,11 @@ class DHQuestionCell: UITableViewCell {
         didSet {
             guard
                 let user = self.loadUser,
-                let infoArray = user.userDetails else { return }
+                let infoArray = user.infoSectionThree else { return }
             if DHQuestionCell.infoIndex > (infoArray.count - 1) { return } else {
                 let info = infoArray[DHQuestionCell.infoIndex]
-                self.lblQuestion.text = info.userInfoType
-                self.lblResponse.text = info.userInfo
+                self.lblQuestion.text = info.title ?? "No question"
+                self.lblResponse.text = info.info ?? "No response"
                 DHQuestionCell.infoIndex += 1
             }
         }

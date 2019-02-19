@@ -10,18 +10,19 @@ import Foundation
 import ObjectMapper
 
 class Media: Mappable, CustomStringConvertible {
-    private var id: Any?
+
     private var urlString: Any?
-    private var type: Any?
-    var url: URL? {
-        guard let urlString = self.urlString as? String, let url = URL(string: urlString) else { return nil }
-        return url
-    }
+    var meta: String?
+
     required init?(map: Map) { }
 
     func mapping(map: Map) {
-        id <- map["id"]
         urlString <- map["url"]
-        type <- map["type"]
+        meta <- map["meta"]
+    }
+
+    var url: URL? {
+        guard let urlString = self.urlString as? String, let url = URL(string: urlString) else { return nil }
+        return url
     }
 }

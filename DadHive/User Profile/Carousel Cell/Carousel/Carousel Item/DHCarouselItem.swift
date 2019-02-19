@@ -17,7 +17,7 @@ class DHCarouselItem: UICollectionViewCell {
     var loadData: Info? {
         didSet {
             guard let info = self.loadData else { return }
-            self.lblInfo.text = info.userInfo
+            self.lblInfo.text = info.info ?? "No info"
         }
     }
     override func awakeFromNib() {

@@ -46,59 +46,43 @@ class FIRAuthentication {
                 guard let results = results else {
                     return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                 }
-                //  MARK:- Move this function to the server
-                let userData: [String: Any] = [
-                    "email": credentials.email ?? "",
-                    "name": [
-                        "fullName" : (credentials.fullname ?? "")
-                    ],
-                    "uid": results.user.uid,
-                    "createdAt": results.user.metadata.creationDate?.toString(format: CustomDateFormat.timeDate.rawValue),
-                    "type": 1,
-                    "settings": [
-                        "preferredCurrency": "USD",
-                        "notifications" : false,
-                        "location" : nil,
-                        "maxDistance" : 25.0,
-                        "ageRange" : [
-                            "index": 0
-                        ],
-                        "initialSetup" : false
-                    ],
-                    "userProfilePictures": [
-                        "index": 0
-                    ],
-                    "mediaArray": [
-                        "index": 0
-                    ],
-                    "userInformation": [
-                        "index": 0
-                    ],
-                    "userDetails": [
-                        "index": 0
-                    ],
-                    "paymentMethod": [
-                        "index": 0
-                    ],
-                    "canSwipe": true,
-                    "profileCreation" : false
-                ]
-                if let user = User(JSON: userData) {
-                    self.createUser(withData: user, completion: {
-                        user in
-                        guard let _ = user else {
-                            return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
-                        }
-                        completion(nil)
-                    })
+                guard let email = credentials.email, let name = credentials.fullname else {
+                    return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                 }
+                let parameters: [String: Any] = [
+                    "email": email,
+                    "name": name,
+                    "uid": results.user.uid,
+                    "type": 1
+                ]
+                APIRepository.shared.performRequest(path: Api.Endpoint.createUser, method: .post, parameters: parameters) { (response, error) in
+                    if error != nil {
+                        print(error)
+                        completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
+                    } else {
+                        if let res = response as? [String: Any], let data = res["data"] as? [String: Any] {
+                            completion(nil)
+                        } else {
+                            completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
+                        }
+                    }
+                }
+//                if let user = User(JSON: userData) {
+//                    self.createUser(withData: user, completion: {
+//                        user in
+//                        guard let _ = user else {
+//                            return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
+//                        }
+//                        completion(nil)
+//                    })
+//                }
             }
         }
     }
 
     func checkSession(_ window: UIWindow? = nil) {
         CurrentUser.shared.refreshCurrentUser {
-            if let initialSetup = CurrentUser.shared.user?.userSettings?.userInitialState, initialSetup == false {
+            if let initialSetup = CurrentUser.shared.user?.settings?.initialSetup, initialSetup == false {
                 self.sessionCheck(window, goToVC: "PermissionsVC")
             } else {
                 self.sessionCheck(window)

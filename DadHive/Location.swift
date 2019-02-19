@@ -11,12 +11,16 @@ import ObjectMapper
 
 class Location: Mappable, CustomStringConvertible {
 
-    var latitude: Any?
-    var longitude: Any?
-    var city: Any?
-    var state: Any?
-    var description: Any?
-    var country: Any?
+    var latitude: Double?
+    var longitude: Double?
+    var city: String?
+    var state: String?
+    var description: String?
+    var country: String?
+    var addressLine1: String?
+    var addressLine2: String?
+    var addressLine3: String?
+    var addressLine4: String?
 
     required init?(map: Map) { }
 
@@ -27,6 +31,10 @@ class Location: Mappable, CustomStringConvertible {
         state <- map["state"]
         description <- map["description"]
         country <- map["country"]
+        addressLine1 <- map["addressLine1"]
+        addressLine2 <- map["addressLine2"]
+        addressLine3 <- map["addressLine3"]
+        addressLine4 <- map["addressLine4"]
     }
 
     public var toDict: [String: Any] {
@@ -40,22 +48,11 @@ class Location: Mappable, CustomStringConvertible {
         return dictionary
     }
 
-    var userLocation: String {
-        return "\(city ?? ""), \(state ?? "")"
-    }
-
-    func setLocation(_ completion: @escaping(Error?)->Void) {
-        CurrentUser.shared.updateUser(withData: ["settings" : ["location" : self.toDict]]) {
-            (error) in
-            if error == nil {
-                print("Successfully updated user data")
-                completion(nil)
-            } else {
-                print(error!.localizedDescription)
-                completion(error!)
-            }
+    var getString: String? {
+        if let city = self.city, let state = self.state {
+            return city + ", " + state
+        } else {
+            return nil
         }
-
     }
-
 }

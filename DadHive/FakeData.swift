@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 class FakeDataGenerator {
     func generateFakeUserAccounts(_ count: Int) {
@@ -70,9 +71,21 @@ class FakeDataGenerator {
             ]
         ]
         if let user = User(JSON: userData) {
-            FIRFirestoreDB.shared.add(data: user.toJSON(), to: kUsers) {
-                (success, results, error) in
-                self.generateFakeUserAccounts(count - 1)
+            FIRFirestoreDB.shared.add(data: user.toJSON(), to: kUsers) { (success, results, error) in
+                if
+                    let documentID = results,
+                    let lat = fakeGeoPoints[Int.random(in: 0...fakeGeoPoints.count - 1)]["Lat"],
+                    let long = fakeGeoPoints[Int.random(in: 0...fakeGeoPoints.count - 1)]["Long"] {
+
+                    FIRFirestoreDB.shared.addGeofireObject(forDocumentID: documentID, atLat: lat, andLong: long, completion: {
+                        print("Successfully updated user data & added a geofire obbject.")
+                        self.generateFakeUserAccounts(count - 1)
+                    })
+                } else {
+                    print("Error with geofire, but continue process")
+                    self.generateFakeUserAccounts(count - 1)
+                }
+
             }
         }
     }

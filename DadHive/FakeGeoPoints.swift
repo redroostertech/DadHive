@@ -8,7 +8,7 @@
 
 import Foundation
 
-var fakeGeoPoints: [[String: Double]] = [
+let fakeGeoPoints: Array<[String: Double]> = [
 [
     "Lat": 34.14073927,
     "Long": -84.95367699

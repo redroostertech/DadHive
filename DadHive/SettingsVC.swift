@@ -15,23 +15,23 @@ class SettingsVC: UITableViewController {
     @IBOutlet var lblPreferences: UILabel!
     @IBOutlet var lblAccount: UILabel!
 
+    var currentUser = CurrentUser.shared
+
     override func viewDidLoad() {
         super.viewDidLoad()
         hideNavigationBarHairline()
         lblFullname.font = UIFont(name: kFontBody, size: kFontSizeBody)
-        lblFullname.text = CurrentUser.shared.user?.name?.userFullName ?? ""
+        lblFullname.text = currentUser.user?.name?.fullName ?? ""
         lblPreferences.font = UIFont(name: kFontMenu, size: kFontSizeMenu)
         lblAccount.font = UIFont(name: kFontMenu, size: kFontSizeMenu)
         btnProfilePicture.applyCornerRadius()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return 3
     }
 

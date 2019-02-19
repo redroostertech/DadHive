@@ -69,7 +69,7 @@ class PermissionsVC: UIViewController {
     }
 
     @IBAction func `continue`(_ sender: UIButton) {
-        CurrentUser.shared.user?.userSettings?.setInitialState(true, {
+        CurrentUser.shared.user?.setInitialState(true, {
             (error) in
             if error == nil {
                 FIRAuthentication.shared.sessionCheck()
@@ -114,7 +114,7 @@ class PermissionsVC: UIViewController {
             self.btnEnableNotification.setText(access ? kNotificationEnabled : kNotificationDisabled)
             self.btnEnableNotification.setTextColor(access ? kEnabledTextColor : kDisabledTextColor)
         }
-        CurrentUser.shared.user?.userSettings?.setNotificationToggle(access)
+        CurrentUser.shared.user?.setNotificationToggle(access)
     }
 
     func showErrorAlert(_ error: DadHiveError) {

@@ -51,9 +51,9 @@ class DHCarousel: UICollectionViewController, UICollectionViewDelegateFlowLayout
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch reuseIdentifier {
         case "DHCarouselImage":
-            return self.user.profilePictures?.count ?? 1
+            return self.user.media?.count ?? 1
         case "DHCarouselCell":
-            return self.user.userInformation?.count ?? 1
+            return self.user.media?.count ?? 1
         default:
             return 1
         }
@@ -65,7 +65,7 @@ class DHCarousel: UICollectionViewController, UICollectionViewDelegateFlowLayout
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? DHCarouselImage else {
                 return UICollectionViewCell()
             }
-            if let pictures = self.user.profilePictures {
+            if let pictures = self.user.media {
                 let item = pictures[indexPath.row]
                 cell.media = item.url
                 cell.backgroundColor = .red
@@ -77,7 +77,7 @@ class DHCarousel: UICollectionViewController, UICollectionViewDelegateFlowLayout
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? DHCarouselItem else {
                 return UICollectionViewCell()
             }
-            if let info = self.user.userInformation {
+            if let info = self.user.infoSectionTwo {
                 let item = info[indexPath.row]
                 cell.loadData = item
             } else {

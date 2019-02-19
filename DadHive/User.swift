@@ -11,393 +11,358 @@ import ObjectMapper
 
 class User: Mappable, CustomStringConvertible {
 
-    private var key: Any?
-    private var uid: Any?
-    private var id: Any?
-    private var type: Any?
-    private var email: Any?
-    private var createdAt: Any?
-    private var refCode: Any?
-
+    var key: String?
+    var uid: String?
+    var id: String?
     var name: Name?
-    var userInformation: [Info]?
-    var userDetails: [Info]?
-    var profilePictures: [Media]?
+    private var timestamp: String?
+    var email: String?
+    var type: Double?
+    var settings: Settings?
+    var media: [Media]?
+    private var dob: String?
+    var bio: String? {
+        guard let userInfo = self.infoSectionOne else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "bio"
+        }
+        let result = results.first
+        return result?.info ?? nil
+    }
+    var jobTitle: String? {
+        guard let userInfo = self.infoSectionOne else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "jobTitle"
+        }
+        let result = results.first
+        return result?.info ?? nil
+    }
+    var companyName: String? {
+        guard let userInfo = self.infoSectionOne else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "companyName"
+        }
+        let result = results.first
+        return result?.info ?? nil
+    }
+    var schoolName: String? {
+        guard let userInfo = self.infoSectionOne else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "schoolName"
+        }
+        let result = results.first
+        return result?.info ?? nil
+    }
+    var kidsNames: String? {
+        guard let userInfo = self.infoSectionTwo else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "kidsNames"
+        }
+        let result = results.first
+        return result?.info ?? nil
+    }
+    var kidsAges: String? {
+        guard let userInfo = self.infoSectionTwo else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "kidsAges"
+        }
+        let result = results.first
+        return result?.info ?? nil
+    }
+    var kidsBio: String? {
+        guard let userInfo = self.infoSectionTwo else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "kidsBio"
+        }
+        let result = results.first
+        return result?.info ?? nil
+    }
+    var questionOneTitle: String? {
+        guard let userInfo = self.infoSectionThree else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "questionOneTitle"
+        }
+        let result = results.first
+        return result?.title ?? nil
+    }
+    var questionOneResponse: String? {
+        guard let userInfo = self.infoSectionThree else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "questionOneResponse"
+        }
+        let result = results.first
+        return result?.info ?? nil
+    }
+    var questionTwoTitle: String? {
+        guard let userInfo = self.infoSectionThree else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "questionTwoTitle"
+        }
+        let result = results.first
+        return result?.title ?? nil
+    }
+    var questionTwoResponse: String? {
+        guard let userInfo = self.infoSectionThree else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "questionTwoResponse"
+        }
+        let result = results.first
+        return result?.info ?? nil
+    }
+    var questionThreeTitle: String? {
+        guard let userInfo = self.infoSectionThree else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "questionThreeTitle"
+        }
+        let result = results.first
+        return result?.title ?? nil
+    }
+    var questionThreeResponse: String? {
+        guard let userInfo = self.infoSectionThree else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "questionThreeResponse"
+        }
+        let result = results.first
+        return result?.info ?? nil
+    }
+    var canSwipe: Bool?
+    private var swipeDateTimestamp: String?
     var profileCreation: Bool?
-    private var nextSwipeDate: String?
-    private var userCanSwipe: Bool?
-    private var paymentMethod: PaymentMethod?
-    private var settings: Settings?
 
-    private var rawName: Any? {
-        didSet {
-            guard let name = self.rawName as? [String : Any] else {
-                return
-            }
-            self.name = Name(JSON: name)
-        }
-    }
-
-    private var rawSettings: Any? {
-        didSet {
-            guard let rawSettings = self.rawSettings as? [String : Any] else {
-                return
-            }
-            self.settings = Settings(JSON: rawSettings)
-        }
-    }
-
-    private var rawPaymentMethod: Any? {
-        didSet {
-            guard let rawPaymentMethod = self.rawPaymentMethod as? [String : Any] else {
-                return
-            }
-            self.paymentMethod = PaymentMethod(JSON: rawPaymentMethod)
-        }
-    }
-
-    private var userInformationArray: Any? {
-        didSet {
-            guard let userInformationArray = self.userInformationArray as? [String : Any] else {
-                return
-            }
-            var emptyUserInformationArray = [Info]()
-            for key in userInformationArray.keys {
-                guard let item = userInformationArray[key] as? [String: Any], let obj = Info(JSON: item) else {
-                    return
-                }
-                emptyUserInformationArray.append(obj)
-            }
-            self.userInformation = emptyUserInformationArray
-        }
-    }
-
-    private var userDetailsArray: Any? {
-        didSet {
-            guard let userDetailsArray = self.userDetailsArray as? [[String : Any]] else {
-                return
-            }
-            var emptyUserDetailsArray = [Info]()
-            for userDetail in userDetailsArray {
-                guard let obj = Info(JSON: userDetail) else {
-                    return
-                }
-                emptyUserDetailsArray.append(obj)
-            }
-            self.userDetails = emptyUserDetailsArray
-        }
-    }
-
-    private var mediaArray: Any? {
-        didSet {
-            guard let mediaArray = self.mediaArray as? [[String : Any]] else {
-                return
-            }
-            var emptyMediaArray = [Media]()
-            for media in mediaArray {
-                guard let obj = Media(JSON: media) else {
-                    return
-                }
-                emptyMediaArray.append(obj)
-            }
-            self.profilePictures = emptyMediaArray
-        }
-    }
+    //  MARK:- This is for displaying my profile to other users
+    var infoSectionOne: [Info]?
+    var infoSectionTwo: [Info]?
+    var infoSectionThree: [Info]?
+    var preferenceSection: [Info]?
     
     required init?(map: Map) { }
     
     func mapping(map: Map) {
-        key <- map["snapshotKey"]
+        key <- map["key"]
         uid <- map["uid"]
         id <- map["id"]
-        type <- map["type"]
+        name <- map["name"]
+        timestamp <- map["createdAt"]
         email <- map["email"]
-        createdAt <- map["createdAt"]
-        mediaArray <- map["mediaArray"]
-        rawName <- map["name"]
-        userInformationArray <- map["userInformation"]
-        userDetailsArray <- map["userDetails"]
-        rawSettings <- map["settings"]
-        rawPaymentMethod <- map["paymentMethod"]
-        refCode <- map["refCode"]
+        type <- map["type"]
+        settings <- map["settings"]
+        media <- map["mediaArray"]
+        dob <- map["dob"]
+        infoSectionOne <- map["userInformationSection1"]
+        infoSectionTwo <- map["userInformationSection2"]
+        infoSectionThree <- map["userInformationSection3"]
+        preferenceSection <- map["userPreferencesSection"]
+        canSwipe <- map["canSwipe"]
+        swipeDateTimestamp <- map["nextSwipeDate"]
         profileCreation <- map["profileCreation"]
-        userCanSwipe <- map["canSwipe"]
-        nextSwipeDate <- map["nextSwipeDate"]
-        profilePictures <- map["userProfilePictures"]
     }
 
-    //  MARK:- Model getter properties
-
-    var userKey: String {
-        return (self.key as? String) ?? ""
+    var createdAt: Date? {
+        return getDate(fromString: self.timestamp ?? "")
     }
 
-    var userId: String {
-        return (self.id as? String) ?? ((self.uid as? String) ?? "")
-    }
-    
-    var userType: Int {
-        return (self.type as? Int) ?? 1
-    }
-
-    var userEmail: String {
-        return (self.email as? String) ?? ""
-    }
-
-    var userSettings: Settings? {
-        return self.settings ?? nil
+    var age: Int? {
+        guard let dob = self.dob else { return nil }
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "MM/dd/yyyy"
+        let birthdayDate = dateFormater.date(from: dob)
+        let calendar: NSCalendar! = NSCalendar(calendarIdentifier: .gregorian)
+        let now = Date()
+        let calcAge = calendar.components(.year, from: birthdayDate!, to: now, options: [])
+        guard let age = calcAge.year else { return nil }
+        return age
     }
 
-    var swipeDate: Date {
-        return self.nextSwipeDate?.toDate() ?? Date()
+    var nextSwipeDate: Date? {
+        return getDate(fromString: self.swipeDateTimestamp ?? "")
+    }
+
+    var countForTable: Int {
+        guard let infoSec1 = self.infoSectionOne, let infoSec2 = self.infoSectionTwo, let infoSec3 = self.infoSectionThree else { return 2 }
+        return 2 + infoSec1.count + infoSec2.count + infoSec3.count
+    }
+
+    var newNextSwipeDate: String? {
+        guard let newNextSwipeDate = Date().add(days: 1) else { return nil }
+        return newNextSwipeDate.toString()
     }
 
     var maxSwipes: Int {
-        if userType == 1 {
+        if type ?? 0.0 == 1.0 {
             return 10
         } else {
             return Int.max
         }
     }
+}
 
-    var canSwipe: Bool {
-        if userType == 1 {
-            return true
-        } else {
-            return (self.nextSwipeDate == nil) ? true : Date().isGreaterThanDate(swipeDate)
-        }
-    }
-
-    var userCreatedDate: Date? {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone.current
-        formatter.dateFormat = CustomDateFormat.regular.rawValue
-        guard let createdDate = self.createdAt as? String, let date = formatter.date(from: createdDate) else {
-            return nil
-        }
-        return date
-    }
-
-    var countForTable: Int {
-        return 2 + (self.userInformation?.count ?? 0) + (self.userDetails?.count ?? 0)
-    }
-
-    var maxCountForInfo: Int {
-        guard let array = self.userInformation else { return 2 }
-        return 2 + array.count
-    }
-
-    var userAge: Int {
-        guard let userInfo = self.userInformation else {
-            return 0
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "age"
-        }
-        let result = results.first
-        return Int(result?.userInfo ?? "0") ?? 0
-    }
-
-    var userLocation: String {
-        guard let userInfo = self.userInformation else {
-            return ""
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "location"
-        }
-        let result = results.first
-        return result?.userInfo ?? ""
-    }
-
-    var userBio: String {
-        guard let userInfo = self.userInformation else {
-            return ""
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "bio"
-        }
-        let result = results.first
-        return result?.userInfo ?? ""
-    }
-
-    var userWork: String {
-        guard let userInfo = self.userInformation else {
-            return ""
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "work"
-        }
-        let result = results.first
-        return result?.userInfo ?? ""
-    }
-
-    var userJobTitle: String {
-        guard let userInfo = self.userInformation else {
-            return ""
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "jobTitle"
-        }
-        let result = results.first
-        return result?.userInfo ?? ""
-    }
-
-    var userSchool: String {
-        guard let userInfo = self.userInformation else {
-            return ""
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "school"
-        }
-        let result = results.first
-        return result?.userInfo ?? ""
-    }
-
-    var userKidsNames: String {
-        guard let userInfo = self.userInformation else {
-            return ""
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "kidsNames"
-        }
-        let result = results.first
-        return result?.userInfo ?? ""
-    }
-
-    var userKidsAges: String {
-        guard let userInfo = self.userInformation else {
-            return ""
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "kidsAges"
-        }
-        let result = results.first
-        return result?.userInfo ?? ""
-    }
-
-    var userKidsBio: String {
-        guard let userInfo = self.userInformation else {
-            return ""
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "kidsBio"
-        }
-        let result = results.first
-        return result?.userInfo ?? ""
-    }
-
-    var userQuestionOne: String {
-        guard let userInfo = self.userInformation else {
-            return ""
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "questionOne"
-        }
-        let result = results.first
-        return result?.userInfo ?? ""
-    }
-
-    var userQuestionTwo: String {
-        guard let userInfo = self.userInformation else {
-            return ""
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "questionTwo"
-        }
-        let result = results.first
-        return result?.userInfo ?? ""
-    }
-
-    var userQuestionThree: String {
-        guard let userInfo = self.userInformation else {
-            return ""
-        }
-        let results = userInfo.filter {
-            (item) -> Bool in
-            return item.userInfoType == "questionThree"
-        }
-        let result = results.first
-        return result?.userInfo ?? ""
-    }
-
-    //  MARK:- Model modification methods
-
-    func setInformation(_ data: [String:Any]) {
-        let info = Info(JSON: data)
-        if self.userInformation == nil {
-            self.userInformation = [Info]()
-        }
-        self.userInformation?.append(info!)
-        FIRFirestoreDB.shared.update(withData: ["userInformation" : [info?.userInfoType ?? "" : data]], from: kUsers, at: "\(CurrentUser.shared.user?.userKey ?? "")") {
-            (success, error) in
+//  MARK:- Model modification methods
+extension User {
+    func change(name: String) {
+        CurrentUser.shared.updateUser(withData: ["name" : name]) { (error) in
             if error == nil {
-                print("Successfully updated user data")
-            } else {
-                print("Didnot update user data.")
+                self.name?.fullName = name
             }
         }
     }
 
-    func setDetails(_ data: [String:Any]) {
-        let info = Info(JSON: data)
-        if self.userDetails == nil {
-            self.userDetails = [Info]()
-        }
-        self.userDetails?.append(info!)
-        FIRFirestoreDB.shared.update(withData: ["userDetails" : [info?.userInfoType ?? "" : data]], from: kUsers, at: "\(CurrentUser.shared.user?.userKey ?? "")") {
-            (success, error) in
+    func setInformation(atKey: String, withValue value: String) {
+        CurrentUser.shared.updateUser(withData: [atKey : value]) { (error) in
             if error == nil {
-                print("Successfully updated user data")
-            } else {
-                print("Didnot update user data.")
+                if let section1 = self.infoSectionOne {
+                    for item in section1 {
+                        if let type = item.type, type == atKey {
+                            item.info = value
+                        }
+                    }
+                }
+                if let section2 = self.infoSectionTwo {
+                    for item in section2 {
+                        if let type = item.type, type == atKey {
+                            item.info = value
+                        }
+                    }
+                }
+                if let section3 = self.infoSectionThree {
+                    for item in section3 {
+                        if let type = item.type, type == atKey {
+                            item.info = value
+                        }
+                    }
+                }
             }
         }
-    }
-
-    var userNextSwipeDate: String {
-        return Date().add(days: 1)?.toString() ?? ""
     }
 
     func disableSwiping() {
-        if self.userCanSwipe == nil {
-            self.userCanSwipe = Bool()
-        }
-        self.userCanSwipe = false
-        FIRFirestoreDB.shared.update(withData: ["canSwipe" : false, "nextSwipeDate" : userNextSwipeDate], from: kUsers, at: "\(CurrentUser.shared.user?.userKey ?? "")") {
-            (success, error) in
+        guard let newNextDate = newNextSwipeDate else { return }
+        CurrentUser.shared.updateUser(withData:["canSwipe" : false, "nextSwipeDate" : newNextDate]) { (error) in
             if error == nil {
-                print("Successfully updated user data")
-            } else {
-                print("Didnot update user data.")
+                self.canSwipe = false
+                self.swipeDateTimestamp = newNextDate
             }
         }
     }
 
     func enableSwiping() {
-        if self.userCanSwipe == nil {
-            self.userCanSwipe = Bool()
+        CurrentUser.shared.updateUser(withData: ["canSwipe" : true]) { (error) in
+            if error == nil {
+                self.canSwipe = true
+            }
         }
-        self.userCanSwipe = true
-        FIRFirestoreDB.shared.update(withData: ["canSwipe" : true, "nextSwipeDate" : nil], from: kUsers, at: "\(CurrentUser.shared.user?.userKey ?? "")") {
-            (success, error) in
+    }
+
+    func setNotificationToggle(_ state: Bool) {
+        CurrentUser.shared.updateUser(withData: ["notifications" : state]) { (error) in
+            if error == nil {
+                self.settings?.notifications = state
+            }
+        }
+    }
+
+    func setMaximumDistance(_ distance: Double) {
+        CurrentUser.shared.updateUser(withData: ["maxDistance" : distance]) { (error) in
+            if error == nil {
+                self.settings?.maxDistance = distance
+            }
+        }
+    }
+
+    func setInitialState(_ state: Bool, _ completion: @escaping(Error?) -> Void) {
+        CurrentUser.shared.updateUser(withData: ["initialSetup" : state]) { (error) in
+            if error == nil {
+                self.settings?.initialSetup = state
+                completion(nil)
+            } else {
+                completion(error)
+            }
+        }
+    }
+
+    func setLocation(_ location: Location, _ completion: @escaping(Error?)->Void) {
+        self.settings?.location = location
+//        CurrentUser.shared.updateUser(withData: ["settings" : ["location" : self.toDict]]) {
+//            (error) in
+//            if error == nil {
+//                if let lat = self.latitude as? Double, let long = self.longitude as? Double, let documentID = CurrentUser.shared.user?.userKey {
+//                    FIRFirestoreDB.shared.addGeofireObject(forDocumentID: documentID, atLat: lat, andLong: long, completion: {
+//                        print("Successfully updated user data & added a geofire obbject.")
+//                        completion(nil)
+//                    })
+//                } else {
+//                    print("Error with geofire, but we uccessfully updated user data.")
+//                    completion(nil)
+//                }
+//            } else {
+//                print(error!.localizedDescription)
+//                completion(error!)
+//            }
+//        }
+    }
+
+    func setAgeRange(_ range: AgeRange) {
+        guard let rangeId = range.id, let rangeMax = range.max, let rangeMin = range.min else {
+            print("Did not update user data.")
+            return
+        }
+        CurrentUser.shared.updateUser(withData: ["ageRangeId" : rangeId, "ageRangeMax" : rangeMax, "ageRangeMin" : rangeMin]) {
+            (error) in
             if error == nil {
                 print("Successfully updated user data")
             } else {
-                print("Didnot update user data.")
+                print("Did not update user data.")
             }
         }
+    }
+
+    private func getDate(fromString dateString: String) -> Date? {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = CustomDateFormat.regular.rawValue
+        guard let date = formatter.date(from: dateString) else {
+            return nil
+        }
+        return date
     }
 
 }

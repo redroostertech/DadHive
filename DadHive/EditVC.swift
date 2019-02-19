@@ -14,26 +14,28 @@ class EditVC: UIViewController {
     @IBOutlet var txtField: UITextView!
     @IBOutlet var btnSave: UIButton!
 
-    var userInfo: [String: Any]?
+    var userInfo: Info?
+    var currentUser = CurrentUser.shared
     var type = 1
 
     override func viewDidLoad() {
         super.viewDidLoad()
         btnSave.applyCornerRadius()
         btnSave.addGradientLayer(using: kAppCGColors)
-        lblTitle.text = userInfo?["title"] as? String ?? ""
+        lblTitle.text = userInfo?.title ?? ""
     }
 
     @IBAction func save(_ sender: UIButton) {
-        if txtField.text != "" {
-            userInfo!["info"] = txtField.text
-            if type == 1 {
-                CurrentUser.shared.user?.setInformation(self.userInfo!)
+        if let userInfo = self.userInfo, txtField.text != "" {
+            if let type = userInfo.type, type == "name" {
+                self.currentUser.user?.change(name: txtField.text)
+            } else {
+                self.currentUser.user?.setInformation(atKey: userInfo.type ?? "", withValue: txtField.text)
             }
-            if type == 2 {
-                CurrentUser.shared.user?.setDetails(self.userInfo!)
+            userInfo.info = txtField.text
+            CurrentUser.shared.refreshCurrentUser {
+                self.popViewController()
             }
-            self.popViewController()
         }
     }
 

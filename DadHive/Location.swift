@@ -11,12 +11,12 @@ import ObjectMapper
 
 class Location: Mappable, CustomStringConvertible {
 
-    var latitude: Double?
-    var longitude: Double?
-    var city: String?
-    var state: String?
+    var addressLat: Double?
+    var addressLong: Double?
+    var addressCity: String?
+    var addressState: String?
     var description: String?
-    var country: String?
+    var addressCountry: String?
     var addressLine1: String?
     var addressLine2: String?
     var addressLine3: String?
@@ -25,12 +25,12 @@ class Location: Mappable, CustomStringConvertible {
     required init?(map: Map) { }
 
     func mapping(map: Map) {
-        latitude <- map["latitude"]
-        longitude <- map["longitude"]
-        city <- map["city"]
-        state <- map["state"]
+        addressLat <- map["latitude"]
+        addressLong <- map["longitude"]
+        addressCity <- map["city"]
+        addressState <- map["state"]
         description <- map["description"]
-        country <- map["country"]
+        addressCountry <- map["country"]
         addressLine1 <- map["addressLine1"]
         addressLine2 <- map["addressLine2"]
         addressLine3 <- map["addressLine3"]
@@ -49,8 +49,8 @@ class Location: Mappable, CustomStringConvertible {
     }
 
     var getString: String? {
-        if let city = self.city, let state = self.state {
-            return city + ", " + state
+        if let city = self.addressCity, let state = self.addressState, let country = self.addressCountry {
+            return city + ", " + state + ", " + country
         } else {
             return nil
         }

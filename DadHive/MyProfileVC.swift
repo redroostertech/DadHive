@@ -57,7 +57,6 @@ class MyProfileVC: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         setupUI()
-        tableView.reloadData()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {

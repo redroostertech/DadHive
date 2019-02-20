@@ -24,8 +24,8 @@ class LocationManagerModule: NSObject {
                 self.userLocationData = [String: Any]()
             }
             //  self.userLocationData!["dateString"] = Date().toString(.timeDate)
-            self.userLocationData!["latitude"] = userLocation.coordinate.latitude
-            self.userLocationData!["longitude"] = userLocation.coordinate.longitude
+            self.userLocationData!["addressLat"] = userLocation.coordinate.latitude
+            self.userLocationData!["addressLong"] = userLocation.coordinate.longitude
         }
     }
 
@@ -35,9 +35,9 @@ class LocationManagerModule: NSObject {
             if self.userLocationData == nil {
                 self.userLocationData = [String: Any]()
             }
-            self.userLocationData!["city"] = userLocationDescription["city"]
-            self.userLocationData!["state"] = userLocationDescription["state"]
-            self.userLocationData!["country"] = userLocationDescription["country"]
+            self.userLocationData!["addressCity"] = userLocationDescription["city"]
+            self.userLocationData!["addressState"] = userLocationDescription["state"]
+            self.userLocationData!["addressCountry"] = userLocationDescription["country"]
         }
     }
 

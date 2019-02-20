@@ -319,24 +319,24 @@ extension User {
     }
 
     func setLocation(_ location: Location, _ completion: @escaping(Error?)->Void) {
-        self.settings?.location = location
-//        CurrentUser.shared.updateUser(withData: ["settings" : ["location" : self.toDict]]) {
-//            (error) in
-//            if error == nil {
-//                if let lat = self.latitude as? Double, let long = self.longitude as? Double, let documentID = CurrentUser.shared.user?.userKey {
-//                    FIRFirestoreDB.shared.addGeofireObject(forDocumentID: documentID, atLat: lat, andLong: long, completion: {
-//                        print("Successfully updated user data & added a geofire obbject.")
-//                        completion(nil)
-//                    })
-//                } else {
-//                    print("Error with geofire, but we uccessfully updated user data.")
-//                    completion(nil)
-//                }
-//            } else {
-//                print(error!.localizedDescription)
-//                completion(error!)
-//            }
-//        }
+        CurrentUser.shared.updateUser(withData: location.toDict) {
+            (error) in
+            if error == nil {
+                if let lat = location.addressLat, let long = location.addressLong, let documentID = CurrentUser.shared.user?.key {
+                    FIRFirestoreDB.shared.addGeofireObject(forDocumentID: documentID, atLat: lat, andLong: long, completion: {
+                        print("Successfully updated user data & added a geofire obbject.")
+                        self.settings?.location = location
+                        completion(nil)
+                    })
+                } else {
+                    print("Error with geofire, but we uccessfully updated user data.")
+                    completion(nil)
+                }
+            } else {
+                print(error!.localizedDescription)
+                completion(error!)
+            }
+        }
     }
 
     func setAgeRange(_ range: AgeRange) {
@@ -353,6 +353,22 @@ extension User {
             }
         }
     }
+
+    func setKidsAgeRange(_ range: AgeRange) {
+        guard let range = range.getAgeRange else {
+            print("Did not update user data.")
+            return
+        }
+        CurrentUser.shared.updateUser(withData: ["kidsAges" : range]) {
+            (error) in
+            if error == nil {
+                print("Successfully updated user data")
+            } else {
+                print("Did not update user data.")
+            }
+        }
+    }
+
 
     private func getDate(fromString dateString: String) -> Date? {
         let formatter = DateFormatter()

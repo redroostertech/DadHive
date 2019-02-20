@@ -100,7 +100,7 @@ class UserProfileVC: UIViewController {
     }
 
     func loadUsers(_ completion: @escaping () -> Void) {
-        if let lat = CurrentUser.shared.user?.settings?.location?.latitude, let long = CurrentUser.shared.user?.settings?.location?.longitude, let radius = CurrentUser.shared.user?.settings?.maxDistance {
+        if let lat = CurrentUser.shared.user?.settings?.location?.addressLat, let long = CurrentUser.shared.user?.settings?.location?.addressLong, let radius = CurrentUser.shared.user?.settings?.maxDistance {
 
             FIRFirestoreDB.shared.retrieveUsersByLocationWithPagination(atLat: lat, andLong: long, withRadius: radius) {
                 completion()
@@ -174,7 +174,7 @@ class UserProfileVC: UIViewController {
 
         if count % 5 == 0 {
             DispatchQueue.global(qos: .background).async {
-                if let lat = CurrentUser.shared.user?.settings?.location?.latitude, let long = CurrentUser.shared.user?.settings?.location?.longitude, let radius = CurrentUser.shared.user?.settings?.maxDistance {
+                if let lat = CurrentUser.shared.user?.settings?.location?.addressLat, let long = CurrentUser.shared.user?.settings?.location?.addressLong, let radius = CurrentUser.shared.user?.settings?.maxDistance {
 
                     FIRFirestoreDB.shared.retrieveUsersByLocationWithPagination(atLat: lat, andLong: long, withRadius: radius) {
                         print("Done with retrieveUsersyLocationWithPagination")

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DHKidsInfoCell" rowHeight="185" id="KGk-i7-Jjw" customClass="DHKidsInfoCell" customModule="DadHive" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="185"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="184.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="kids" translatesAutoresizingMaskIntoConstraints="NO" id="wdj-Rk-Mbq">
+                        <rect key="frame" x="16" y="59" width="36" height="36"/>
+                        <color key="backgroundColor" red="0.58431372550000005" green="0.81176470590000005" blue="0.49019607840000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="36" id="ZEl-sH-cYD"/>
+                            <constraint firstAttribute="height" constant="36" id="t1E-CZ-JZx"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Age Ranges" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mp7-eN-6Hu">
+                        <rect key="frame" x="60" y="59" width="236" height="36"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kids Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tQj-PF-zTI">
+                        <rect key="frame" x="16" y="103" width="280" height="39"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="9VL-T6-cRn"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Kids" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bna-TS-1k9">
+                        <rect key="frame" x="16" y="11" width="288" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="32" id="Rh2-Gz-hfr"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="mp7-eN-6Hu" firstAttribute="leading" secondItem="wdj-Rk-Mbq" secondAttribute="trailing" constant="8" id="0zb-Bi-d7O"/>
+                    <constraint firstItem="mp7-eN-6Hu" firstAttribute="top" secondItem="wdj-Rk-Mbq" secondAttribute="top" id="1pq-Wf-NhJ"/>
+                    <constraint firstItem="wdj-Rk-Mbq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="7x2-pK-0pZ"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="mp7-eN-6Hu" secondAttribute="trailing" constant="8" id="8oz-32-BFw"/>
+                    <constraint firstItem="bna-TS-1k9" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="AGe-fj-Ni2"/>
+                    <constraint firstItem="mp7-eN-6Hu" firstAttribute="bottom" secondItem="wdj-Rk-Mbq" secondAttribute="bottom" id="B6z-VP-j2C"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="tQj-PF-zTI" secondAttribute="bottom" constant="32" id="FDZ-1E-iV3"/>
+                    <constraint firstItem="mp7-eN-6Hu" firstAttribute="leading" secondItem="wdj-Rk-Mbq" secondAttribute="trailing" constant="8" id="LdS-jA-6BW"/>
+                    <constraint firstItem="bna-TS-1k9" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="Nlb-bJ-BHk"/>
+                    <constraint firstItem="tQj-PF-zTI" firstAttribute="trailing" secondItem="mp7-eN-6Hu" secondAttribute="trailing" id="Yhv-Mt-P8c"/>
+                    <constraint firstItem="tQj-PF-zTI" firstAttribute="top" secondItem="wdj-Rk-Mbq" secondAttribute="bottom" constant="8" id="pGj-db-02Z"/>
+                    <constraint firstItem="wdj-Rk-Mbq" firstAttribute="top" secondItem="bna-TS-1k9" secondAttribute="bottom" constant="16" id="qYI-0O-BbG"/>
+                    <constraint firstItem="bna-TS-1k9" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="sqW-EC-7fd"/>
+                    <constraint firstItem="tQj-PF-zTI" firstAttribute="leading" secondItem="wdj-Rk-Mbq" secondAttribute="leading" id="vKv-s3-TVB"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="imgKids" destination="wdj-Rk-Mbq" id="jj5-lY-8Ce"/>
+                <outlet property="lblKidsAgeRanges" destination="mp7-eN-6Hu" id="YTC-Gv-Gfe"/>
+                <outlet property="lblKidsBio" destination="tQj-PF-zTI" id="Tb9-nm-dNf"/>
+            </connections>
+            <point key="canvasLocation" x="121.59999999999999" y="183.95802098950526"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="kids" width="32" height="32"/>
+    </resources>
+</document>

@@ -67,25 +67,29 @@ textField2.selectedLineColor = overcastBlueColor
 
 textField2.lineHeight = 1.0 // bottom line height in points
 textField2.selectedLineHeight = 2.0
+self.view.addSubview(textField2)
 ```
 
 ### Icons and fonts
 
-Use the `SkyFloatingLabelTextFieldWithIcon` field to display icons next to the textfields. You will have to set the `iconFont` property and bundle your icon with your app (if it's not a built in one). Icons can be rotated and more precise positioning is also supported:
+Use the `SkyFloatingLabelTextFieldWithIcon` field to display icons next to the textfields. You have the option of using a font or an image as the icon by setting the `iconType` property (Default = `IconType.font`). If using an image as icon, you will have to set the `iconImage` property. If using a font as icon, you will have to set the `iconFont` property and bundle your icon with your app (if it's not a built in one). Icons can be rotated and more precise positioning is also supported:
 
 ![](/SkyFloatingLabelTextField/images/example-3.gif)
 
+#### Using a font
+
 ```swift
 let overcastBlueColor = UIColor(red: 0, green: 187/255, blue: 204/255, alpha: 1.0)
+let textFieldFrame = CGRect(x: 150, y: 10, width: 120, height: 45)
 
-let textField1 = SkyFloatingLabelTextFieldWithIcon(frame: CGRectMake(10, 10, 120, 45))
+let textField1 = SkyFloatingLabelTextFieldWithIcon(frame: textFieldFrame, iconType: .font)
 textField1.placeholder = "Departure"
 textField1.title = "Flying from"
 textField1.iconFont = UIFont(name: "FontAwesome", size: 15)
 textField1.iconText = "\u{f072}" // plane icon as per https://fortawesome.github.io/Font-Awesome/cheatsheet/
 self.view.addSubview(textField1)
 
-let textField2 = SkyFloatingLabelTextFieldWithIcon(frame: CGRectMake(150, 10, 120, 45))
+let textField2 = SkyFloatingLabelTextFieldWithIcon(frame: textFieldFrame)
 textField2.placeholder = "Arrival"
 textField2.title = "Flying to"
 textField2.tintColor = overcastBlueColor
@@ -93,6 +97,7 @@ textField2.selectedTitleColor = overcastBlueColor
 textField2.selectedLineColor = overcastBlueColor
 
 // Set icon properties
+textField2.iconType = .font
 textField2.iconColor = UIColor.lightGrayColor()
 textField2.selectedIconColor = overcastBlueColor
 textField2.iconFont = UIFont(name: "FontAwesome", size: 15)
@@ -101,6 +106,17 @@ textField2.iconMarginBottom = 4.0 // more precise icon positioning. Usually need
 textField2.iconRotationDegrees = 90 // rotate it 90 degrees
 textField2.iconMarginLeft = 2.0
 self.view.addSubview(textField2)
+```
+
+#### Using an image
+```swift
+let textFieldframe = CGRect(x: 150, y: 10, width: 120, height: 45)
+
+let textField1 = SkyFloatingLabelTextFieldWithIcon(frame: textFieldframe, iconType: .image)
+textField1.placeholder = "Departure"
+textField1.title = "Flying from"
+textField1.iconImage = UIImage(imageLiteralResourceName: "PlaneIcon")
+self.view.addSubview(textField1)
 ```
 
 ### Error state and delegates
@@ -187,7 +203,7 @@ pod 'SkyFloatingLabelTextField', '~> 3.0'
 
 Lastly, let CocoaPods fetch the latest version of the component by running:
 ```shell
-$ cocoapods update
+$ pod update
 ```
 
 ##### Integrating into Objective C projects
@@ -238,7 +254,7 @@ Credits for the original design, and improving it with iconography to Matt D. Sm
 
 - *Can I use it in Objective C projects?*
 
-  Of course! Please see the [Integrating-into-Objective-C-projects](#Integrating into Objective C projects) section on how to integrate the component via CocoaPods.
+  Of course! Please see the [Integrating-into-Objective-C-projects](#integrating-into-objective-c-projects) section on how to integrate the component via CocoaPods.
 
 - *Does the control work well with auto layout? What about using it programmatically?*
 

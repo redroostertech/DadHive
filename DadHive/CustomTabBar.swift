@@ -41,9 +41,9 @@ extension CustomTabBar {
             tabBarItem.tag = count
             tabBarItem.image = UIImage(named: arrayOfImagesForTabBar[count])
             tabBarItem.selectedImage = UIImage(named: arrayOfImagesForTabBar[count] + "-selected")
-            tabBarItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: unselectedColor],
+            tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: unselectedColor],
                                               for: .normal)
-            tabBarItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: selectedColor],
+            tabBarItem.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: selectedColor],
                                               for: .selected)
             count += 1
         }

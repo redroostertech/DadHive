@@ -18,7 +18,7 @@ class CurrentUser {
 
     private init() {
         self.defaults = DefaultsManager()
-        self.apiRepo = ModuleHandler.shared.apiRepository
+        self.apiRepo = APIRepository()
     }
 
     func signout(_ completion: @escaping(Bool) -> Void) {
@@ -38,7 +38,7 @@ class CurrentUser {
             retrieveUser(withId: firUser.uid, completion: {
                 (user, error, data) in
                 if let user = user, let data = data {
-                UserDefaults.standard.setValue(NSKeyedArchiver.archivedData(withRootObject: data), forKey: kAuthorizedUser)
+                    UserDefaults.standard.setValue(NSKeyedArchiver.archivedData(withRootObject: data), forKey: kAuthorizedUser)
                     self.user = user
                     completion?()
                 } else {
@@ -62,8 +62,9 @@ class CurrentUser {
             if let err = error {
                 completion(err)
             } else {
-                self.refreshCurrentUser()
-                completion(nil)
+                self.refreshCurrentUser({
+                    completion(nil)
+                })
             }
         }
     }
@@ -84,22 +85,6 @@ class CurrentUser {
                 }
             }
         }
-//        FIRFirestoreDB.shared.retrieveUser(withId: id, completion: {
-//            (success, document, error) in
-//            if let error = error {
-//                print(error)
-//                completion(nil, error, nil)
-//            } else {
-//                if let document = document {
-//                    var userData = document.data()
-//                    userData["snapshotKey"] = document.documentID
-//                    let user = User(JSON: userData)
-//                    completion(user, nil, userData)
-//                } else {
-//                    FIRAuthentication.shared.signout()
-//                }
-//            }
-//        })
     }
 }
 
@@ -142,4 +127,21 @@ extension CurrentUser {
 //                        }
 //        }
 //    }
+
+    //        FIRFirestoreDB.shared.retrieveUser(withId: id, completion: {
+    //            (success, document, error) in
+    //            if let error = error {
+    //                print(error)
+    //                completion(nil, error, nil)
+    //            } else {
+    //                if let document = document {
+    //                    var userData = document.data()
+    //                    userData["snapshotKey"] = document.documentID
+    //                    let user = User(JSON: userData)
+    //                    completion(user, nil, userData)
+    //                } else {
+    //                    FIRAuthentication.shared.signout()
+    //                }
+    //            }
+    //        })
 }

@@ -12,7 +12,7 @@ import SVProgressHUD
 
 class LocationManagerModule: NSObject {
     static let shared = LocationManagerModule()
-    private var locationManager: CLLocationManager!
+    private var locationManager: CLLocationManager?
     private var geoCoder = CLGeocoder()
     private var userLocationData: [String: Any]?
     var accessGranted = false
@@ -20,10 +20,10 @@ class LocationManagerModule: NSObject {
     private var userLocation: CLLocation? {
         didSet {
             guard let userLocation = self.userLocation else { return }
+            print("Location longitude and latitude was retrieved.")
             if self.userLocationData == nil {
                 self.userLocationData = [String: Any]()
             }
-            //  self.userLocationData!["dateString"] = Date().toString(.timeDate)
             self.userLocationData!["addressLat"] = userLocation.coordinate.latitude
             self.userLocationData!["addressLong"] = userLocation.coordinate.longitude
         }
@@ -32,6 +32,7 @@ class LocationManagerModule: NSObject {
     private var userLocationDescription: [String: String]? {
         didSet {
             guard let userLocationDescription = self.userLocationDescription else { return }
+            print("Location was reverse geocoded.")
             if self.userLocationData == nil {
                 self.userLocationData = [String: Any]()
             }
@@ -42,13 +43,26 @@ class LocationManagerModule: NSObject {
     }
 
     private override init() {
-        locationManager = CLLocationManager()
+        super.init()
+        print(" \(kAppName) | LocationManagerModule Handler Initialized")
+        createInstance()
+    }
+
+    func createInstance() {
+        if locationManager == nil {
+            self.locationManager = CLLocationManager()
+            self.locationManager?.delegate = self
+            self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        }
+        getLocationAccess { (access) in
+            if (access) {
+                self.requestLocation()
+            }
+        }
     }
 
     func checkLocationPermissions(_ completion: @escaping(DadHiveError?)->Void) {
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
+        locationManager?.requestWhenInUseAuthorization()
         getAccess { (access) in
             if access == false {
                 completion(DadHiveError.locationAccessDisabled)
@@ -66,7 +80,7 @@ class LocationManagerModule: NSObject {
         }
     }
 
-    func getAccess (_ completion: ((Bool) -> Void)? = nil) {
+    private func getAccess (_ completion: ((Bool) -> Void)? = nil) {
         if CLLocationManager.authorizationStatus() == .denied {
             completion?(false)
         } else {
@@ -76,23 +90,9 @@ class LocationManagerModule: NSObject {
 
     func requestLocation(){
         if CLLocationManager.locationServicesEnabled() {
-            self.locationManager.startUpdatingLocation()
+            self.locationManager?.startUpdatingLocation()
         } else {
             self.showErrorAlert(DadHiveError.locationAccessDisabled)
-        }
-    }
-
-    func getUserLocation(_ completion: @escaping(Location?)->Void) {
-        if let data = self.userLocationData, let location = Location(JSON: data) {
-            CurrentUser.shared.user?.setLocation(location, { (error) in
-                if let error = error {
-                    completion(nil)
-                } else {
-                    completion(location)
-                }
-            })
-        } else {
-            completion(nil)
         }
     }
 }
@@ -114,7 +114,7 @@ extension LocationManagerModule: CLLocationManagerDelegate {
             self.userLocation = CLLocation()
         }
         self.userLocation! = CLLocation(latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude)
-        manager.stopUpdatingLocation()
+        self.locationManager?.stopUpdatingLocation()
         reverseGeocode(usingLocation: userLocation!)
     }
 
@@ -130,7 +130,10 @@ extension LocationManagerModule: CLLocationManagerDelegate {
                     self.userLocationDescription!["city"] = place.subLocality ?? ""
                     self.userLocationDescription!["state"] = place.administrativeArea ?? ""
                     self.userLocationDescription!["country"] = place.country ?? ""
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: kSaveLocationObservationKey), object: nil, userInfo: ["access": false])
+                    
+                    if let data = self.userLocationData {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: kSaveLocationObservationKey), object: nil, userInfo: ["access": false, "location": data])
+                    }
                 }
             }
         }
@@ -147,5 +150,30 @@ extension LocationManagerModule {
         SVProgressHUD.setDefaultStyle(.dark)
         SVProgressHUD.setDefaultMaskType(.gradient)
         SVProgressHUD.setMinimumDismissTimeInterval(1)
+    }
+}
+
+//  MARK:- Observer method
+extension LocationManagerModule {
+    func getUserLocation(_ completion: @escaping(Location?)->Void) {
+        if let data = self.userLocationData, let location = Location(JSON: data) {
+            CurrentUser.shared.user?.setLocation(location, { (error) in
+                if let error = error {
+                    completion(nil)
+                } else {
+                    completion(location)
+                }
+            })
+        } else {
+            completion(nil)
+        }
+    }
+
+    func getLocation(_ completion: @escaping(Location?)->Void) {
+        if let data = self.userLocationData, let location = Location(JSON: data) {
+            completion(location)
+        } else {
+            completion(nil)
+        }
     }
 }

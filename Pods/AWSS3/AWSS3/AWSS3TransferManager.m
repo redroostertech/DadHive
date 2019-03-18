@@ -13,13 +13,13 @@
 // permissions and limitations under the License.
 //
 
-#import "AWSS3TransferManager.h"
 #import "AWSS3.h"
-#import "AWSBolts.h"
-#import "AWSTMCache.h"
-#import "AWSCategory.h"
-#import "AWSCocoaLumberjack.h"
-#import "AWSSynchronizedMutableDictionary.h"
+#import "AWSS3TransferManager.h"
+#import <AWSCore/AWSBolts.h>
+#import <AWSCore/AWSCategory.h>
+#import <AWSCore/AWSCocoaLumberjack.h>
+#import <AWSCore/AWSSynchronizedMutableDictionary.h>
+#import <AWSCore/AWSTMCache.h>
 
 static NSString *const AWSInfoS3TransferManager = @"S3TransferManager";
 
@@ -526,9 +526,10 @@ static AWSSynchronizedMutableDictionary *_serviceClients = nil;
                     generatedfileName = [components componentsJoinedByString:@"."];
 
                 } else {
-                    AWSDDLogError(@"[generatedPath componentsSeparatedByString] returns empty array or nil, generatedfileName:%@",generatedfileName);
-                    NSString *errorString = [NSString stringWithFormat:@"[generatedPath componentsSeparatedByString] returns empty array or nil, generatedfileName:%@",generatedfileName];
-                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(errorString, nil)};
+                    NSString *errorString = @"[generatedPath componentsSeparatedByString] returns empty array or nil, generatedfileName:%@";
+                    AWSDDLogError(errorString, generatedfileName);
+                    NSString *localizedErrorString = [NSString stringWithFormat:NSLocalizedString(errorString, @"[generatedPath componentsSeparatedByString] returns empty array or nil, generatedfileName:{Generated File Name}"), generatedfileName];
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: localizedErrorString};
                     return [AWSTask taskWithError:[NSError errorWithDomain:AWSS3TransferManagerErrorDomain code:AWSS3TransferManagerErrorInternalInConsistency userInfo:userInfo]];
                 }
                 suffixCount++;

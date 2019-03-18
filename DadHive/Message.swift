@@ -10,16 +10,24 @@ import Foundation
 import ObjectMapper
 import Firebase
 
+class Messages: Mappable {
+    var messages: [Message]?
+
+    required init?(map: Map) { }
+
+    func mapping(map: Map) {
+        self.messages <- map["messages"]
+    }
+}
+
 public class Message: Mappable {
     
-    var key: Any?
-    var id: Any?
-    var conversationId: Any?
-    var senderId: Any?
-    var message: Any?
-    private var createdAt: Any?
-
-    var sender: User?
+    var key: String?
+    var id: String?
+    var conversationId: String?
+    var senderId: String?
+    var message: String?
+    private var createdAt: String?
 
     required public init?(map: Map) { }
 
@@ -30,21 +38,6 @@ public class Message: Mappable {
         message <- map["message"]
         createdAt <- map["createdAt"]
         senderId <- map["senderId"]
-
-        DispatchQueue.global(qos: .background).async {
-            //  MARK:- Get Sender
-            FIRFirestoreDB.shared.retrieveUser(withId: self.senderId as? String ?? "", completion: { (success, document, error) in
-                if let err = error {
-                    print("No user data from API")
-                } else {
-                    if let data = document?.data(), let user = User(JSON: data) {
-                        self.sender = user
-                    } else {
-                        print("Sender document data is empty.")
-                    }
-                }
-            })
-        }
     }
 
     var conversationDate: Date? {
@@ -63,13 +56,5 @@ public class Message: Mappable {
             return nil
         }
         return conversationDate.timeAgoDisplay()
-    }
-
-    private var senderDict: Any? {
-        didSet {
-            if let dict = self.senderDict as? [String: Any] {
-                self.sender = User(JSON: dict)
-            }
-        }
     }
 }

@@ -10,21 +10,30 @@ import UIKit
 
 class SettingsVC: UITableViewController {
 
-    @IBOutlet var btnProfilePicture: UIButton!
-    @IBOutlet var lblFullname: UILabel!
-    @IBOutlet var lblPreferences: UILabel!
-    @IBOutlet var lblAccount: UILabel!
-
-    var currentUser = CurrentUser.shared
+    @IBOutlet weak var btnProfilePicture: UIButton!
+    @IBOutlet weak var lblFullname: UILabel!
+    @IBOutlet weak var lblPreferences: UILabel!
+    @IBOutlet weak var lblAccount: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         hideNavigationBarHairline()
         lblFullname.font = UIFont(name: kFontBody, size: kFontSizeBody)
-        lblFullname.text = currentUser.user?.name?.fullName ?? ""
+        lblFullname.text = CurrentUser.shared.user?.name?.fullName ?? ""
         lblPreferences.font = UIFont(name: kFontMenu, size: kFontSizeMenu)
         lblAccount.font = UIFont(name: kFontMenu, size: kFontSizeMenu)
         btnProfilePicture.applyCornerRadius()
+
+        if let mediaArray = CurrentUser.shared.user?.media, mediaArray.count > 0 {
+            let media = mediaArray[0]
+            self.btnProfilePicture.imageView?.contentMode = .scaleAspectFill
+            if media.url != nil {
+                self.btnProfilePicture.sd_setImage(with: media.url, for: .normal, completed: nil)
+            } else {
+                self.btnProfilePicture.setImage(UIImage(named: "placeholder"), for: .normal)
+            }
+        }
+        self.tableView.reloadData()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {

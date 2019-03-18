@@ -26,6 +26,9 @@ public class Api {
         static let createUser: String = {
             return Api.init().baseURL + "createUser"
         }()
+        static let getNearbyUsers: String = {
+            return Api.init().baseURL + "getNearbyUsers"
+        }()
         static let createMatch: String = {
             return Api.init().baseURL + "createMatch"
         }()
@@ -43,6 +46,9 @@ public class Api {
         }()
         static let sendMessage: String = {
             return Api.init().baseURL + "sendMessage"
+        }()
+        static let saveLocation: String = {
+            return Api.init().baseURL + "saveLocation"
         }()
     }
 }

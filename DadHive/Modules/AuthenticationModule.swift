@@ -3,7 +3,7 @@ import Foundation
 class AuthenticationModule {
     private var apiRepository: APIRepository!
     init() {
-        self.apiRepository = ModuleHandler.shared.apiRepository
+        self.apiRepository = APIRepository()
     }
     
     func loginUsing(credentials: [String: Any]?,

@@ -13,6 +13,7 @@ class Info: Mappable, CustomStringConvertible {
     var type: String?
     var info: String?
     var title: String?
+    var icon: String?
 
     required init?(map: Map) { }
 
@@ -20,6 +21,7 @@ class Info: Mappable, CustomStringConvertible {
         type <- map["type"]
         info <- map["info"]
         title <- map["title"]
+        icon <- map["image"]
     }
 
     public var toDict: [String: Any] {

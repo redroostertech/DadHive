@@ -58,9 +58,6 @@ class FIRFirestoreDB {
     func update(withData data: [String: Any], from collection: String, at document: String, completion: @escaping(Bool, Error?) -> Void) {
         self.dbRef.collection(collection).document(document).setData(data, merge: true) { (error) in
             if error == nil {
-//                if let data = data["settings"] as? [String:Any], let location = data["location"] as? [String: Any], let loc = Location(JSON: location), let lat = loc.addressLat, let lon = loc.addressLong {
-//                    self.geoFire.setLocation(geopoint: GeoPoint(latitude: lat, longitude:  lon), forDocumentWithID: document)
-//                }
                 completion(true, nil)
             } else {
                 completion(false, error)
@@ -81,10 +78,6 @@ class FIRFirestoreDB {
     func retrieve(byKey key: String, withValue value: String, from collection: String, completion: @escaping(Bool, [QueryDocumentSnapshot]?, Error?) -> Void) {
         self.dbRef.collection(collection).whereField(key, isEqualTo: value).getDocuments(completion: { (snapshot, error) in
             if error == nil {
-                print(key)
-                print(value)
-                print(snapshot?.documents.count)
-                print(snapshot?.documents.first?.data())
                 completion(true, snapshot?.documents, nil)
             } else {
                 completion(false, nil, error)
@@ -146,6 +139,7 @@ extension FIRFirestoreDB {
     func retrieveUser(withId id: String, completion: @escaping(Bool, QueryDocumentSnapshot?, Error?) -> Void) {
         self.retrieve(byKey: "uid", withValue: id, from: kUsers) { (success, documents, error) in
             if error == nil, let documents = documents, documents.count > 0 {
+                print(documents[0])
                 completion(true, documents[0], nil)
             } else {
                 completion(false, nil, error)
@@ -211,9 +205,10 @@ extension FIRFirestoreDB {
         if let lastUserKey = DefaultsManager().retrieveStringDefault(forKey: kLastUser) {
             print("LastUserKey exists")
             self.retrieveUser(withId: lastUserKey) {
-                (success, document, error) in
-                if error == nil, let document = document {
-                    let _ = self.geoFire.query(withCenter: geoPoint, radius: radius).observeWithPagination(startingAtDocument: document, orderedByKey: "uid", withPreferences: nil, limitedTo: limit, .documentEntered, with: { (id, location) in
+                (success, object, error) in
+                if error == nil, let document = object {
+                    let query = self.geoFire.query(withCenter: geoPoint, radius: radius)
+                    let _ = query.observeWithPagination(startingAtDocument: document, orderedByKey: "uid", withPreferences: nil, limitedTo: limit, .documentEntered, with: { (id, location) in
                         if let id = id {
                             self.retrieveUserFromGeoPoint(withId: id, completion: { (success, document, error) in
                                 if var doc = document?.data() {
@@ -229,9 +224,12 @@ extension FIRFirestoreDB {
                             completion()
                         }
                     })
+                } else {
+                    completion()
                 }
             }
         } else {
+            print("LastUserKey does not exists")
             let _ = self.geoFire.query(withCenter: geoPoint, radius: radius).observeWithPagination(startingAtDocument: nil, orderedByKey: "uid", withPreferences: nil, limitedTo: limit, .documentEntered, with: { (id, location) in
                 if let id = id {
                     self.retrieveUserFromGeoPoint(withId: id, completion: { (success, document, error) in
@@ -291,8 +289,10 @@ extension FIRFirestoreDB {
             } else {
                 guard let documents = documents?.filter({
                     (result) -> Bool in
-                    let user = User(JSON: result.data())
-                    return user?.uid ?? "" != CurrentUser.shared.user?.uid ?? "n/a"
+                    guard let raw = result.data() as? [String: Any], let user = User(JSON: raw), let theirUid = user.uid else {
+                        return false
+                    }
+                    return theirUid != "BJn3NIG3QIMBVvvIRl1n3McjaHt1"
                 }) else {
                     print("Error filtering snapshot documents")
                     return
@@ -470,6 +470,20 @@ extension FIRFirestoreDB {
         }
     }
 
+    func checkForMatch(recipient: String, sender: String, completion: @escaping(Bool, [QueryDocumentSnapshot]?, Error?) -> Void) {
+        self.dbRef.collection(kMatches).whereField("senderId", isEqualTo: sender).whereField("recipientId", isEqualTo: recipient).getDocuments(completion: { (snapshot, error) in
+            if error == nil {
+                //                print(key)
+                //                print(value)
+                //                print(snapshot?.documents.count)
+                //                print(snapshot?.documents.first?.data())
+                completion(true, snapshot?.documents, nil)
+            } else {
+                completion(false, nil, error)
+            }
+        })
+    }
+
 }
 
 //  MARK:- Finding all conversations
@@ -489,6 +503,32 @@ extension FIRFirestoreDB {
                 completion(false, nil, error)
             }
         })
+    }
+
+    func retrieveMyConversations(_ completion: @escaping(Bool, [QueryDocumentSnapshot]?, Error?) -> Void) {
+        self.dbRef.collection(kConversations)
+            .whereField("senderId", isEqualTo: CurrentUser.shared.user?.uid ?? "")
+            .limit(to: 100)
+            .getDocuments(completion: { (snapshot, error) in
+                if error == nil {
+                    completion(true, snapshot?.documents, nil)
+                } else {
+                    completion(false, nil, error)
+                }
+            })
+    }
+
+    func retrieveOtherConversations(_ completion: @escaping(Bool, [QueryDocumentSnapshot]?, Error?) -> Void) {
+        self.dbRef.collection(kConversations)
+            .whereField("recipientId", isEqualTo: CurrentUser.shared.user?.uid ?? "")
+            .limit(to: 100)
+            .getDocuments(completion: { (snapshot, error) in
+                if error == nil {
+                    completion(true, snapshot?.documents, nil)
+                } else {
+                    completion(false, nil, error)
+                }
+            })
     }
 
     func retrieveConversation(withId id: String, completion: @escaping(Bool, QueryDocumentSnapshot?, Error?) -> Void) {
@@ -517,16 +557,28 @@ extension FIRFirestoreDB {
         }
     }
 
+    func checkForConversation(recipient: String, sender: String, completion: @escaping(Bool, [QueryDocumentSnapshot]?, Error?) -> Void) {
+        self.dbRef.collection(kConversations).whereField("senderId", isEqualTo: sender).whereField("recipientId", isEqualTo: recipient).whereField("senderId", isEqualTo: recipient).whereField("recipientId", isEqualTo: sender).getDocuments(completion: { (snapshot, error) in
+            if error == nil {
+                //                print(key)
+                //                print(value)
+                //                print(snapshot?.documents.count)
+                //                print(snapshot?.documents.first?.data())
+                completion(true, snapshot?.documents, nil)
+            } else {
+                completion(false, nil, error)
+            }
+        })
+    }
 }
 
 //  MARK:- Finding all messages
 extension FIRFirestoreDB {
     func retrieveMessageFromConversation(withId id: String, completion: @escaping(Bool, [QueryDocumentSnapshot]?, Error?) -> Void) {
-        self.dbRef.collection(kConversations)
+        self.dbRef.collection(kMessages)
             .order(by: "createdAt")
-            .order(by: "conversationId")
             .whereField("conversationId", isEqualTo: id)
-            .limit(to: 30)
+            .limit(to: 40)
             .getDocuments(completion: { (snapshot, error) in
                 if error == nil {
                     completion(true, snapshot?.documents, nil)
@@ -536,9 +588,9 @@ extension FIRFirestoreDB {
             })
     }
 
-    func createMessage(withData data: Message, completion: @escaping(Message?) -> Void) {
+    func createMessage(withData data: Message, completion: @escaping(String?) -> Void) {
         self.add(data: data.toJSON(), to: kMessages) { (success, result, error) in
-            completion(data)
+            completion(result)
         }
     }
 

@@ -142,6 +142,12 @@ extension String {
         print(dateFormatter.date(from: self))
         return dateFormatter.date(from: self) ?? Date()
     }
+
+    var westernArabicNumeralsOnly: String {
+        let pattern = UnicodeScalar("0")..."9"
+        return String(unicodeScalars
+            .flatMap { pattern ~= $0 ? Character($0) : nil })
+    }
 }
 
 //  MARK:- Validation

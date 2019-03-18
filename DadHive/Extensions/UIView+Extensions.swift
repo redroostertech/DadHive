@@ -93,23 +93,23 @@ extension UIView {
     
     public func makeHeightZero() {
         let verticalSpaceConstraint = self.superview!.constraints.filter({(constraint) -> Bool in
-            return constraint.secondItem as? UIView == self && constraint.secondAttribute == NSLayoutAttribute.bottom
+            return constraint.secondItem as? UIView == self && constraint.secondAttribute == NSLayoutConstraint.Attribute.bottom
         }).first
         
         let superViewHeightConstraint = self.superview!.constraints.filter({(constraint) -> Bool in
-            return constraint.firstAttribute == NSLayoutAttribute.height
+            return constraint.firstAttribute == NSLayoutConstraint.Attribute.height
         }).first
         
         superViewHeightConstraint?.constant -= verticalSpaceConstraint?.constant ?? 0 + self.frame.height
         verticalSpaceConstraint?.constant = 0
         
         let heightConstraint = self.constraints.filter({(constraint) -> Bool in
-            return constraint.firstAttribute == NSLayoutAttribute.height
+            return constraint.firstAttribute == NSLayoutConstraint.Attribute.height
         }).first
         if heightConstraint != nil {self.removeConstraint(heightConstraint!)}
         
         let constH = NSLayoutConstraint(item: self,
-                                        attribute: NSLayoutAttribute.height,
+                                        attribute: NSLayoutConstraint.Attribute.height,
                                         relatedBy: NSLayoutRelation.equal,
                                         toItem: nil,
                                         attribute: NSLayoutAttribute.notAnAttribute,
@@ -200,7 +200,7 @@ extension UIView {
     }
     
     public func constraintView(_ target: UIView,
-                               forAttribute attrib: NSLayoutAttribute,
+                               forAttribute attrib: NSLayoutConstraint.Attribute,
                                multiplier: CGFloat = 1,
                                constant: CGFloat = 0,
                                priority: UILayoutPriority = .required ) {
@@ -407,7 +407,7 @@ extension UIView {
     
     // MARK: Remove Constraints
     
-    private func removeConstraints(onView view: UIView, forAttributes: [NSLayoutAttribute]) {
+    private func removeConstraints(onView view: UIView, forAttributes: [NSLayoutConstraint.Attribute]) {
         forAttributes.forEach { (attrib) in
             let const = view.constraints.filter {$0.firstAttribute == attrib}
             superView.removeConstraints(const)
@@ -416,7 +416,7 @@ extension UIView {
     
     // MARK: Internal helpers
     
-    private func constrain(attribute: NSLayoutAttribute, to value: CGFloat, relatedBy relation: NSLayoutRelation = .equal) -> Constraint {
+    private func constrain(attribute: NSLayoutConstraint.Attribute, to value: CGFloat, relatedBy relation: NSLayoutConstraint.Relation = .equal) -> Constraint {
         removeConstraints(onView: view, forAttributes: [attribute])
         view.addConstraint(NSLayoutConstraint(item: view,
                                               attribute: attribute,

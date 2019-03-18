@@ -42,22 +42,27 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
         let image = UIImage(named: "dadhive-hive")
         imageView.image = image
         self.navigationItem.titleView = imageView
-        
-        APESuperHUD.appearance.cornerRadius = 10
-        APESuperHUD.appearance.animateInTime = 1.0
-        APESuperHUD.appearance.animateOutTime = 1.0
-        APESuperHUD.appearance.backgroundBlurEffect = .light
-        APESuperHUD.appearance.iconColor = UIColor.flatGreen
-        APESuperHUD.appearance.textColor =  UIColor.flatGreen
-        APESuperHUD.appearance.loadingActivityIndicatorColor = UIColor.flatGreen
-        APESuperHUD.appearance.defaultDurationTime = 4.0
-        APESuperHUD.appearance.cancelableOnTouch = true
-        APESuperHUD.appearance.iconWidth = 48
-        APESuperHUD.appearance.iconHeight = 48
-        APESuperHUD.appearance.messageFontName = "Avenir Next Demi Bold "
-        APESuperHUD.appearance.titleFontName = "Avenir Next Demi Bold "
-        APESuperHUD.appearance.titleFontSize = 12
-        APESuperHUD.appearance.messageFontSize = 12
+
+        setupSuperHUD()
+
+    }
+
+    func setupSuperHUD() {
+        HUDAppearance.cornerRadius = 10
+        HUDAppearance.animateInTime = 1.0
+        HUDAppearance.animateOutTime = 1.0
+        HUDAppearance.iconColor = UIColor.flatGreen
+        HUDAppearance.titleTextColor =  UIColor.flatGreen
+        HUDAppearance.loadingActivityIndicatorColor = UIColor.flatGreen
+        HUDAppearance.cancelableOnTouch = true
+        HUDAppearance.iconSize = CGSize(width: kIconSizeWidth, height: kIconSizeHeight)
+        HUDAppearance.messageFont = UIFont(name: kFontBody, size: kFontSizeBody) ?? UIFont.systemFont(ofSize: kFontSizeBody, weight: .regular)
+        HUDAppearance.titleFont = UIFont(name: kFontTitle, size: kFontSizeTitle) ?? UIFont.systemFont(ofSize: kFontSizeTitle, weight: .bold)
+        showHUD()
+    }
+
+    func showHUD() {
+        APESuperHUD.show(style: .icon(image: UIImage(named: "dadhive-hive")!, duration: 4.0), title: nil, message: "Finding Profile", completion: nil)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -80,7 +85,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
     }
     
     func query(forPreregesteredUsers code: String) {
-        APESuperHUD.showOrUpdateHUD(icon: .email, message: "Finding Profile", presentingView: self.view)
+        showHUD()
     
         let searchData = [
             "regcode": self.preReg.text!,
@@ -94,9 +99,7 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                     return
                 }
                 DispatchQueue.main.async {
-                    APESuperHUD.removeHUD(animated: true, presentingView: self.view, completion: {
-                        // Completed
-                    })
+                    self.showHUD()
                 }
                 
                 DispatchQueue.main.async {
@@ -104,12 +107,8 @@ class RegisterViewController: UITableViewController, UITextFieldDelegate {
                     self.fullName.text = String(describing: prefill.value(forKey: "uname")!)
                 }
             } else {
-                APESuperHUD.showOrUpdateHUD(icon: .sadFace, message: "Could not locate user.", presentingView: self.view)
                 let when = DispatchTime.now() + 2 // change 2 to desired number of seconds
                 DispatchQueue.main.asyncAfter(deadline: when) {
-                    APESuperHUD.removeHUD(animated: true, presentingView: self.view, completion: {
-                        // Completed
-                    })
                 }
             }
         }

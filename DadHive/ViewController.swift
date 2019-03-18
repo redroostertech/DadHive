@@ -14,13 +14,13 @@ import SVProgressHUD
 
 class ViewController: UIViewController {
 
-    @IBOutlet var btnAuthenticate: UIButton!
-    @IBOutlet var lblGDPR: UILabel!
-    @IBOutlet var vwAuthenticationTypeContainer: UIView!
-    @IBOutlet var txtFullname: UITextField!
-    @IBOutlet var txtPassword: UITextField!
-    @IBOutlet var txtPasswordConfirm: UITextField!
-    @IBOutlet var txtEmail: UITextField!
+    @IBOutlet weak var btnAuthenticate: UIButton!
+    @IBOutlet weak var lblGDPR: UILabel!
+    @IBOutlet weak var vwAuthenticationTypeContainer: UIView!
+    @IBOutlet weak var txtFullname: UITextField!
+    @IBOutlet weak var txtPassword: UITextField!
+    @IBOutlet weak var txtPasswordConfirm: UITextField!
+    @IBOutlet weak var txtEmail: UITextField!
 
     var player : AVPlayer?
     var playerLayer : AVPlayerLayer?
@@ -29,31 +29,33 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        loadVideoBG()
+        //loadVideoBG()
         setupSuperHUD()
         setupSwitch()
         loadGDPR()
 
-        for view in self.view.subviews {
-            if let textField = view as? UITextField {
-                textField.delegate = self
-                textField.addLeftPadding(withWidth: kTextFieldPadding)
+        DispatchQueue.main.async {
+            for view in self.view.subviews {
+                if let textField = view as? UITextField {
+                    textField.delegate = self
+                    textField.addLeftPadding(withWidth: kTextFieldPadding)
+                }
+            }
+
+            self.btnAuthenticate.applyCornerRadius()
+            self.btnAuthenticate.addGradientLayer(using: kAppCGColors)
+
+            if self.authenticationSwitch!.selectedIndex == 0 {
+                self.txtPasswordConfirm.isHidden = true
+                self.txtFullname.isHidden = true
+                self.btnAuthenticate.setText(kLoginText)
+            } else {
+                self.txtPasswordConfirm.isHidden = false
+                self.txtFullname.isHidden = false
+                self.btnAuthenticate.setText(kSignUpText)
             }
         }
 
-        btnAuthenticate.applyCornerRadius()
-        btnAuthenticate.addGradientLayer(using: kAppCGColors)
-
-        if authenticationSwitch!.selectedIndex == 0 {
-            txtPasswordConfirm.isHidden = true
-            txtFullname.isHidden = true
-            btnAuthenticate.setText(kLoginText)
-        } else {
-            txtPasswordConfirm.isHidden = false
-            txtFullname.isHidden = false
-            btnAuthenticate.setText(kSignUpText)
-        }
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -114,7 +116,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func generate(_ sender: UIButton) {
-        FakeDataGenerator().generateFakeUserAccounts(300)
+        FakeDataGenerator().generateFakeUserAccounts(20)
     }
 
     @IBAction func deleteAllUsers(_ sender: UIButton) {
@@ -123,35 +125,25 @@ class ViewController: UIViewController {
 
 
     func login(withCredentials credentials: AuthCredentials) {
-        APESuperHUD.showOrUpdateHUD(icon: .email,
-                                    message: "Logging In",
-                                    duration: 1000.0,
-                                    particleEffectFileName: "FireFliesParticle",
-                                    presentingView: self.view,
-                                    completion: nil)
-        ModuleHandler.shared.firebaseRepository.auth.performLogin(credentials: credentials) { (error) in
+        showHUD("Logging In")
+        FIRRepository.shared.auth.performLogin(credentials: credentials) { (error) in
             if let err = error {
-                APESuperHUD.removeHUD(animated: true, presentingView: self.view)
+                self.dismissHUD()
                 self.showAlertErrorIfNeeded(error: err)
             } else {
-                ModuleHandler.shared.firebaseRepository.auth.checkSession(nil)
+                FIRRepository.shared.auth.checkSession(nil)
             }
         }
     }
 
     func signup(withCredentials credentials: AuthCredentials) {
-        APESuperHUD.showOrUpdateHUD(icon: .email,
-                                    message: "Creating Account",
-                                    duration: 1000.0,
-                                    particleEffectFileName: "FireFliesParticle",
-                                    presentingView: self.view,
-                                    completion: nil)
-        ModuleHandler.shared.firebaseRepository.auth.performRegisteration(usingCredentials: credentials) { (error) in
+        showHUD("Creating Account")
+        FIRRepository.shared.auth.performRegisteration(usingCredentials: credentials) { (error) in
             if let err = error {
-                APESuperHUD.removeHUD(animated: true, presentingView: self.view)
+                self.dismissHUD()
                 self.showAlertErrorIfNeeded(error: err)
             } else {
-                ModuleHandler.shared.firebaseRepository.auth.checkSession(nil)
+                FIRRepository.shared.auth.checkSession(nil)
             }
         }
     }
@@ -205,30 +197,25 @@ extension ViewController {
     }
 
     func setupSuperHUD() {
-        APESuperHUD.appearance.cornerRadius = 10
-        APESuperHUD.appearance.animateInTime = 1.0
-        APESuperHUD.appearance.animateOutTime = 1.0
-        APESuperHUD.appearance.backgroundBlurEffect = .light
-        APESuperHUD.appearance.iconColor = UIColor.flatGreen
-        APESuperHUD.appearance.textColor =  UIColor.flatGreen
-        APESuperHUD.appearance.loadingActivityIndicatorColor = UIColor.flatGreen
-        APESuperHUD.appearance.defaultDurationTime = 4.0
-        APESuperHUD.appearance.cancelableOnTouch = true
-        APESuperHUD.appearance.iconWidth = kIconSizeWidth
-        APESuperHUD.appearance.iconHeight = kIconSizeHeight
-        APESuperHUD.appearance.messageFontName = kFontBody
-        APESuperHUD.appearance.titleFontName = kFontTitle
-        APESuperHUD.appearance.titleFontSize = kFontSizeTitle
-        APESuperHUD.appearance.messageFontSize = kFontSizeBody
+        HUDAppearance.cornerRadius = 10
+        HUDAppearance.animateInTime = 1.0
+        HUDAppearance.animateOutTime = 1.0
+        HUDAppearance.iconColor = UIColor.flatGreen
+        HUDAppearance.titleTextColor =  UIColor.flatGreen
+        HUDAppearance.loadingActivityIndicatorColor = UIColor.flatGreen
+        HUDAppearance.cancelableOnTouch = true
+        HUDAppearance.iconSize = CGSize(width: kIconSizeWidth, height: kIconSizeHeight)
+        HUDAppearance.messageFont = UIFont(name: kFontBody, size: kFontSizeBody) ?? UIFont.systemFont(ofSize: kFontSizeBody, weight: .regular)
+        HUDAppearance.titleFont = UIFont(name: kFontTitle, size: kFontSizeTitle) ?? UIFont.systemFont(ofSize: kFontSizeTitle, weight: .bold)
+        showHUD()
     }
 
-    func showHUD() {
-        APESuperHUD.showOrUpdateHUD(icon: .email,
-                                    message: "Logging In",
-                                    duration: 1000.0,
-                                    particleEffectFileName: "FireFliesParticle",
-                                    presentingView: self.view,
-                                    completion: nil)
+    func showHUD(_ text: String = "Finding Users") {
+        APESuperHUD.show(style: .icon(image: UIImage(named: "dadhive-hive")!, duration: 4.0), title: nil, message: text, completion: nil)
+    }
+
+    func dismissHUD() {
+        APESuperHUD.dismissAll(animated: true)
     }
 
     func loadGDPR() {

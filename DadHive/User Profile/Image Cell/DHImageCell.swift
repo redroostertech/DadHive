@@ -9,8 +9,8 @@
 import UIKit
 
 protocol SwipingDelegate {
-    func didLikeUser()
-    func didNotLikeUser()
+    func didLike(user: User)
+    func didNotLike()
 }
 
 class DHImageCell: UITableViewCell {
@@ -36,6 +36,13 @@ class DHImageCell: UITableViewCell {
         }
     }
 
+    var mediaArray: [Media]? {
+        didSet {
+            guard let _ = self.mediaArray else { return }
+            updateNib()
+        }
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
         self.selectionStyle = .none
@@ -43,11 +50,15 @@ class DHImageCell: UITableViewCell {
     }
 
     @IBAction func checkButtonTapped(_ sender: UIButton) {
-        delegate?.didLikeUser()
+        delegate?.didLike(user: loadUser!)
     }
 
     private func updateNib() {
-        carousel = DHCarousel(collectionViewLayout: flowLayout, cellID: identifier, andUserData: loadUser!)
+        guard let mediaArray = self.mediaArray, mediaArray.count > 0 else {
+            self.awakeFromNib()
+            return
+        }
+        carousel = DHCarousel(collectionViewLayout: flowLayout, cellID: identifier, andMedia: mediaArray)
         carousel!.view.frame = vwMain.bounds
         vwMain.addSubview(carousel!.view)
         self.awakeFromNib()

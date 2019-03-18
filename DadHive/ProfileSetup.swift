@@ -39,12 +39,12 @@ class ProfileSetupFlowManager {
 
 public class FinishProfileStep1VC: UIViewController, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
-    @IBOutlet var txtUniversity: UITextField!
-    @IBOutlet var txtProfession: UITextField!
-    @IBOutlet var btnUploadProfile: UIButton!
-    @IBOutlet var txtvwBio: UITextView!
-    @IBOutlet var btnNext: UIButton!
-    @IBOutlet var txtAge: UITextField!
+    @IBOutlet weak var txtUniversity: UITextField!
+    @IBOutlet weak var txtProfession: UITextField!
+    @IBOutlet weak var btnUploadProfile: UIButton!
+    @IBOutlet weak var txtvwBio: UITextView!
+    @IBOutlet weak var btnNext: UIButton!
+    @IBOutlet weak var txtAge: UITextField!
 
     var imagePicker: UIImagePickerController?
 
@@ -127,11 +127,11 @@ public class FinishProfileStep1VC: UIViewController, UITextViewDelegate, UINavig
 
 public class FinishProfileStep2VC: UIViewController, UITextViewDelegate {
 
-    @IBOutlet var txtBoyCount: UITextField!
-    @IBOutlet var txtGirlCount: UITextField!
-    @IBOutlet var txtvwKidDescription: UITextView!
-    @IBOutlet var txtvwFreeTime: UITextView!
-    @IBOutlet var btnNext: UIButton!
+    @IBOutlet weak var txtBoyCount: UITextField!
+    @IBOutlet weak var txtGirlCount: UITextField!
+    @IBOutlet weak var txtvwKidDescription: UITextView!
+    @IBOutlet weak var txtvwFreeTime: UITextView!
+    @IBOutlet weak var btnNext: UIButton!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -173,11 +173,11 @@ public class FinishProfileStep2VC: UIViewController, UITextViewDelegate {
 }
 
 public class FinishProfileStep3VC: UIViewController {
-    @IBOutlet var btnDistance: UIButton!
-    @IBOutlet var btnAgeRange: UIButton!
-    @IBOutlet var txtLocationPreferenceOne: UITextField!
-    @IBOutlet var txtLocationPreferenceTwo: UITextField!
-    @IBOutlet var btnDone: UIButton!
+    @IBOutlet weak var btnDistance: UIButton!
+    @IBOutlet weak var btnAgeRange: UIButton!
+    @IBOutlet weak var txtLocationPreferenceOne: UITextField!
+    @IBOutlet weak var txtLocationPreferenceTwo: UITextField!
+    @IBOutlet weak var btnDone: UIButton!
 
     var distanceSelection: Double = 0.0
     var minAge: Double = 0.0

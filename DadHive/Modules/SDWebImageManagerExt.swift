@@ -12,6 +12,7 @@ import SDWebImage
 class SDWebImageManagerExt {
     static let shared = SDWebImageManagerExt()
     private init() {
+        print(" \(kAppName) | SDWebImageManagerExt Handler Initialized")
         SDWebImageManager.shared().imageDownloader?.maxConcurrentDownloads = kMaxConcurrentImageDownloads
     }
 }

@@ -12,12 +12,12 @@ import UIKit
 class DHCarousel: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
     fileprivate var reuseIdentifier = ""
-    fileprivate var user: User!
+    fileprivate var media: [Media]!
 
-    init(collectionViewLayout layout: UICollectionViewLayout, cellID id: String, andUserData userData: User) {
+    init(collectionViewLayout layout: UICollectionViewLayout, cellID id: String, andMedia mediaData: [Media]) {
         super.init(collectionViewLayout: layout)
         reuseIdentifier = id
-        user = userData
+        media = mediaData
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -26,20 +26,10 @@ class DHCarousel: UICollectionViewController, UICollectionViewDelegateFlowLayout
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        switch reuseIdentifier {
-        case "DHCarouselImage":
-            self.collectionView?.register(UINib(nibName: "DHCarouselImage",
-                                                bundle: nil),
-                                          forCellWithReuseIdentifier: reuseIdentifier)
-            self.collectionView!.reloadData()
-        case "DHCarouselItem":
-            self.collectionView?.register(UINib(nibName: "DHCarouselItem",
-                                                bundle: nil),
-                                          forCellWithReuseIdentifier: reuseIdentifier)
-            self.collectionView!.reloadData()
-        default:
-            return
-        }
+        self.collectionView?.register(UINib(nibName: "DHCarouselImage",
+                                            bundle: nil),
+                                        forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView!.reloadData()
     }
 
     // MARK: UICollectionViewDataSource
@@ -49,77 +39,29 @@ class DHCarousel: UICollectionViewController, UICollectionViewDelegateFlowLayout
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch reuseIdentifier {
-        case "DHCarouselImage":
-            return self.user.media?.count ?? 1
-        case "DHCarouselCell":
-            return self.user.media?.count ?? 1
-        default:
-            return 1
-        }
+        return self.media.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch reuseIdentifier {
-        case "DHCarouselImage":
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? DHCarouselImage else {
-                return UICollectionViewCell()
-            }
-            if let pictures = self.user.media {
-                let item = pictures[indexPath.row]
-                cell.media = item.url
-                cell.backgroundColor = .red
-            } else {
-                //  Set empty url
-            }
-            return cell
-        case "DHCarouselItem":
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? DHCarouselItem else {
-                return UICollectionViewCell()
-            }
-            if let info = self.user.infoSectionTwo {
-                let item = info[indexPath.row]
-                cell.loadData = item
-            } else {
-                // Set empty string
-            }
-            return cell
-        default:
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? DHCarouselImage else {
             return UICollectionViewCell()
         }
+        let item = media[indexPath.row]
+        cell.media = item.url
+        cell.backgroundColor = .red
+        return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        switch reuseIdentifier {
-        case "DHCarouselImage":
-            return CGSize(width: kWidthOfScreen, height: 300.0)
-        case "DHCarouselItem":
-            return CGSize(width: 150.0, height: 91.0)
-        default:
-            return .zero
-        }
+        return CGSize(width: kWidthOfScreen, height: 350.0)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        switch reuseIdentifier {
-        case "DHCarouselImage":
-            return  0
-        case "DHCarouselItem":
-            return 4
-        default:
-            return 0
-        }
+        return  0
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        switch reuseIdentifier {
-        case "DHCarouselImage":
-            return  0
-        case "DHCarouselItem":
-            return 4
-        default:
-            return 0
-        }
+        return 0
     }
 
 }

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MatchVC" customModule="DadHive" customModuleProvider="target">
+            <connections>
+                <outlet property="btnContinue" destination="bRc-a0-ea9" id="bkt-g3-lf1"/>
+                <outlet property="btnMessage" destination="rko-v8-nX7" id="hBb-Kw-aXX"/>
+                <outlet property="imgMain" destination="sam-g8-Tvx" id="jsA-IX-Xaz"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sam-g8-Tvx">
+                    <rect key="frame" x="125" y="271" width="125" height="125"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="125" id="U0E-iE-zLf"/>
+                        <constraint firstAttribute="width" constant="125" id="kub-rZ-wyN"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rko-v8-nX7">
+                    <rect key="frame" x="125" y="412" width="125" height="42"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="42" id="EVU-Hs-vpg"/>
+                    </constraints>
+                    <state key="normal" title="SEND MESSAGE"/>
+                    <connections>
+                        <action selector="sendMessage:" destination="-1" eventType="touchUpInside" id="6s4-Zb-4vo"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRc-a0-ea9">
+                    <rect key="frame" x="125" y="470" width="125" height="42"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="42" id="LJQ-HJ-Pi3"/>
+                    </constraints>
+                    <state key="normal" title="CONTINUE"/>
+                    <connections>
+                        <action selector="continueSwiping:" destination="-1" eventType="touchUpInside" id="p2T-eU-sFg"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Congratulations! You have a match!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rcu-lS-Jjh">
+                    <rect key="frame" x="16" y="234" width="343" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="sam-g8-Tvx" firstAttribute="top" secondItem="Rcu-lS-Jjh" secondAttribute="bottom" constant="16" id="0nM-yK-OGL"/>
+                <constraint firstItem="sam-g8-Tvx" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="7uE-5g-3AB"/>
+                <constraint firstItem="rko-v8-nX7" firstAttribute="top" secondItem="sam-g8-Tvx" secondAttribute="bottom" constant="16" id="Fr5-dG-Qcd"/>
+                <constraint firstItem="sam-g8-Tvx" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="G0l-Dt-Icr"/>
+                <constraint firstItem="rko-v8-nX7" firstAttribute="trailing" secondItem="sam-g8-Tvx" secondAttribute="trailing" id="IKz-rg-PJG"/>
+                <constraint firstItem="bRc-a0-ea9" firstAttribute="trailing" secondItem="rko-v8-nX7" secondAttribute="trailing" id="MOd-dy-QCS"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Rcu-lS-Jjh" secondAttribute="trailing" constant="16" id="Nak-Da-Ndd"/>
+                <constraint firstItem="Rcu-lS-Jjh" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="ONS-lF-5QI"/>
+                <constraint firstItem="rko-v8-nX7" firstAttribute="leading" secondItem="sam-g8-Tvx" secondAttribute="leading" id="ObO-TS-Kj0"/>
+                <constraint firstItem="bRc-a0-ea9" firstAttribute="leading" secondItem="rko-v8-nX7" secondAttribute="leading" id="QCT-QO-Mis"/>
+                <constraint firstItem="bRc-a0-ea9" firstAttribute="top" secondItem="rko-v8-nX7" secondAttribute="bottom" constant="16" id="VP3-oI-QS6"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="138.40000000000001" y="129.98500749625188"/>
+        </view>
+    </objects>
+</document>

@@ -9,6 +9,16 @@
 import Foundation
 import ObjectMapper
 
+class Users: Mappable {
+    var users: [User]?
+
+    required init?(map: Map) { }
+
+    func mapping(map: Map) {
+        self.users <- map["users"]
+    }
+}
+
 class User: Mappable, CustomStringConvertible {
 
     var key: String?
@@ -19,7 +29,23 @@ class User: Mappable, CustomStringConvertible {
     var email: String?
     var type: Double?
     var settings: Settings?
-    var media: [Media]?
+    var media: [Media]? {
+        didSet {
+            guard let mediaArray = self.media, mediaArray.count > 0 else { return }
+            self.imageSectionOne.removeAll()
+            self.imageSectionTwo.removeAll()
+            var count = 0
+            while count < mediaArray.count {
+                if count <= 2 && mediaArray[count].url != nil {
+                    self.imageSectionOne.append(mediaArray[count])
+                }
+                if count > 2 && mediaArray[count].url != nil {
+                    self.imageSectionTwo.append(mediaArray[count])
+                }
+                count += 1
+            }
+        }
+    }
     private var dob: String?
     var bio: String? {
         guard let userInfo = self.infoSectionOne else {
@@ -98,6 +124,17 @@ class User: Mappable, CustomStringConvertible {
         let result = results.first
         return result?.info ?? nil
     }
+    var kidsCount: String? {
+        guard let userInfo = self.infoSectionTwo else {
+            return ""
+        }
+        let results = userInfo.filter {
+            (item) -> Bool in
+            return item.type == "kidsCount"
+        }
+        let result = results.first
+        return result?.info ?? nil
+    }
     var questionOneTitle: String? {
         guard let userInfo = self.infoSectionThree else {
             return ""
@@ -167,13 +204,19 @@ class User: Mappable, CustomStringConvertible {
     var canSwipe: Bool?
     private var swipeDateTimestamp: String?
     var profileCreation: Bool?
+    var currentPage: Int?
+    var docId: String?
+    var lastId: String?
+    var matches: [String]?
 
     //  MARK:- This is for displaying my profile to other users
     var infoSectionOne: [Info]?
     var infoSectionTwo: [Info]?
     var infoSectionThree: [Info]?
     var preferenceSection: [Info]?
-    
+    var imageSectionOne = [Media]()
+    var imageSectionTwo = [Media]()
+
     required init?(map: Map) { }
     
     func mapping(map: Map) {
@@ -194,6 +237,14 @@ class User: Mappable, CustomStringConvertible {
         canSwipe <- map["canSwipe"]
         swipeDateTimestamp <- map["nextSwipeDate"]
         profileCreation <- map["profileCreation"]
+        currentPage <- map["currentPage"]
+        lastId <- map["lastId"]
+        docId <- map["docId"]
+        matches <- map["matches"]
+
+        if self.media != nil, self.media!.count > 1 {
+            self.media!.sort { $0.order! < $1.order! }
+        }
     }
 
     var createdAt: Date? {
@@ -204,10 +255,10 @@ class User: Mappable, CustomStringConvertible {
         guard let dob = self.dob else { return nil }
         let dateFormater = DateFormatter()
         dateFormater.dateFormat = "MM/dd/yyyy"
-        let birthdayDate = dateFormater.date(from: dob)
+        guard let birthdayDate = dateFormater.date(from: dob) else { return nil }
         let calendar: NSCalendar! = NSCalendar(calendarIdentifier: .gregorian)
         let now = Date()
-        let calcAge = calendar.components(.year, from: birthdayDate!, to: now, options: [])
+        let calcAge = calendar.components(.year, from: birthdayDate, to: now, options: [])
         guard let age = calcAge.year else { return nil }
         return age
     }
@@ -216,9 +267,60 @@ class User: Mappable, CustomStringConvertible {
         return getDate(fromString: self.swipeDateTimestamp ?? "")
     }
 
+    var countForSection1: Int {
+        guard let infoSec1 = self.infoSectionOne else { return 0 }
+        let infoSec1Array = infoSec1.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        return 2 + infoSec1Array.count
+    }
+
+    var countForSection2: Int {
+        guard let infoSec1 = self.infoSectionOne, let infoSec2 = self.infoSectionTwo else { return 0 }
+        let infoSec1Array = infoSec1.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        let infoSec2Array = infoSec2.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        return 2 + infoSec1Array.count + infoSec2Array.count
+    }
+
+    var countForSection3: Int {
+        guard let infoSec1 = self.infoSectionOne, let infoSec2 = self.infoSectionTwo, let infoSec3 = self.infoSectionThree else { return 0 }
+        let infoSec1Array = infoSec1.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        let infoSec2Array = infoSec2.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        let infoSec3Array = infoSec3.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        return 2 + infoSec1Array.count + infoSec2Array.count + infoSec3Array.count
+    }
+
     var countForTable: Int {
         guard let infoSec1 = self.infoSectionOne, let infoSec2 = self.infoSectionTwo, let infoSec3 = self.infoSectionThree else { return 2 }
-        return 2 + infoSec1.count + infoSec2.count + infoSec3.count
+        let infoSec1Array = infoSec1.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        let infoSec2Array = infoSec2.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        let infoSec3Array = infoSec3.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        return 2 + infoSec1Array.count + infoSec2Array.count + infoSec3Array.count
     }
 
     var newNextSwipeDate: String? {
@@ -237,15 +339,18 @@ class User: Mappable, CustomStringConvertible {
 
 //  MARK:- Model modification methods
 extension User {
-    func change(name: String) {
+    func change(name: String, _ completion: @escaping(Error?) -> Void) {
         CurrentUser.shared.updateUser(withData: ["name" : name]) { (error) in
             if error == nil {
                 self.name?.fullName = name
+                completion(nil)
+            } else {
+                completion(error)
             }
         }
     }
 
-    func setInformation(atKey: String, withValue value: String) {
+    func setInformation(atKey: String, withValue value: String, _ completion: @escaping(Error?) -> Void) {
         CurrentUser.shared.updateUser(withData: [atKey : value]) { (error) in
             if error == nil {
                 if let section1 = self.infoSectionOne {
@@ -269,6 +374,36 @@ extension User {
                         }
                     }
                 }
+                completion(nil)
+            }
+        }
+    }
+
+    func setInformation(atKey: String, withValue value: Int, _ completion: @escaping(Error?) -> Void) {
+        CurrentUser.shared.updateUser(withData: [atKey : value]) { (error) in
+            if error == nil {
+                if let section1 = self.infoSectionOne {
+                    for item in section1 {
+                        if let type = item.type, type == atKey {
+                            item.info = String(describing: value)
+                        }
+                    }
+                }
+                if let section2 = self.infoSectionTwo {
+                    for item in section2 {
+                        if let type = item.type, type == atKey {
+                            item.info = String(describing: value)
+                        }
+                    }
+                }
+                if let section3 = self.infoSectionThree {
+                    for item in section3 {
+                        if let type = item.type, type == atKey {
+                            item.info = String(describing: value)
+                        }
+                    }
+                }
+                completion(nil)
             }
         }
     }
@@ -319,28 +454,36 @@ extension User {
     }
 
     func setLocation(_ location: Location, _ completion: @escaping(Error?)->Void) {
-        CurrentUser.shared.updateUser(withData: location.toDict) {
-            (error) in
-            if error == nil {
-                if let lat = location.addressLat, let long = location.addressLong, let documentID = CurrentUser.shared.user?.key {
-                    FIRFirestoreDB.shared.addGeofireObject(forDocumentID: documentID, atLat: lat, andLong: long, completion: {
-                        print("Successfully updated user data & added a geofire obbject.")
-                        self.settings?.location = location
-                        completion(nil)
-                    })
+        if let lat = location.addressLat, let long = location.addressLong, let documentID = CurrentUser.shared.user?.key {
+            let parameters: [String: Any] = [
+                "userId": CurrentUser.shared.user!.uid!,
+                "latitude": lat,
+                "longitude": long
+            ]
+            APIRepository().performRequest(path: Api.Endpoint.saveLocation, method: .post, parameters: parameters) { (response, error) in
+                if let err = error {
+                    print(err)
+                    completion(err)
                 } else {
-                    print("Error with geofire, but we uccessfully updated user data.")
-                    completion(nil)
+                    print("Successfully updated user data & added a geofire obbject.")
+                    self.settings?.location = location
+                    CurrentUser.shared.updateUser(withData: location.toDict) {
+                        (error) in
+                        if let error = error {
+                            completion(error)
+                        } else {
+                            completion(nil)
+                        }
+                    }
                 }
-            } else {
-                print(error!.localizedDescription)
-                completion(error!)
             }
+        } else {
+            completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
         }
     }
 
     func setAgeRange(_ range: AgeRange) {
-        guard let rangeId = range.id, let rangeMax = range.max, let rangeMin = range.min else {
+        guard let rangeId = range.id, let rangeMax = range.max, let rangeMin = range.min, let ageRange = AgeRange(JSON: ["ageRangeId" : rangeId, "ageRangeMax" : rangeMax, "ageRangeMin" : rangeMin]) else {
             print("Did not update user data.")
             return
         }
@@ -348,6 +491,7 @@ extension User {
             (error) in
             if error == nil {
                 print("Successfully updated user data")
+                self.settings?.ageRange = ageRange
             } else {
                 print("Did not update user data.")
             }
@@ -369,6 +513,37 @@ extension User {
         }
     }
 
+    func updateCurrentPage(_ page: Int) {
+        CurrentUser.shared.updateUser(withData: ["currentPage" : page]) {
+            (error) in
+            if error == nil {
+                print("Successfully updated user data")
+            } else {
+                print("Did not update user data.")
+            }
+        }
+    }
+
+    func updateLastId(_ id: String) {
+        CurrentUser.shared.updateUser(withData: ["lastId" : id]) {
+            (error) in
+            if error == nil {
+                print("Successfully updated user data")
+            } else {
+                print("Did not update user data.")
+            }
+        }
+    }
+
+    func addMatches(withValue value: [String], _ completion: @escaping(Error?) -> Void) {
+        CurrentUser.shared.updateUser(withData: ["matches" : value]) { (error) in
+            if error == nil {
+                print("Successfully updated user data")
+            } else {
+                print("Did not update user data.")
+            }
+        }
+    }
 
     private func getDate(fromString dateString: String) -> Date? {
         let formatter = DateFormatter()

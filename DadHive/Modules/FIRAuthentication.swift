@@ -55,7 +55,7 @@ class FIRAuthentication {
                     "uid": results.user.uid,
                     "type": 1
                 ]
-                APIRepository.shared.performRequest(path: Api.Endpoint.createUser, method: .post, parameters: parameters) { (response, error) in
+                APIRepository().performRequest(path: Api.Endpoint.createUser, method: .post, parameters: parameters) { (response, error) in
                     if error != nil {
                         print(error)
                         completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
@@ -67,15 +67,6 @@ class FIRAuthentication {
                         }
                     }
                 }
-//                if let user = User(JSON: userData) {
-//                    self.createUser(withData: user, completion: {
-//                        user in
-//                        guard let _ = user else {
-//                            return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
-//                        }
-//                        completion(nil)
-//                    })
-//                }
             }
         }
     }
@@ -93,14 +84,8 @@ class FIRAuthentication {
     func sessionCheck(_ window: UIWindow? = nil, goToVC vcID: String = "CustomTabBar") {
         let sb = UIStoryboard(name: "Main", bundle: nil)
         if let _ = Auth.auth().currentUser {
-             CurrentUser.shared.refreshCurrentUser {
-                guard let _ = CurrentUser.shared.user else {
-                    self.signout(window)
-                    return
-                }
-                let vc = sb.instantiateViewController(withIdentifier: vcID)
-                self.goTo(vc: vc, forWindow: window)
-            }
+            let vc = sb.instantiateViewController(withIdentifier: vcID)
+            self.goTo(vc: vc, forWindow: window)
         } else {
             self.signout(window)
         }
@@ -125,9 +110,10 @@ class FIRAuthentication {
     }
 }
 
+//  MARK:- Deprecated
 extension FIRAuthentication {
     func createUser(withData data: User, completion: @escaping(User?) -> Void) {
-        ModuleHandler.shared.firebaseRepository.firestore.add(data: data.toJSON(), to: kUsers) { (success, result, error) in
+        FIRRepository.shared.firestore.add(data: data.toJSON(), to: kUsers) { (success, result, error) in
             completion(data)
         }
     }

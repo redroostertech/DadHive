@@ -12,6 +12,7 @@ import GoogleMobileAds
 class GoogleAdMobManager {
     static let shared = GoogleAdMobManager()
     private init() {
+        print(" \(kAppName) | GoogleAdMobManager Handler Initialized")
         GADMobileAds.configure(withApplicationID: kAdMobApplicationID)
     }
 }

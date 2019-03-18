@@ -1,29 +1,35 @@
 PODS:
-  - Alamofire (4.8.0)
-  - APESuperHUD (1.1.3)
-  - AWSCore (2.6.5)
-  - AWSS3 (2.6.5):
-    - AWSCore (= 2.6.5)
+  - Alamofire (4.8.1)
+  - AlamofireImage (3.5.0):
+    - Alamofire (~> 4.8)
+  - APESuperHUD (2.0.1)
+  - AWSCore (2.9.3)
+  - AWSS3 (2.9.3):
+    - AWSCore (= 2.9.3)
   - Bolts (1.9.0):
     - Bolts/AppLinks (= 1.9.0)
     - Bolts/Tasks (= 1.9.0)
   - Bolts/AppLinks (1.9.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
-  - BoringSSL-GRPC (0.0.2):
-    - BoringSSL-GRPC/Implementation (= 0.0.2)
-    - BoringSSL-GRPC/Interface (= 0.0.2)
-  - BoringSSL-GRPC/Implementation (0.0.2):
-    - BoringSSL-GRPC/Interface (= 0.0.2)
-  - BoringSSL-GRPC/Interface (0.0.2)
+  - BoringSSL-GRPC (0.0.3):
+    - BoringSSL-GRPC/Implementation (= 0.0.3)
+    - BoringSSL-GRPC/Interface (= 0.0.3)
+  - BoringSSL-GRPC/Implementation (0.0.3):
+    - BoringSSL-GRPC/Interface (= 0.0.3)
+  - BoringSSL-GRPC/Interface (0.0.3)
   - Cachable (1.2.1)
   - ChameleonFramework/Default (2.1.0)
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
-  - CVCalendar (1.6.1)
-  - FBSDKCoreKit (4.40.0):
+  - CountryList (1.1)
+  - CVCalendar (1.6.2)
+  - DatePicker (1.0.0):
+    - Extended (~> 1.0.4)
+  - Extended (1.0.5)
+  - FBSDKCoreKit (4.41.0):
     - Bolts (~> 1.9)
-  - FBSDKLoginKit (4.40.0):
+  - FBSDKLoginKit (4.41.0):
     - FBSDKCoreKit
   - Firebase (5.4.1):
     - Firebase/Core (= 5.4.1)
@@ -165,7 +171,7 @@ PODS:
   - FirebaseUI/Twitter (5.2.2):
     - FirebaseUI/Auth
     - TwitterKit (~> 3.0)
-  - FontAwesome.swift (1.4.9)
+  - FontAwesome.swift (1.6.0)
   - Fuse (1.2.0)
   - GeoFire (3.0.0):
     - Firebase/Database (~> 5.0)
@@ -174,22 +180,23 @@ PODS:
     - FirebaseCore (~> 5.0.3)
     - FirebaseFirestore (~> 0.12.3)
     - GeoFire (~> 3.0)
+  - GiphyCoreSDK (1.4.1)
   - Google-Mobile-Ads-SDK (7.31.0)
   - GoogleAPIClientForREST (1.3.8):
     - GoogleAPIClientForREST/Core (= 1.3.8)
     - GTMSessionFetcher (>= 1.1.7)
   - GoogleAPIClientForREST/Core (1.3.8):
     - GTMSessionFetcher (>= 1.1.7)
-  - GoogleMaps (2.7.0):
-    - GoogleMaps/Maps (= 2.7.0)
-  - GoogleMaps/Base (2.7.0)
-  - GoogleMaps/Maps (2.7.0):
+  - GoogleMaps (3.0.3):
+    - GoogleMaps/Maps (= 3.0.3)
+  - GoogleMaps/Base (3.0.3)
+  - GoogleMaps/Maps (3.0.3):
     - GoogleMaps/Base
-  - GooglePlacePicker (2.7.0):
-    - GoogleMaps (= 2.7.0)
-    - GooglePlaces (= 2.7.0)
-  - GooglePlaces (2.7.0):
-    - GoogleMaps/Base (= 2.7.0)
+  - GooglePlacePicker (3.0.3):
+    - GoogleMaps (= 3.0.3)
+    - GooglePlaces (= 3.0.3)
+  - GooglePlaces (3.0.3):
+    - GoogleMaps/Base (= 3.0.3)
   - GoogleSignIn (4.4.0):
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
@@ -215,27 +222,27 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.2.0)
     - "GoogleToolboxForMac/NSDictionary+URLArguments (= 2.2.0)"
     - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.0)"
-  - gRPC (1.18.0):
-    - gRPC-RxLibrary (= 1.18.0)
-    - gRPC/Main (= 1.18.0)
-  - gRPC-Core (1.18.0):
-    - gRPC-Core/Implementation (= 1.18.0)
-    - gRPC-Core/Interface (= 1.18.0)
-  - gRPC-Core/Implementation (1.18.0):
-    - BoringSSL-GRPC (= 0.0.2)
-    - gRPC-Core/Interface (= 1.18.0)
+  - gRPC (1.19.0):
+    - gRPC-RxLibrary (= 1.19.0)
+    - gRPC/Main (= 1.19.0)
+  - gRPC-Core (1.19.0):
+    - gRPC-Core/Implementation (= 1.19.0)
+    - gRPC-Core/Interface (= 1.19.0)
+  - gRPC-Core/Implementation (1.19.0):
+    - BoringSSL-GRPC (= 0.0.3)
+    - gRPC-Core/Interface (= 1.19.0)
     - nanopb (~> 0.3)
-  - gRPC-Core/Interface (1.18.0)
-  - gRPC-ProtoRPC (1.18.0):
-    - gRPC-ProtoRPC/Main (= 1.18.0)
-  - gRPC-ProtoRPC/Main (1.18.0):
-    - gRPC (= 1.18.0)
-    - gRPC-RxLibrary (= 1.18.0)
+  - gRPC-Core/Interface (1.19.0)
+  - gRPC-ProtoRPC (1.19.0):
+    - gRPC-ProtoRPC/Main (= 1.19.0)
+  - gRPC-ProtoRPC/Main (1.19.0):
+    - gRPC (= 1.19.0)
+    - gRPC-RxLibrary (= 1.19.0)
     - Protobuf (~> 3.0)
-  - gRPC-RxLibrary (1.18.0)
-  - gRPC/Main (1.18.0):
-    - gRPC-Core (= 1.18.0)
-    - gRPC-RxLibrary (= 1.18.0)
+  - gRPC-RxLibrary (1.19.0)
+  - gRPC/Main (1.19.0):
+    - gRPC-Core (= 1.19.0)
+    - gRPC-RxLibrary (= 1.19.0)
   - GTMOAuth2 (1.1.6):
     - GTMSessionFetcher (~> 1.1)
   - GTMSessionFetcher (1.2.1):
@@ -243,21 +250,39 @@ PODS:
   - GTMSessionFetcher/Core (1.2.1)
   - GTMSessionFetcher/Full (1.2.1):
     - GTMSessionFetcher/Core (= 1.2.1)
+  - Hero (1.4.0)
+  - ImageSlideshow (1.7.0):
+    - ImageSlideshow/Core (= 1.7.0)
+  - ImageSlideshow/Alamofire (1.7.0):
+    - AlamofireImage (~> 3.0)
+    - ImageSlideshow/Core
+  - ImageSlideshow/Core (1.7.0)
+  - ImageSlideshow/SDWebImage (1.7.0):
+    - ImageSlideshow/Core
+    - SDWebImage (< 5.0, >= 3.7)
+  - Instabug (8.1)
   - IQKeyboardManagerSwift (6.2.0)
+  - JSQMessagesViewController (7.3.5):
+    - JSQSystemSoundPlayer (~> 2.0.1)
+  - JSQSystemSoundPlayer (2.0.1)
+  - Kingfisher (5.2.0)
   - leveldb-library (1.20)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
-  - NextGrowingTextView (1.2.1)
-  - ObjectMapper (3.4.1)
-  - Protobuf (3.6.1)
-  - SDWebImage (4.2.1):
-    - SDWebImage/Core (= 4.2.1)
-  - SDWebImage/Core (4.2.1)
-  - SkyFloatingLabelTextField (3.3.0)
+  - NextGrowingTextView (1.4.1)
+  - ObjectMapper (3.4.2)
+  - Poi (3.1.0)
+  - Protobuf (3.7.0)
+  - Pulsator (0.5.3)
+  - SDWebImage (4.4.6):
+    - SDWebImage/Core (= 4.4.6)
+  - SDWebImage/Core (4.4.6)
+  - SkyFloatingLabelTextField (3.6.0)
   - SVProgressHUD (2.2.5)
+  - SwiftGifOrigin (1.6.1)
   - TwitterCore (3.2.0)
   - TwitterKit (3.4.2):
     - TwitterCore (>= 3.2.0)
@@ -269,7 +294,9 @@ DEPENDENCIES:
   - AWSS3
   - Cachable
   - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
+  - CountryList
   - CVCalendar
+  - DatePicker (= 1.0.0)
   - Firebase (~> 5.0)
   - Firebase/AdMob (~> 5.0)
   - Firebase/Auth (~> 5.0)
@@ -286,25 +313,41 @@ DEPENDENCIES:
   - Fuse
   - GeoFire (~> 3.0)
   - Geofirestore
+  - GiphyCoreSDK
   - GoogleMaps
   - GooglePlacePicker
   - GooglePlaces
+  - GoogleSignIn
+  - Hero
+  - ImageSlideshow (~> 1.6)
+  - ImageSlideshow/Alamofire
+  - ImageSlideshow/SDWebImage
+  - Instabug
   - IQKeyboardManagerSwift
+  - JSQMessagesViewController
+  - Kingfisher
   - NextGrowingTextView
   - ObjectMapper (~> 3.1)
+  - Poi
+  - Pulsator
   - SDWebImage
   - SkyFloatingLabelTextField
   - SVProgressHUD
+  - SwiftGifOrigin (~> 1.6.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - AlamofireImage
     - AWSCore
     - AWSS3
     - Bolts
     - BoringSSL-GRPC
     - Cachable
+    - CountryList
     - CVCalendar
+    - DatePicker
+    - Extended
     - FBSDKCoreKit
     - FBSDKLoginKit
     - Firebase
@@ -327,6 +370,7 @@ SPEC REPOS:
     - Fuse
     - GeoFire
     - Geofirestore
+    - GiphyCoreSDK
     - Google-Mobile-Ads-SDK
     - GoogleAPIClientForREST
     - GoogleMaps
@@ -340,15 +384,24 @@ SPEC REPOS:
     - gRPC-RxLibrary
     - GTMOAuth2
     - GTMSessionFetcher
+    - Hero
+    - ImageSlideshow
+    - Instabug
     - IQKeyboardManagerSwift
+    - JSQMessagesViewController
+    - JSQSystemSoundPlayer
+    - Kingfisher
     - leveldb-library
     - nanopb
     - NextGrowingTextView
     - ObjectMapper
+    - Poi
     - Protobuf
+    - Pulsator
     - SDWebImage
     - SkyFloatingLabelTextField
     - SVProgressHUD
+    - SwiftGifOrigin
     - TwitterCore
     - TwitterKit
 
@@ -360,24 +413,28 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   APESuperHUD:
-    :commit: b955f8f47f841ec3938b62245d5a7b3703e54e8d
+    :commit: 0a7aecdf9d00094824b68d2f15e0f277ea3b767b
     :git: https://github.com/apegroup/APESuperHUD.git
   ChameleonFramework:
     :commit: 6dd284bde21ea2e7f9fd89bc36f40df16e16369d
     :git: https://github.com/ViccAlexander/Chameleon.git
 
 SPEC CHECKSUMS:
-  Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
-  APESuperHUD: d18e9cc943c1e9229830d8381bbc3efc39ec279d
-  AWSCore: b4895b4a5256d0040f8825ad31f3477d081f508f
-  AWSS3: a92df2b4625488b5aae142f4311379fcd6bae3a7
+  Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
+  AlamofireImage: 1aea346f4dda2f6c67622fa5a89fcbb80d79cc16
+  APESuperHUD: 18ce2f9f114dd38d8fef5a6831e71ae9634cfc26
+  AWSCore: 5cbb6c6ccfad4b55e494c2e8df87781512f7881e
+  AWSS3: f016dddb6de858f0cc328d4e10a551299a66a3bb
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  BoringSSL-GRPC: 2a230d9cd93e7ce39916044f645cebb31f37dde6
+  BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   Cachable: af3b7624756db339513c83fedeac67b046f22638
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
-  CVCalendar: 505c11b11a088b43f159806e791eba1c2540853b
-  FBSDKCoreKit: ae214474b25033399c131dc81d258e412582a2ba
-  FBSDKLoginKit: 7a1e411d46acc8834588eca437daf34de42e1d52
+  CountryList: ad58cd670c4ecab6bb014abebc12e63f619174b2
+  CVCalendar: 515092247b9c5059855643c2a2220f259bd5417f
+  DatePicker: 7eb10cf9d75d2ff975e3724763d4df8f2cf96ce1
+  Extended: c463225e0c29b2823847866c1b106827772ac678
+  FBSDKCoreKit: 974810fe3806173f3777c68062fa8ed6fa59b59d
+  FBSDKLoginKit: 159a5c2eebe6a0774c3b128f5085128679233d2b
   Firebase: 355bd535bfdacaa82a7fe8d9784115edefd6fc03
   FirebaseABTesting: 1f50b8d50f5e3469eea54e7463a7b7fe221d1f5e
   FirebaseAnalytics: b3628aea54c50464c32c393fb2ea032566e7ecc2
@@ -394,35 +451,45 @@ SPEC CHECKSUMS:
   FirebaseStorage: 7ca4bb7b58a25fa647b04f524033fc7cb7eb272b
   FirebaseSwizzlingUtilities: 6c22677c50d0b6f5f0dc637c1233f13694a3003f
   FirebaseUI: 09519bf436a055cd696bf68687d624423150e4c0
-  FontAwesome.swift: 7f831846e85b93d32ded5d86983804b749921760
+  FontAwesome.swift: 71a422e7b209ee940c7c21a5d13964ecf2897ca4
   Fuse: 287bd95a5c8dbfe6c41af519eaf48856aa1a28f6
   GeoFire: e3ae6f4be3f2466c3467ef6c1c203db3af935c59
   Geofirestore: d41d8b0341399468c7f8f9e2f3d5c8328e1627ce
+  GiphyCoreSDK: 147a492c2477e9ddb20f8dd3a4489e3ea3c05e38
   Google-Mobile-Ads-SDK: 6e529e748b45507a2ca904e0b5a52669ba3920c4
   GoogleAPIClientForREST: 5447a194eae517986cafe6421a5330b80b820591
-  GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
-  GooglePlacePicker: 59ea44db173c58486ad6123993e81feefcbce9c3
-  GooglePlaces: 3d06e6c99654545b4738ce49648745779c25f2ef
+  GoogleMaps: fd5c9fa58871781b9fb94d4936f19c69fe60ce32
+  GooglePlacePicker: 0c90898945f02ef36cce86fc9a107e1c5d3d26b1
+  GooglePlaces: f09e76993c9c3ee4af8f4f7f535bb94d6aa3b649
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
-  gRPC: f0d45d7bfd5f220e405df5a9f672315ab963440c
-  gRPC-Core: 901572a0099a453a79eb58bdb29e381ede0787bd
-  gRPC-ProtoRPC: 8e49c501c166d221cf9e44076b20580171f8ecd0
-  gRPC-RxLibrary: bf23bc3bfde06674a794bb63f458f8d67d4038bb
+  gRPC: 77d2866b3ce1e187b2239d8adba48b98d9524c15
+  gRPC-Core: bd9472c8daa2e414b9f8038ba667bf56ce0e02b8
+  gRPC-ProtoRPC: cc498c1885e75a1fb6b892881b440707f131fb5e
+  gRPC-RxLibrary: 562e2a6d12137d15dfb93bbf652bd3f638e3eb8a
   GTMOAuth2: e8b6512c896235149df975c41d9a36c868ab7fba
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
+  Hero: bac92350d7201a1a940003e0767c7b52ce7c99a1
+  ImageSlideshow: f8eec5e37a980f60923b585ff23b0e140fd24018
+  Instabug: 592a4deabae96082ea20d1afac0ec7c34ef650fb
   IQKeyboardManagerSwift: b07ccf9d8cafe993dcd6cb794eb4ba34611a0c4e
+  JSQMessagesViewController: 6587f56aedbcb150a8ba1d968e1ef58b1bc758b7
+  JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
+  Kingfisher: 07067cfacf371117330dceb4b4b8f5c4b691ab42
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
-  NextGrowingTextView: 48f2387f32e66d342ff5ad510b9c3c47eea1341c
-  ObjectMapper: 5311bd50ca732930959e7ca1a2de43ab823a5ced
-  Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
-  SDWebImage: 1fa4c9edf525b744f002db89f3f5a38b3cd4c541
-  SkyFloatingLabelTextField: 771be94beca6868a6cea187f70c965ebd81d2f93
+  NextGrowingTextView: 63d064e669caae6fd78b81b96a4ed156906bf80f
+  ObjectMapper: 0d4402610f4e468903ae64629eec4784531e5c51
+  Poi: 153f9c751449573ad484dc68b6e4c374cc33d409
+  Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
+  Pulsator: d58707c6827ec862cd89fd727424866795dabd24
+  SDWebImage: 3f3f0c02f09798048c47a5ed0a13f17b063572d8
+  SkyFloatingLabelTextField: 38164979b79512f9ff9288ad8acfc4bbf5d843e3
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  SwiftGifOrigin: d6679d3ebe9df2e049a84bc52582635107b581f6
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
   TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: 993f7e77691df2e4407ba77d1a3387cad98cb56b
+PODFILE CHECKSUM: d164a0372b0ac1758323947065abd393eae00063
 
 COCOAPODS: 1.5.3

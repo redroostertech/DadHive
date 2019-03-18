@@ -9,9 +9,9 @@ import UIKit
 
 class EditAccountVC: UIViewController {
 
-    @IBOutlet var lblTitle: TitleLabel!
-    @IBOutlet var txtField: UITextView!
-    @IBOutlet var btnSave: UIButton!
+    @IBOutlet weak var lblTitle: TitleLabel!
+    @IBOutlet weak var txtField: UITextView!
+    @IBOutlet weak var btnSave: UIButton!
 
     var userInfo: Info?
     var currentUser = CurrentUser.shared
@@ -27,12 +27,29 @@ class EditAccountVC: UIViewController {
     @IBAction func save(_ sender: UIButton) {
         if let userInfo = self.userInfo, txtField.text != "" {
             if let type = userInfo.type, type == "name" {
-                self.currentUser.user?.change(name: txtField.text)
+                self.currentUser.user?.change(name: txtField.text, {
+                    (error) in
+                    if let err = error {
+                        print(err)
+                    } else {
+                        DispatchQueue.main.async {
+                            self.popViewController()
+                        }
+                    }
+                })
             } else {
-                self.currentUser.user?.setInformation(atKey: userInfo.type ?? "", withValue: txtField.text)
+                self.currentUser.user?.setInformation(atKey: userInfo.type ?? "", withValue: txtField.text, {
+                    (error) in
+                    if let err = error {
+                        print(err)
+                    } else {
+                        DispatchQueue.main.async {
+                            self.popViewController()
+                        }
+                    }
+                })
             }
             userInfo.info = txtField.text
-            self.popViewController()
         }
     }
 }

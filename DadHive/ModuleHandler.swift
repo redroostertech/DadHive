@@ -8,37 +8,31 @@
 
 import Foundation
 import IQKeyboardManagerSwift
+import SDWebImage
 
 class ModuleHandler {
-    
-    static let shared = ModuleHandler()
 
-    var keyboardManager: KeyboardManager
     var awsService: AWSService
-    var apiRepository: APIRepository
     var firebaseRepository: FIRRepository
     var testDataGrabberModule: TestDataGrabberModule
-    var sdWebImageManagerExt: SDWebImageManagerExt
     var googleAdMobManager: GoogleAdMobManager
+    var locationManager: LocationManagerModule
+    var notificationManager: NotificationsManagerModule
     
-    //  Add additional services as needed
-    //  ...
-    
-    private init() {
+    init() {
         print(" \(kAppName) | Module Handler Initialized")
-        self.keyboardManager = KeyboardManager.shared
+        IQKeyboardManager.shared.enable = true
+
         self.awsService = AWSService.shared
-        self.apiRepository = APIRepository.shared
         self.firebaseRepository = FIRRepository.shared
         self.testDataGrabberModule = TestDataGrabberModule.shared
-        self.sdWebImageManagerExt = SDWebImageManagerExt.shared
+        SDWebImageManager.shared().imageDownloader?.maxConcurrentDownloads = kMaxConcurrentImageDownloads
         self.googleAdMobManager = GoogleAdMobManager.shared
+        self.locationManager = LocationManagerModule.shared
+        self.notificationManager = NotificationsManagerModule.shared
     }
-}
 
-class KeyboardManager {
-    static let shared = KeyboardManager()
-    private init() {
-        IQKeyboardManager.shared.enable = true
+    deinit {
+        print("Modulehandler is being deinitialized")
     }
 }

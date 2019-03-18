@@ -10,9 +10,8 @@ import Foundation
 import Alamofire
 
 class APIRepository {
-    
-    static let shared = APIRepository()
-    private init() { }
+
+    init() { }
 
     func performRequest(path: String = "",
                         method: HTTPMethod = .get,

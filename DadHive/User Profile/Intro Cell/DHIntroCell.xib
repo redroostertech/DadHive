@@ -15,7 +15,7 @@
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DHIntroCell" rowHeight="99" id="KGk-i7-Jjw" customClass="DHIntroCell" customModule="DadHive" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="98.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
@@ -29,31 +29,43 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0O-t8-4J9">
-                        <rect key="frame" x="16" y="56" width="288" height="24"/>
-                        <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="24" id="BLi-Am-2vG"/>
-                        </constraints>
+                        <rect key="frame" x="60" y="56" width="244" height="36"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="kids" translatesAutoresizingMaskIntoConstraints="NO" id="rth-19-K5M">
+                        <rect key="frame" x="16" y="56" width="36" height="36"/>
+                        <color key="backgroundColor" red="0.58431372550000005" green="0.81176470590000005" blue="0.49019607840000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="36" id="Lnl-Km-LoV"/>
+                            <constraint firstAttribute="height" constant="36" id="XSf-WF-3i8"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="v0O-t8-4J9" firstAttribute="bottom" secondItem="rth-19-K5M" secondAttribute="bottom" id="4d6-3S-baN"/>
+                    <constraint firstItem="v0O-t8-4J9" firstAttribute="leading" secondItem="rth-19-K5M" secondAttribute="trailing" constant="8" id="IVM-e1-JkO"/>
                     <constraint firstItem="GMC-DP-dWY" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="NdS-fT-cnZ"/>
+                    <constraint firstItem="v0O-t8-4J9" firstAttribute="top" secondItem="rth-19-K5M" secondAttribute="top" id="QLQ-vn-3Hy"/>
                     <constraint firstItem="v0O-t8-4J9" firstAttribute="top" secondItem="GMC-DP-dWY" secondAttribute="bottom" constant="15" id="Tet-nm-qwd"/>
                     <constraint firstItem="GMC-DP-dWY" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="YyK-5S-DsP"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="v0O-t8-4J9" secondAttribute="bottom" constant="8" id="dad-ve-uGn"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="v0O-t8-4J9" secondAttribute="bottom" constant="16" id="dad-ve-uGn"/>
                     <constraint firstItem="GMC-DP-dWY" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="k8e-Xr-HLW"/>
-                    <constraint firstItem="v0O-t8-4J9" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="qY8-dV-YfE"/>
+                    <constraint firstItem="rth-19-K5M" firstAttribute="leading" secondItem="GMC-DP-dWY" secondAttribute="leading" id="uJ4-xX-Wu3"/>
                     <constraint firstItem="v0O-t8-4J9" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="wVP-HS-Vuk"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="imgKids" destination="rth-19-K5M" id="Aso-V0-PEr"/>
                 <outlet property="lblKids" destination="v0O-t8-4J9" id="8o8-K8-37A"/>
                 <outlet property="lblName" destination="GMC-DP-dWY" id="6rP-pa-Br6"/>
             </connections>
             <point key="canvasLocation" x="137.59999999999999" y="178.56071964017991"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="kids" width="32" height="32"/>
+    </resources>
 </document>

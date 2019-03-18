@@ -10,7 +10,9 @@ import Foundation
 
 class TestDataGrabberModule {
     static let shared = TestDataGrabberModule()
-    private init() { }
+    private init() {
+        print(" \(kAppName) | TestDataGrabberModule Handler Initialized")
+    }
     
     //  MARK:- Methods for Local Data
     func getJSONResourceData(fileName: String) -> [String: Any]? {
@@ -40,7 +42,7 @@ class TestDataGrabberModule {
     }
     
     private func getJSONResourceData(path: String, completion: @escaping(_ data: [String: Any]?) -> Void) {
-        APIRepository.shared.performRequest(path: path) {
+        APIRepository().performRequest(path: path) {
             (json, error) in
             if let error = error {
                 print(error.localizedDescription)

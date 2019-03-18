@@ -9,24 +9,31 @@
 import UIKit
 import SVProgressHUD
 
+enum EditVCPickerViewTypesString: String {
+    case AgeRange = "AgeRange"
+    case KidsCount = "kidCount"
+}
+
 class EditVC: UIViewController {
 
-    @IBOutlet var lblTitle: TitleLabel!
-    @IBOutlet var txtField: UITextView!
-    @IBOutlet var btnSave: UIButton!
+    @IBOutlet weak var lblTitle: TitleLabel!
+    @IBOutlet weak var txtField: UITextView!
+    @IBOutlet weak var btnSave: UIButton!
     var datePicker: UIDatePicker!
     var maxDistancePicker: UIPickerView!
 
     var userInfo: Info?
     var currentUser = CurrentUser.shared
-    let locationManager = LocationManagerModule.shared
     let notificationCenter = NotificationCenter.default
 
     var ageRange = [AgeRange]()
-    var type = 1
+    var kidsCount = [1, 2, 3, 4, 5, 6, 7, 8]
+    var selectedKidsCount = 0
+    var type: EditVCPickerViewTypesString?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         btnSave.applyCornerRadius()
         btnSave.addGradientLayer(using: kAppCGColors)
         lblTitle.text = userInfo?.title ?? ""
@@ -36,6 +43,7 @@ class EditVC: UIViewController {
         }
 
         if let type = userInfo?.type, type == "kidsAges" {
+            self.type = EditVCPickerViewTypesString.AgeRange
             showAgeRangePicker()
             DispatchQueue.global(qos: .background).async {
                 FIRFirestoreDB.shared.retrieve(from: kAgeRange) { (success, documents, error) in
@@ -46,15 +54,19 @@ class EditVC: UIViewController {
                             for doc in docs {
                                 if let range = AgeRange(JSON: doc.data()) {
                                     self.ageRange.append(range)
-                                    let sortedArray = self.ageRange.sorted { $0.min! < $1.min! }
-                                    self.ageRange = sortedArray
                                 }
                             }
+                            let sortedArray = self.ageRange.sorted { $0.min ?? 0 < $1.min ?? 0}
+                            self.ageRange = sortedArray
                         }
                     }
                 }
             }
+        }
 
+        if let type = userInfo?.type, type == "kidsCount" {
+            self.type = EditVCPickerViewTypesString.KidsCount
+            showAgeRangePicker()
         }
 
         if let type = userInfo?.type, type == "location" {
@@ -66,7 +78,7 @@ class EditVC: UIViewController {
         }
 
         notificationCenter.addObserver(self,
-                                       selector: #selector(UserProfileVC.saveLocation(_:)),
+                                       selector: #selector(EditVC.saveLocation(_:)),
                                        name: Notification.Name(rawValue: kSaveLocationObservationKey),
                                        object: nil)
     }
@@ -78,11 +90,11 @@ class EditVC: UIViewController {
     @objc
     func updateLocation() {
         showHUD()
-        locationManager.checkLocationPermissions { (error) in
+        LocationManagerModule.shared.checkLocationPermissions { (error) in
             if let error = error {
                 self.showErrorAlert(error)
             } else {
-                self.locationManager.requestLocation()
+                LocationManagerModule.shared.requestLocation()
                 print("Check location permissions finished")
             }
         }
@@ -93,15 +105,43 @@ class EditVC: UIViewController {
         showHUD()
         if let userInfo = self.userInfo, txtField.text != "" {
             if let type = userInfo.type, type == "name" {
-                self.currentUser.user?.change(name: txtField.text)
+                self.currentUser.user?.change(name: txtField.text, {
+                    (error) in
+                    if let err = error {
+                        print(err)
+                    } else {
+                        DispatchQueue.main.async {
+                            self.hideHUD()
+                            self.popViewController()
+                        }
+                    }
+                })
+            } else if let type = userInfo.type, type == "kidsCount" {
+                self.currentUser.user?.setInformation(atKey: userInfo.type ?? "", withValue: selectedKidsCount, {
+                    (error) in
+                    if let err = error {
+                        print(err)
+                    } else {
+                        DispatchQueue.main.async {
+                            self.hideHUD()
+                            self.popViewController()
+                        }
+                    }
+                })
             } else {
-                self.currentUser.user?.setInformation(atKey: userInfo.type ?? "", withValue: txtField.text)
+                self.currentUser.user?.setInformation(atKey: userInfo.type ?? "", withValue: txtField.text, {
+                    (error) in
+                    if let err = error {
+                        print(err)
+                    } else {
+                        DispatchQueue.main.async {
+                            self.hideHUD()
+                            self.popViewController()
+                        }
+                    }
+                })
             }
             userInfo.info = txtField.text
-            CurrentUser.shared.refreshCurrentUser {
-                self.hideHUD()
-                self.popViewController()
-            }
         }
     }
 
@@ -109,9 +149,9 @@ class EditVC: UIViewController {
     func saveLocation(_ notification: Notification) {
         LocationManagerModule.shared.getUserLocation {
             (location) in
-            self.hideHUD()
             if let _ = location {
-                CurrentUser.shared.refreshCurrentUser {
+                DispatchQueue.main.async {
+                    self.hideHUD()
                     self.popViewController()
                 }
             } else {
@@ -169,13 +209,52 @@ class EditVC: UIViewController {
         txtField.inputAccessoryView = toolBar
     }
 
-    @objc func ageRangePickerViewDone() {
+    func showKidCountPicker() {
+        maxDistancePicker = UIPickerView(frame: CGRect(x: 0, y: 200, width: self.view.bounds.width, height: 150))
+        maxDistancePicker.delegate = self
+        maxDistancePicker.dataSource = self
+        maxDistancePicker.backgroundColor = .white
+        maxDistancePicker.showsSelectionIndicator = true
+
+        let toolBar = UIToolbar()
+        toolBar.barStyle = .default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = .lightGray
+        toolBar.sizeToFit()
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(EditVC.kidCountPickerViewDone))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(EditVC.kidCountPickerViewCancel))
+
+        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: true)
+        toolBar.isUserInteractionEnabled = true
+
+        txtField.inputView = maxDistancePicker
+        txtField.inputAccessoryView = toolBar
+    }
+
+    @objc
+    func kidCountPickerViewDone() {
+        let row = maxDistancePicker.selectedRow(inComponent: 0)
+        txtField.resignFirstResponder()
+        selectedKidsCount = kidsCount[row]
+        txtField.text = "\(String(describing: kidsCount[row]) == "8" ? "7+": String(describing: kidsCount[row]))"
+    }
+
+    @objc
+    func kidCountPickerViewCancel() {
+        txtField.resignFirstResponder()
+        viewWillAppear(true)
+    }
+
+    @objc
+    func ageRangePickerViewDone() {
         let row = maxDistancePicker.selectedRow(inComponent: 0)
         txtField.resignFirstResponder()
         txtField.text = "\(ageRange[row].getAgeRange ?? "")"
     }
 
-    @objc func ageRangePickerViewCancel() {
+    @objc
+    func ageRangePickerViewCancel() {
         txtField.resignFirstResponder()
         viewWillAppear(true)
     }
@@ -184,7 +263,7 @@ class EditVC: UIViewController {
     func pickerViewDone() {
         //For date formate
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy"
+        formatter.dateFormat = "MM/dd/yyyy"
         txtField.text = formatter.string(from: datePicker.date)
         //dismiss date picker dialog
         self.view.endEditing(true)
@@ -225,10 +304,22 @@ extension EditVC: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return ageRange.count
+        guard let type = self.type else { return 0 }
+        switch type {
+        case .AgeRange:
+            return ageRange.count
+        case .KidsCount:
+            return 8
+        }
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return "\(ageRange[row].getAgeRange ?? "")"
+        guard let type = self.type else { return "" }
+        switch type {
+        case .AgeRange:
+            return "\(ageRange[row].getAgeRange ?? "")"
+        case .KidsCount:
+            return "\(String(describing: kidsCount[row]) == "8" ? "7+": String(describing: kidsCount[row]))"
+        }
     }
 }

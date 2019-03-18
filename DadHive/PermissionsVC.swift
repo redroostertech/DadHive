@@ -11,18 +11,18 @@ import SVProgressHUD
 
 class PermissionsVC: UIViewController {
 
-    @IBOutlet var lblTitle: UILabel!
-    @IBOutlet var btnEnableLocation: UIButton!
-    @IBOutlet var btnEnableNotification: UIButton!
-    @IBOutlet var btnContinue: UIButton!
-    @IBOutlet var lblDescription: UILabel!
+    @IBOutlet weak var lblTitle: UILabel!
+    @IBOutlet weak var btnEnableLocation: UIButton!
+    @IBOutlet weak var btnEnableNotification: UIButton!
+    @IBOutlet weak var btnContinue: UIButton!
+    @IBOutlet weak var lblDescription: UILabel!
 
     let notificationCenter = NotificationCenter.default
-    let locationManager = LocationManagerModule.shared
     let notificationManager = NotificationsManagerModule.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         notificationCenter.addObserver(self,
                                        selector: #selector(PermissionsVC.observeLocationAccessCheck(_:)),
                                        name: Notification.Name(rawValue: kLocationAccessCheckObservationKey),
@@ -38,7 +38,7 @@ class PermissionsVC: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        locationManager.getLocationAccess { (access) in
+        LocationManagerModule.shared.getLocationAccess { (access) in
             self.updateLocationButton(access: access)
         }
 
@@ -48,11 +48,11 @@ class PermissionsVC: UIViewController {
     }
 
     @IBAction func enableLocation(_ sender: UIButton) {
-        locationManager.checkLocationPermissions { (error) in
+        LocationManagerModule.shared.checkLocationPermissions { (error) in
             if let error = error {
                 self.showErrorAlert(error)
             } else {
-                self.locationManager.requestLocation()
+                LocationManagerModule.shared.requestLocation()
                 print("Check location permissions finished")
             }
         }
@@ -88,7 +88,7 @@ class PermissionsVC: UIViewController {
 
     @objc
     func saveLocation(_ notification: Notification) {
-        locationManager.getUserLocation { (location) in
+        LocationManagerModule.shared.getUserLocation { (location) in
            print("Location is \(location)")
         }
     }

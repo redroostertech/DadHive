@@ -25,12 +25,12 @@ class Location: Mappable, CustomStringConvertible {
     required init?(map: Map) { }
 
     func mapping(map: Map) {
-        addressLat <- map["latitude"]
-        addressLong <- map["longitude"]
-        addressCity <- map["city"]
-        addressState <- map["state"]
+        addressLat <- map["addressLat"]
+        addressLong <- map["addressLong"]
+        addressCity <- map["addressCity"]
+        addressState <- map["addressState"]
         description <- map["description"]
-        addressCountry <- map["country"]
+        addressCountry <- map["addressCountry"]
         addressLine1 <- map["addressLine1"]
         addressLine2 <- map["addressLine2"]
         addressLine3 <- map["addressLine3"]

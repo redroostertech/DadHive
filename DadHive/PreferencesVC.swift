@@ -24,14 +24,14 @@ class ValueLabel: UILabel {
 
 class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource  {
 
-    @IBOutlet var lblAgeRange: TitleLabel!
-    @IBOutlet var lblAgeRangeValue: ValueLabel!
-    @IBOutlet var lblMaximumDistance: TitleLabel!
-    @IBOutlet var lblMaximumDistanceValue: ValueLabel!
-    @IBOutlet var sliderMaximumDistanceValue: UISlider!
-    @IBOutlet var lblPreferredMeetingLocations: TitleLabel!
-    @IBOutlet var lblMeetingLocationOne: ValueLabel!
-    @IBOutlet var lblMeetingLocationTwo: ValueLabel!
+    @IBOutlet weak var lblAgeRange: TitleLabel!
+    @IBOutlet weak var lblAgeRangeValue: ValueLabel!
+    @IBOutlet weak var lblMaximumDistance: TitleLabel!
+    @IBOutlet weak var lblMaximumDistanceValue: ValueLabel!
+    @IBOutlet weak var sliderMaximumDistanceValue: UISlider!
+    @IBOutlet weak var lblPreferredMeetingLocations: TitleLabel!
+    @IBOutlet weak var lblMeetingLocationOne: ValueLabel!
+    @IBOutlet weak var lblMeetingLocationTwo: ValueLabel!
     var textField: UITextField!
     var maxDistancePicker: UIPickerView!
 
@@ -68,7 +68,7 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
                         for doc in docs {
                             if let range = AgeRange(JSON: doc.data()) {
                                 self.ageRange.append(range)
-                                let sortedArray = self.ageRange.sorted { $0.min! < $1.min! }
+                                let sortedArray = self.ageRange.sorted { $0.min ?? 0 < $1.min ?? 0 }
                                 self.ageRange = sortedArray
                             }
                         }
@@ -125,7 +125,6 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
         if segue.identifier == "goToEdit" {
             let destination = segue.destination as! EditVC
             destination.userInfo = userInfo
-            destination.type = 2
         }
     }
 

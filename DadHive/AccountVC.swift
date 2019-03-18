@@ -11,8 +11,8 @@ import UserNotifications
 
 class AccountVC: UITableViewController {
 
-    @IBOutlet var lblEmail: TitleLabel!
-    @IBOutlet var swPushNotifications: UISwitch!
+    @IBOutlet weak var lblEmail: TitleLabel!
+    @IBOutlet weak var swPushNotifications: UISwitch!
 
     var userInfo: Info?
     

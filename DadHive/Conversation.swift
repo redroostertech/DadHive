@@ -10,26 +10,25 @@ import Foundation
 import ObjectMapper
 import Firebase
 
+class Conversations: Mappable {
+    var conversations: [Conversation]?
+
+    required init?(map: Map) { }
+
+    func mapping(map: Map) {
+        self.conversations <- map["conversations"]
+    }
+}
+
 public class Conversation: Mappable, CustomStringConvertible {
 
-    var key: Any?
-    var id: Any?
-    var senderId: Any?
-    var recipientId: Any?
-    var createdAt: Any?
-    private var lastMessageID: Any?
-    var updatedAt: Any?
-
-    var otherUser: User? {
-        if senderId as? String ?? "" == CurrentUser.shared.user?.uid ?? "n/a" {
-            return self.recipient
-        } else {
-            return self.sender
-        }
-    }
-
-    var sender: User?
-    var recipient: User?
+    var key: String?
+    var id: String?
+    var senderId: String?
+    var recipientId: String?
+    var createdAt: String?
+    var updatedAt: String?
+    var trueRecipient: User?
     var lastMessage: Message?
 
     required public init?(map: Map) { }
@@ -41,52 +40,8 @@ public class Conversation: Mappable, CustomStringConvertible {
         recipientId <- map["recipientId"]
         createdAt <- map["createdAt"]
         updatedAt <- map["updatedAt"]
-        lastMessageID <- map["lastMessageID"]
-
-        DispatchQueue.global(qos: .background).async {
-            //  MARK:- Get Sender
-            FIRFirestoreDB.shared.retrieveUser(withId: self.senderId as? String ?? "", completion: { (success, document, error) in
-                if let err = error {
-                    print("No user data from API")
-                } else {
-                    if let data = document?.data(), let user = User(JSON: data) {
-                        self.sender = user
-                    } else {
-                        print("Sender document data is empty.")
-                    }
-                }
-            })
-        }
-
-        DispatchQueue.global(qos: .background).async {
-            //  MARK:- Get Recipient
-            FIRFirestoreDB.shared.retrieveUser(withId: self.recipientId as? String ?? "", completion: { (success, document, error) in
-                if let err = error {
-                    print("No user data from API")
-                } else {
-                    if let data = document?.data(), let user = User(JSON: data) {
-                        self.recipient = user
-                    } else {
-                        print("Sender document data is empty.")
-                    }
-                }
-            })
-        }
-
-        DispatchQueue.global(qos: .background).async {
-            //  MARK:- Get Message
-            FIRFirestoreDB.shared.retrieveUser(withId: self.recipientId as? String ?? "", completion: { (success, document, error) in
-                if let err = error {
-                    print("No user data from API")
-                } else {
-                    if let data = document?.data(), let user = User(JSON: data) {
-                        self.recipient = user
-                    } else {
-                        print("Sender document data is empty.")
-                    }
-                }
-            })
-        }
+        trueRecipient <- map["trueRecipient"]
+        lastMessage <- map["lastMessage"]
     }
 
     var conversationDate: Date? {
@@ -99,7 +54,7 @@ public class Conversation: Mappable, CustomStringConvertible {
     }
 
     var date: String? {
-        if let conversationDate = self.conversationDate {
+        if let conversationDate = self.conversationUpdatedDate {
             return conversationDate.timeAgoDisplay()
         } else {
             return nil
@@ -113,29 +68,5 @@ public class Conversation: Mappable, CustomStringConvertible {
             return nil
         }
         return date
-    }
-
-    private var lastMessageDict: Any? {
-        didSet {
-            if let dict = self.lastMessageDict as? [String: Any] {
-                lastMessage = Message(JSON: dict)
-            }
-        }
-    }
-
-    private var senderDict: Any? {
-        didSet {
-            if let dict = self.senderDict as? [String: Any] {
-                sender = User(JSON: dict)
-            }
-        }
-    }
-
-    private var recipientDict: Any? {
-        didSet {
-            if let dict = self.recipientDict as? [String: Any] {
-                recipient = User(JSON: dict)
-            }
-        }
     }
 }

@@ -77,7 +77,7 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -225,16 +225,18 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
 
+        guard let userId = CurrentUser.shared.user?.uid else {
+            print("User ID not available")
+            FIRAuthentication.shared.signout()
+            return
+        }
+
         guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
-            print("Selected Image not available")
+            self.showError("Image unavailable. Please try again.")
             return
         }
         guard let selectedBtn = self.selectedBtn else {
-            print("Selected button not available")
-            return
-        }
-        guard let userId = CurrentUser.shared.user?.uid else {
-            print("User ID not available")
+            self.showError("Image unavailable. Please try again.")
             return
         }
 
@@ -259,11 +261,13 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
                 storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
                     if let err = error {
                         print("PutData error : \(err.localizedDescription)")
+                        self.showError("There was an uploading image. Please try again.")
                         self.reset(self.selectedBtn!)
                     } else {
                         storageRef.downloadURL(completion: { (url, error) in
                             if let err = error {
                                 print("Download url error : \(err.localizedDescription)")
+                                self.showError("There was an uploading image. Please try again.")
                                 self.reset(self.selectedBtn!)
                             } else {
                                 if let urlString = url?.absoluteString {
@@ -272,6 +276,7 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
                                         ], completion: { (erorr) in
                                             if let err = error {
                                                 print("Current user upload error: \(err.localizedDescription)")
+                                                self.showError("There was an uploading image. Please try again.")
                                                 self.reset(self.selectedBtn!)
                                             } else {
                                                 print("Completed uploading image")

@@ -119,7 +119,6 @@ class FIRRealtimeDB {
                       whereKey key: String,
                       isEqualTo value: Any,
                       completion: @escaping (Bool, DataSnapshot?, Error?) -> Void) {
-
         self.dbRef.child(child)
             .queryOrdered(byChild: key)
             .queryEqual(toValue: value)
@@ -147,7 +146,7 @@ class FIRRealtimeDB {
             if let error = error {
                 completion(false, nil, error)
             } else {
-                completion(true, "Placeholder", nil)
+                completion(true, ref.key, nil)
             }
         }
     }

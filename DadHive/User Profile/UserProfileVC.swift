@@ -35,10 +35,11 @@ class UserProfileVC: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        //retrieveUsers()
+        retrieveUsers()
     }
 
     func retrieveUsers() {
+        showHUD("Finding Users", withDuration: 30.0)
         self.loadUsers { (error, results) in
             self.dismissHUD()
             if error == nil, let res = results, let objs = results?.users, let firstUser = objs.first {
@@ -61,6 +62,7 @@ class UserProfileVC: UIViewController {
                 }
             } else {
                 print(error?.localizedDescription)
+                self.showErrorAlert(DadHiveError.noMoreUsersAvailable)
                 self.tblMain.reloadData()
             }
         }
@@ -72,98 +74,45 @@ class UserProfileVC: UIViewController {
         tblMain.reloadData()
     }
 
-    func like(user: User, completion: @escaping (Bool)->Void) {
+    func like(user: User, completion: @escaping (Bool, User?)->Void) {
         guard let senderId = CurrentUser.shared.user?.uid, let recipientId = user.uid else {
-            completion(false)
+            completion(false, nil)
             return
         }
 
         //  MARK:- Create match object
-        let match: [String: String] = [
-            "id": Utilities.randomString(length: 25),
+        let parameters: [String: String] = [
             "senderId": senderId,
-            "recipientId": recipientId,
-            "createdAt": Date().toString(format: CustomDateFormat.timeDate.rawValue),
-            "updatedAt": Date().toString(format: CustomDateFormat.timeDate.rawValue)
+            "recipientId": recipientId
         ]
-
-        //  MARK:- Check if match exists already
-        FIRFirestoreDB.shared.checkForMatch(recipient: senderId, sender: recipientId) { (success, documents, error) in
-
+        self.apiRepository.performRequest(path: Api.Endpoint.createMatch, method: .post, parameters: parameters) { (response, error) in
             guard error == nil else {
-                print(error!.localizedDescription)
-                return completion(false)
+                print("There was an error at the api.")
+                return completion(false, nil)
+//                return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]), nil)
             }
 
-            guard let results = documents, results.count > 0 else {
-                //  MARK:- Match does not exist yet, create it.
-                return self.addMatch(match, completion: { (success) in
-                    completion(success)
-                })
+            guard let res = response as? [String: Any] else {
+                print("Response was unable to be retrieved.")
+                return completion(false, nil)
+//                return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]), nil)
             }
 
-            //  MARK:- Match exists already, check to see if conversation exists
-            print("Success is \(success), Number of results \(results.count)")
+            guard let data = res["data"] as? [String: Any] else {
+                print("Data attribute does not exist for the response.")
+                return completion(false, nil)
+//                return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]), nil)
+            }
 
-            FIRFirestoreDB.shared.checkForConversation(recipient: senderId, sender: recipientId) { (success, documents, error) in
-
-                guard error == nil else {
-                    print(error!.localizedDescription)
-                    return completion(false)
-                }
-
-                guard let results = documents, results.count < 1 else {
-                    return
-                }
-
-                //  MARK:- Conversation does not exist so create it.
-                print("Success is \(success), Number of results \(results.count)")
-
-                //  MARK:- Create conversation object
-                let conversation: [String: String] = [
-                    "id": Utilities.randomString(length: 25),
-                    "senderId": senderId,
-                    "recipientId": recipientId,
-                    "createdAt": Date().toString(format: CustomDateFormat.timeDate.rawValue),
-                    "updatedAt": Date().toString(format: CustomDateFormat.timeDate.rawValue)
-                ]
-
-                //  MARK:- Add conversation object
-                FIRFirestoreDB.shared.add(data: conversation, to: kConversations, completion: { (success, docID, error) in
-
-                    guard error == nil else {
-                        print(error!.localizedDescription)
-                        return completion(false)
-                    }
-
-                    guard docID != nil else {
-                        return completion(false)
-                    }
-
-                    print("CONGRATS YOU HAVE A MATCH!")
-                    completion(true)
-
-                })
+            if let rawData = data["users"] as? [String: Any], let userData = User(JSON: rawData), let uid = userData.uid {
+                print("Match exists")
+                completion(true, userData)
+//                return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]), nil)
+            } else {
+                print("Match does not exist yet. Continue")
+                completion(true, nil)
             }
         }
-    }
-
-    func addMatch(_ match: [String: Any], completion: @escaping (Bool) -> Void) {
-        FIRFirestoreDB.shared.add(data: match, to: kMatches, completion: { (success, docID, error) in
-
-            guard error == nil else {
-                print(error!.localizedDescription)
-                return completion(false)
-            }
-
-            guard docID != nil else {
-                print("Match not created")
-                return completion(false)
-            }
-
-            print("Match created")
-            completion(true)
-        })
     }
 
     func goToNextUser() {
@@ -185,7 +134,7 @@ class UserProfileVC: UIViewController {
 
         guard let users = self.users?.users else {
             print("No users object(s). Please purchase a new plan.")
-            self.showErrorAlert(DadHiveError.maximumSwipesReached)
+            self.showErrorAlert(DadHiveError.noMoreUsersAvailable)
             return
         }
 
@@ -293,11 +242,21 @@ extension UserProfileVC: UITableViewDelegate, UITableViewDataSource {
 
 extension UserProfileVC: SwipingDelegate {
     func didLike(user: User) {
-        like(user: user) { (success) in
+        self.showHUD("Liking User", withDuration: 30.0)
+        like(user: user) { (success, user) in
+            self.dismissHUD()
             if (success) {
-                self.goToNextUser()
+                if let user = user {
+                    let matchVC = MatchVC(user: user)
+                    self.present(matchVC, animated: true, completion: {
+                        self.goToNextUser()
+                    })
+                    self.present(matchVC, animated: true, completion: nil)
+                } else {
+                    self.goToNextUser()
+                }
             } else {
-                print("Something went wrong while liking the user.")
+                self.showError("There was an error matching with the user. Please try again.")
             }
         }
     }
@@ -319,11 +278,10 @@ extension UserProfileVC {
         HUDAppearance.iconSize = CGSize(width: kIconSizeWidth, height: kIconSizeHeight)
         HUDAppearance.messageFont = UIFont(name: kFontBody, size: kFontSizeBody) ?? UIFont.systemFont(ofSize: kFontSizeBody, weight: .regular)
         HUDAppearance.titleFont = UIFont(name: kFontTitle, size: kFontSizeTitle) ?? UIFont.systemFont(ofSize: kFontSizeTitle, weight: .bold)
-        showHUD()
     }
 
-    func showHUD(_ text: String = "Finding Users") {
-        APESuperHUD.show(style: .icon(image: UIImage(named: "dadhive-hive")!, duration: 4.0), title: nil, message: text, completion: nil)
+    func showHUD(_ text: String = "Finding Users", withDuration duration: TimeInterval? = 4.0) {
+        APESuperHUD.show(style: .icon(image: UIImage(named: "dadhive-hive")!, duration: duration), title: nil, message: text, completion: nil)
     }
 
     func dismissHUD() {
@@ -359,7 +317,8 @@ extension UserProfileVC {
                 "longitude": Double(long),
                 "maxDistance": Double(radius),
                 "pageNo": pageNo,
-                "lastId": CurrentUser.shared.user!.lastId ?? ""
+                "lastId": CurrentUser.shared.user!.lastId ?? "",
+                "ageRangeId": CurrentUser.shared.user!.settings?.ageRange?.id ?? 4
             ]
             self.apiRepository.performRequest(path: Api.Endpoint.getNearbyUsers, method: .post, parameters: parameters) { (response, error) in
                 guard error == nil else {
@@ -383,35 +342,3 @@ extension UserProfileVC {
         }
     }
 }
-
-
-/*
-
- FIRFirestoreDB.shared.retrieveUsers {
- (success, snapshot, error) in
- if let error = error {
- print(error)
- completion()
- } else {
- guard let documents = snapshot?.filter({
- (result) -> Bool in
- let user = User(JSON: result.data())
- return user?.uid != CurrentUser.shared.user?.uid ?? ""
- }) else {
- completion()
- return
- }
- if documents.count > 0 {
- self.load(user: User(JSON: documents[0].data())!)
- for document in documents {
- var rawData: [String: Any] = document.data()
- rawData["snapshotKey"] = document.documentID
- self.users.append(User(JSON: rawData)!)
- }
- completion()
- } else {
- completion()
- }
- }
- }
- */

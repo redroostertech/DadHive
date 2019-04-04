@@ -8,6 +8,7 @@
 
 import Foundation
 import ObjectMapper
+import Firebase
 
 class Users: Mappable {
     var users: [User]?
@@ -339,6 +340,23 @@ class User: Mappable, CustomStringConvertible {
 
 //  MARK:- Model modification methods
 extension User {
+
+    func change(email: String, _ completion: @escaping(Error?) -> Void) {
+        Auth.auth().currentUser?.updateEmail(to: email, completion: { (error) in
+            guard error == nil else {
+                return completion(error!)
+            }
+            CurrentUser.shared.updateUser(withData: ["email" : email]) { (error) in
+                if error == nil {
+                    self.email = email
+                    completion(nil)
+                } else {
+                    completion(error)
+                }
+            }
+        })
+    }
+
     func change(name: String, _ completion: @escaping(Error?) -> Void) {
         CurrentUser.shared.updateUser(withData: ["name" : name]) { (error) in
             if error == nil {

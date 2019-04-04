@@ -20,6 +20,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var txtFullname: UITextField!
     @IBOutlet weak var txtPassword: UITextField!
     @IBOutlet weak var txtPasswordConfirm: UITextField!
+    @IBOutlet var btnGenerate: UIButton!
+    @IBOutlet var btnDelete: UIButton!
     @IBOutlet weak var txtEmail: UITextField!
 
     var player : AVPlayer?
@@ -29,7 +31,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //loadVideoBG()
+        btnGenerate.isHidden = true
+        btnDelete.isHidden = true
+
+        loadVideoBG()
         setupSuperHUD()
         setupSwitch()
         loadGDPR()
@@ -143,8 +148,22 @@ class ViewController: UIViewController {
                 self.dismissHUD()
                 self.showAlertErrorIfNeeded(error: err)
             } else {
-                FIRRepository.shared.auth.checkSession(nil)
+                CurrentUser.shared.refreshCurrentUser {
+                    let sb = UIStoryboard(name: "Main", bundle: nil)
+                    let vc = sb.instantiateViewController(withIdentifier: "UploadProfilePhotoVC")
+                    self.goTo(vc: vc, forWindow: nil)
+                }
             }
+        }
+    }
+
+    private func goTo(vc: UIViewController, forWindow window: UIWindow? = nil) {
+        if window == nil {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.window?.rootViewController = vc
+        } else {
+            window?.rootViewController = vc
+            window?.makeKeyAndVisible()
         }
     }
 
@@ -207,7 +226,6 @@ extension ViewController {
         HUDAppearance.iconSize = CGSize(width: kIconSizeWidth, height: kIconSizeHeight)
         HUDAppearance.messageFont = UIFont(name: kFontBody, size: kFontSizeBody) ?? UIFont.systemFont(ofSize: kFontSizeBody, weight: .regular)
         HUDAppearance.titleFont = UIFont(name: kFontTitle, size: kFontSizeTitle) ?? UIFont.systemFont(ofSize: kFontSizeTitle, weight: .bold)
-        showHUD()
     }
 
     func showHUD(_ text: String = "Finding Users") {

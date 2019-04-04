@@ -21,13 +21,13 @@ class EditAccountVC: UIViewController {
         super.viewDidLoad()
         btnSave.applyCornerRadius()
         btnSave.addGradientLayer(using: kAppCGColors)
-        lblTitle.text = userInfo?.title ?? ""
     }
 
     @IBAction func save(_ sender: UIButton) {
-        if let userInfo = self.userInfo, txtField.text != "" {
-            if let type = userInfo.type, type == "name" {
-                self.currentUser.user?.change(name: txtField.text, {
+        let alert = UIAlertController(title: "Email Change", message: "You are about to change your email address on file. Are you sure", preferredStyle: .alert)
+        let yes = UIAlertAction(title: "Yes", style: .default) { (action) in
+            if self.txtField.text != "" {
+                self.currentUser.user?.change(email: self.txtField.text, {
                     (error) in
                     if let err = error {
                         print(err)
@@ -38,18 +38,14 @@ class EditAccountVC: UIViewController {
                     }
                 })
             } else {
-                self.currentUser.user?.setInformation(atKey: userInfo.type ?? "", withValue: txtField.text, {
-                    (error) in
-                    if let err = error {
-                        print(err)
-                    } else {
-                        DispatchQueue.main.async {
-                            self.popViewController()
-                        }
-                    }
-                })
+                self.showError("Please provide new email.")
             }
-            userInfo.info = txtField.text
         }
+        let no = UIAlertAction(title: "No", style: .default) { (action) in
+            alert.dismissViewController()
+        }
+        alert.addAction(yes)
+        alert.addAction(no)
+        present(alert, animated: true, completion: nil)
     }
 }

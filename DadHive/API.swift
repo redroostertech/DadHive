@@ -50,5 +50,8 @@ public class Api {
         static let saveLocation: String = {
             return Api.init().baseURL + "saveLocation"
         }()
+        static let updateConversation: String = {
+            return Api.init().baseURL + "updateConversation"
+        }()
     }
 }

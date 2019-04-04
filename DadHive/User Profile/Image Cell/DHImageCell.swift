@@ -63,4 +63,8 @@ class DHImageCell: UITableViewCell {
         vwMain.addSubview(carousel!.view)
         self.awakeFromNib()
     }
+
+    func hideCheckButton() {
+        self.btnCheck.isHidden = true
+    }
 }

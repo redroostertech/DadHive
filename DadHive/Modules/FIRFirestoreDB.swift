@@ -579,13 +579,13 @@ extension FIRFirestoreDB {
             .order(by: "createdAt")
             .whereField("conversationId", isEqualTo: id)
             .limit(to: 40)
-            .getDocuments(completion: { (snapshot, error) in
+            .addSnapshotListener { (snapshot, error) in
                 if error == nil {
                     completion(true, snapshot?.documents, nil)
                 } else {
                     completion(false, nil, error)
                 }
-            })
+            }
     }
 
     func createMessage(withData data: Message, completion: @escaping(String?) -> Void) {

@@ -62,7 +62,6 @@ class MessagesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        conversations.removeAll()
         getConversations {
             self.tblMain.reloadData()
             APESuperHUD.dismissAll(animated: true)
@@ -102,19 +101,21 @@ class MessagesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
 
     func getConversations(_ completion: @escaping () -> Void) {
+        conversations.removeAll()
         let parameters: [String: Any] = [
             "senderId": CurrentUser.shared.user?.uid ?? "",
         ]
         APIRepository().performRequest(path: Api.Endpoint.findConversations, method: .post, parameters: parameters) { (response, error) in
-            if error != nil {
-                print(error)
-                //completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
+            if let err = error {
+                print(err.localizedDescription)
+                self.showError("There was an error loading conversations. Please try again later.")
                 completion()
             } else {
                 if let res = response as? [String: Any], let data = res["data"] as? [String: Any], let conversationsData = Conversations(JSON: data)?.conversations {
                     self.conversations = conversationsData
                     completion()
                 } else {
+                    self.showError("There was an error loading conversations. Please try again later.")
                     //completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                     completion()
                 }

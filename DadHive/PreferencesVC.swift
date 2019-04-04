@@ -10,14 +10,14 @@ import UIKit
 
 class TitleLabel: UILabel {
     override func awakeFromNib() {
-        self.font = UIFont(name: kFontMenu, size: kFontSizeMenu)
+        self.font = UIFont(name: kFontMenu, size: kFontSizeCaption)
         self.makeMultipleLines()
     }
 }
 
 class ValueLabel: UILabel {
     override func awakeFromNib() {
-        self.font = UIFont(name: kFontCaption, size: kFontSizeCaption)
+        self.font = UIFont(name: kFontButton, size: kFontSizeButton)
         self.makeMultipleLines()
     }
 }
@@ -111,7 +111,7 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
     override func viewWillAppear(_ animated: Bool) {
         setupUI()
     }
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

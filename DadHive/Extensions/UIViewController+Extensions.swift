@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-//import SVProgressHUD
+import SVProgressHUD
 import ChameleonFramework
 
 extension UIViewController {
@@ -143,18 +143,15 @@ extension UIViewController {
     
 //    func showHUD() {
 //        SVProgressHUD.show()
-//        UIApplication.shared.beginIgnoringInteractionEvents()
 //        SVProgressHUD.setBackgroundColor(UIColor.orange)
 //        SVProgressHUD.setForegroundColor(UIColor.white)
 //    }
-//
-//    func hideHUD() {
-//        if SVProgressHUD.isVisible() {
-//            SVProgressHUD.dismiss()
-//        }
-//        UIApplication.shared.endIgnoringInteractionEvents()
-//    }
-    
+
+    func showError(_ error: String, withDelay delay: TimeInterval = 3.0) {
+        SVProgressHUD.showError(withStatus: error)
+        SVProgressHUD.dismiss(withDelay: delay)
+    }
+
     func scrollToTop(of tableView: UITableView, completion: @escaping () -> Void) {
         DispatchQueue.main.async {
             if tableView.visibleCells.count > 0 {

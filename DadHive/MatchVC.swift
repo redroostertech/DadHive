@@ -28,7 +28,40 @@ class MatchVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        imgMain.applyCornerRadius()
+        imgMain.makeAspectFill()
+        if let mediaArray = user?.media, mediaArray.count > 0 {
+            let media = mediaArray[0]
+            if media.url != nil {
+                self.imgMain.sd_setImage(with: media.url!, placeholderImage: UIImage(named: "unknown")!, options: SDWebImageOptions.continueInBackground, completed: nil)
+            } else {
+                self.imgMain.image = UIImage(named: "unknown")
+            }
+        }
+
+        //  MARK:- Create conversation object
+        let conversation: [String: String] = [
+            "id": Utilities.randomString(length: 25),
+            "senderId": CurrentUser.shared.user?.uid ?? "",
+            "recipientId": user?.uid ?? "",
+            "createdAt": Date().toString(format: CustomDateFormat.timeDate.rawValue),
+            "updatedAt": Date().toString(format: CustomDateFormat.timeDate.rawValue)
+        ]
+
+        //  MARK:- Add conversation object
+        FIRFirestoreDB.shared.add(data: conversation, to: kConversations, completion: { (success, docID, error) in
+
+            guard error == nil else {
+                print(error!.localizedDescription)
+                return
+            }
+
+            guard docID != nil else {
+                return
+            }
+
+            print("Conversation created")
+        })
     }
 
     @IBAction func sendMessage(_ sender: UIButton) {

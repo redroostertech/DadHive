@@ -142,6 +142,8 @@ class EditVC: UIViewController {
                 })
             }
             userInfo.info = txtField.text
+        } else {
+            self.showError("Field cannot be empty.")
         }
     }
 

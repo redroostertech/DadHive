@@ -48,7 +48,9 @@ class AccountVC: UITableViewController {
         switch indexPath.section {
         case 0:
             switch indexPath.row {
-            case 0: print("Change Email")
+            case 0:
+                print("Change Email")
+                performSegue(withIdentifier: "goToAccountEdit", sender: self)
             default: print("Do Nothing")
             }
         case 1: print("No touches necessary")

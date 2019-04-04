@@ -101,8 +101,8 @@ class FIRAuthentication {
 
     private func goTo(vc: UIViewController, forWindow window: UIWindow? = nil) {
         if window == nil {
-            UIApplication.shared.keyWindow?.rootViewController = vc
-            UIApplication.shared.keyWindow?.makeKeyAndVisible()
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.window?.rootViewController = vc
         } else {
             window?.rootViewController = vc
             window?.makeKeyAndVisible()

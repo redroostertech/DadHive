@@ -34,7 +34,7 @@ public class Conversation: Mappable, CustomStringConvertible {
     required public init?(map: Map) { }
     
     public func mapping(map: Map) {
-        key <- map["snapshotKey"]
+        key <- map["key"]
         id <- map["id"]
         senderId <- map["senderId"]
         recipientId <- map["recipientId"]

@@ -127,7 +127,7 @@ extension LocationManagerModule: CLLocationManagerDelegate {
                     if self.userLocationDescription == nil {
                         self.userLocationDescription = [String: String]()
                     }
-                    self.userLocationDescription!["city"] = place.subLocality ?? ""
+                    self.userLocationDescription!["city"] = place.locality ?? ""
                     self.userLocationDescription!["state"] = place.administrativeArea ?? ""
                     self.userLocationDescription!["country"] = place.country ?? ""
                     
@@ -158,7 +158,8 @@ extension LocationManagerModule {
     func getUserLocation(_ completion: @escaping(Location?)->Void) {
         if let data = self.userLocationData, let location = Location(JSON: data) {
             CurrentUser.shared.user?.setLocation(location, { (error) in
-                if let error = error {
+                if let err = error {
+                    print(err.localizedDescription)
                     completion(nil)
                 } else {
                     completion(location)

@@ -346,7 +346,7 @@ extension User {
             guard error == nil else {
                 return completion(error!)
             }
-            CurrentUser.shared.updateUser(withData: ["email" : email]) { (error) in
+            CurrentUser.shared.updateProfile(withData: ["email" : email]) { (error) in
                 if error == nil {
                     self.email = email
                     completion(nil)
@@ -358,7 +358,7 @@ extension User {
     }
 
     func change(name: String, _ completion: @escaping(Error?) -> Void) {
-        CurrentUser.shared.updateUser(withData: ["name" : name]) { (error) in
+        CurrentUser.shared.updateProfile(withData: ["name" : name]) { (error) in
             if error == nil {
                 self.name?.fullName = name
                 completion(nil)
@@ -369,7 +369,7 @@ extension User {
     }
 
     func setInformation(atKey: String, withValue value: String, _ completion: @escaping(Error?) -> Void) {
-        CurrentUser.shared.updateUser(withData: [atKey : value]) { (error) in
+        CurrentUser.shared.updateProfile(withData: [atKey : value]) { (error) in
             if error == nil {
                 if let section1 = self.infoSectionOne {
                     for item in section1 {
@@ -398,7 +398,7 @@ extension User {
     }
 
     func setInformation(atKey: String, withValue value: Int, _ completion: @escaping(Error?) -> Void) {
-        CurrentUser.shared.updateUser(withData: [atKey : value]) { (error) in
+        CurrentUser.shared.updateProfile(withData: [atKey : value]) { (error) in
             if error == nil {
                 if let section1 = self.infoSectionOne {
                     for item in section1 {
@@ -428,7 +428,7 @@ extension User {
 
     func disableSwiping() {
         guard let newNextDate = newNextSwipeDate else { return }
-        CurrentUser.shared.updateUser(withData:["canSwipe" : false, "nextSwipeDate" : newNextDate]) { (error) in
+        CurrentUser.shared.updateProfile(withData:["canSwipe" : false, "nextSwipeDate" : newNextDate]) { (error) in
             if error == nil {
                 self.canSwipe = false
                 self.swipeDateTimestamp = newNextDate
@@ -437,7 +437,7 @@ extension User {
     }
 
     func enableSwiping() {
-        CurrentUser.shared.updateUser(withData: ["canSwipe" : true]) { (error) in
+        CurrentUser.shared.updateProfile(withData: ["canSwipe" : true]) { (error) in
             if error == nil {
                 self.canSwipe = true
             }
@@ -445,7 +445,7 @@ extension User {
     }
 
     func setNotificationToggle(_ state: Bool) {
-        CurrentUser.shared.updateUser(withData: ["notifications" : state]) { (error) in
+        CurrentUser.shared.updateProfile(withData: ["notifications" : state]) { (error) in
             if error == nil {
                 self.settings?.notifications = state
             }
@@ -453,7 +453,7 @@ extension User {
     }
 
     func setMaximumDistance(_ distance: Double) {
-        CurrentUser.shared.updateUser(withData: ["maxDistance" : distance]) { (error) in
+        CurrentUser.shared.updateProfile(withData: ["maxDistance" : distance]) { (error) in
             if error == nil {
                 self.settings?.maxDistance = distance
             }
@@ -461,7 +461,7 @@ extension User {
     }
 
     func setInitialState(_ state: Bool, _ completion: @escaping(Error?) -> Void) {
-        CurrentUser.shared.updateUser(withData: ["initialSetup" : state]) { (error) in
+        CurrentUser.shared.updateProfile(withData: ["initialSetup" : state]) { (error) in
             if error == nil {
                 self.settings?.initialSetup = state
                 completion(nil)
@@ -485,7 +485,7 @@ extension User {
                 } else {
                     print("Successfully updated user data & added a geofire obbject.")
                     self.settings?.location = location
-                    CurrentUser.shared.updateUser(withData: location.toDict) {
+                    CurrentUser.shared.updateProfile(withData: location.toDict) {
                         (error) in
                         if let error = error {
                             completion(error)
@@ -505,7 +505,7 @@ extension User {
             print("Did not update user data.")
             return
         }
-        CurrentUser.shared.updateUser(withData: ["ageRangeId" : rangeId, "ageRangeMax" : rangeMax, "ageRangeMin" : rangeMin]) {
+        CurrentUser.shared.updateProfile(withData: ["ageRangeId" : rangeId, "ageRangeMax" : rangeMax, "ageRangeMin" : rangeMin]) {
             (error) in
             if error == nil {
                 print("Successfully updated user data")
@@ -521,7 +521,7 @@ extension User {
             print("Did not update user data.")
             return
         }
-        CurrentUser.shared.updateUser(withData: ["kidsAges" : range]) {
+        CurrentUser.shared.updateProfile(withData: ["kidsAges" : range]) {
             (error) in
             if error == nil {
                 print("Successfully updated user data")
@@ -532,7 +532,7 @@ extension User {
     }
 
     func updateCurrentPage(_ page: Int) {
-        CurrentUser.shared.updateUser(withData: ["currentPage" : page]) {
+        CurrentUser.shared.updateProfile(withData: ["currentPage" : page]) {
             (error) in
             if error == nil {
                 print("Successfully updated user data")
@@ -543,7 +543,7 @@ extension User {
     }
 
     func updateLastId(_ id: String) {
-        CurrentUser.shared.updateUser(withData: ["lastId" : id]) {
+        CurrentUser.shared.updateProfile(withData: ["lastId" : id]) {
             (error) in
             if error == nil {
                 print("Successfully updated user data")
@@ -554,7 +554,7 @@ extension User {
     }
 
     func addMatches(withValue value: [String], _ completion: @escaping(Error?) -> Void) {
-        CurrentUser.shared.updateUser(withData: ["matches" : value]) { (error) in
+        CurrentUser.shared.updateProfile(withData: ["matches" : value]) { (error) in
             if error == nil {
                 print("Successfully updated user data")
             } else {

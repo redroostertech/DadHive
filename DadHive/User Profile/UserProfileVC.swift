@@ -118,7 +118,7 @@ class UserProfileVC: UIViewController {
     func goToNextUser() {
         guard let currentUser = CurrentUser.shared.user else {
             print("User is no longer signed in. Sign them out.")
-            FIRAuthentication.shared.signout()
+            FIRAuthentication.signout()
             return
         }
 

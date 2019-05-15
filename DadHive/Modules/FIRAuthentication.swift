@@ -1,53 +1,41 @@
-//
-//  FIRAuth.swift
-//  Gumbo
-//
-//  Created by Michael Westbrooks on 9/17/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import Firebase
 
-class FIRAuthentication {
-    static let shared = FIRAuthentication()
-
-    private init() { }
+class FIRAuthentication: NSObject {
+    static var errorInvalidCredentials: DadHiveError {
+        return DadHiveError.invalidCredentials
+    }
     
-    func performLogin(credentials: AuthCredentials?,
-                      completion: @escaping (Error?) -> Void) {
+    static var errorJsonResponse: DadHiveError {
+        return DadHiveError.jsonResponseError
+    }
+    
+    static func login(credentials: AuthCredentials?, completion: @escaping (Error?) -> Void) {
         guard let credentials = credentials else {
-            return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.invalidCredentials.rawValue]))
+            return completion(FIRAuthentication.generateError(fromError: errorInvalidCredentials))
         }
-        Auth.auth().signIn(withEmail: credentials.email ?? "",
-                           password: credentials.password ?? "") { (results, error) in
+        Auth.auth().signIn(withEmail: credentials.email ?? "", password: credentials.password ?? "") { (results, error) in
             if let error = error {
                 completion(error)
             } else {
                 guard let _ = results else {
-                    return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
+                    return completion(FIRAuthentication.generateError(fromError: DadHiveError.jsonResponseError))
                 }
                 completion(nil)
             }
         }
     }
 
-    func performRegisteration(usingCredentials credentials: AuthCredentials?,
-                              completion: @escaping (Error?) -> Void) {
+    static func register(usingCredentials credentials: AuthCredentials?, completion: @escaping (Error?) -> Void) {
         guard let credentials = credentials else {
-            return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.invalidCredentials.rawValue]))
+            return completion(FIRAuthentication.generateError(fromError: errorInvalidCredentials))
         }
-        
-        Auth.auth().createUser(withEmail: credentials.email ?? "",
-                               password: credentials.password ?? "") { (results, error) in
+        Auth.auth().createUser(withEmail: credentials.email ?? "", password: credentials.password ?? "") { (results, error) in
             if let error = error {
                 completion(error)
             } else {
-                guard let results = results else {
-                    return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
-                }
-                guard let email = credentials.email, let name = credentials.fullname else {
-                    return completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
+                guard let results = results, let email = credentials.email, let name = credentials.fullname else {
+                    return completion(FIRAuthentication.generateError(fromError: errorJsonResponse))
                 }
                 let parameters: [String: Any] = [
                     "email": email,
@@ -58,63 +46,64 @@ class FIRAuthentication {
                 APIRepository().performRequest(path: Api.Endpoint.createUser, method: .post, parameters: parameters) { (response, error) in
                     if error != nil {
                         print(error)
-                        completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
+                        completion(FIRAuthentication.generateError(fromError: errorJsonResponse))
                     } else {
                         if let res = response as? [String: Any], let data = res["data"] as? [String: Any] {
                             completion(nil)
                         } else {
-                            completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
+                            completion(FIRAuthentication.generateError(fromError: errorJsonResponse))
                         }
                     }
                 }
             }
         }
     }
-
-    func checkSession(_ window: UIWindow? = nil) {
-        CurrentUser.shared.refreshCurrentUser {
+    
+    static func checkIsSessionActive(_ window: UIWindow? = nil) {
+        CurrentUser.shared.refresh {
             if let initialSetup = CurrentUser.shared.user?.settings?.initialSetup, initialSetup == false {
-                self.sessionCheck(window, goToVC: "PermissionsVC")
+                FIRAuthentication.sessionCheck(window, goToVC: "PermissionsVC")
             } else {
-                self.sessionCheck(window)
+                FIRAuthentication.sessionCheck(window)
             }
         }
     }
     
-    func sessionCheck(_ window: UIWindow? = nil, goToVC vcID: String = "CustomTabBar") {
+    private static func sessionCheck(_ window: UIWindow? = nil, goToVC vcID: String = "CustomTabBar") {
         let sb = UIStoryboard(name: "Main", bundle: nil)
         if let _ = Auth.auth().currentUser {
             let vc = sb.instantiateViewController(withIdentifier: vcID)
             self.goTo(vc: vc, forWindow: window)
         } else {
-            self.signout(window)
+            FIRAuthentication.signout(window)
         }
     }
     
-    func signout(_ window: UIWindow? = nil, goToVC vcID: String = "ViewController") {
+    private static func checkInitialSetup() {
+        
+    }
+    
+    static func signout(_ window: UIWindow? = nil, goToVC vcID: String = "ViewController") {
         CurrentUser.shared.signout { (success) in
             let sb = UIStoryboard(name: "Main", bundle: nil)
             let vc = sb.instantiateViewController(withIdentifier: vcID)
-            self.goTo(vc: vc, forWindow: window)
+            FIRAuthentication.goTo(vc: vc, forWindow: window)
         }
     }
+}
 
-    private func goTo(vc: UIViewController, forWindow window: UIWindow? = nil) {
+extension FIRAuthentication {
+    fileprivate static func generateError(fromError error: DadHiveError) -> NSError {
+        return NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : error.rawValue])
+    }
+
+    fileprivate static func goTo(vc: UIViewController, forWindow window: UIWindow? = nil) {
         if window == nil {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.window?.rootViewController = vc
         } else {
             window?.rootViewController = vc
             window?.makeKeyAndVisible()
-        }
-    }
-}
-
-//  MARK:- Deprecated
-extension FIRAuthentication {
-    func createUser(withData data: User, completion: @escaping(User?) -> Void) {
-        FIRRepository.shared.firestore.add(data: data.toJSON(), to: kUsers) { (success, result, error) in
-            completion(data)
         }
     }
 }

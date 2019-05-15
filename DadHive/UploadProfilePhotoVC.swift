@@ -42,7 +42,7 @@ class UploadProfilePhotoVC: UIViewController, UINavigationControllerDelegate, UI
 
         guard let userId = CurrentUser.shared.user?.uid else {
             print("User ID not available")
-            FIRAuthentication.shared.signout()
+            FIRAuthentication.signout()
             return
         }
 
@@ -83,7 +83,7 @@ class UploadProfilePhotoVC: UIViewController, UINavigationControllerDelegate, UI
                                 self.reset()
                             } else {
                                 if let urlString = url?.absoluteString {
-                                    CurrentUser.shared.updateUser(withData: [
+                                    CurrentUser.shared.updateProfile(withData: [
                                         "userProfilePicture_\(buttonTag)_url": urlString
                                         ], completion: { (erorr) in
                                             if let err = error {

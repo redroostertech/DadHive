@@ -1,11 +1,3 @@
-//
-//  ViewController.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks II on 11/20/17.
-//  Copyright © 2017 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 import AVFoundation
 import FirebaseAuth
@@ -131,24 +123,24 @@ class ViewController: UIViewController {
 
     func login(withCredentials credentials: AuthCredentials) {
         showHUD("Logging In")
-        FIRRepository.shared.auth.performLogin(credentials: credentials) { (error) in
+        FIRAuthentication.login(credentials: credentials) { (error) in
             if let err = error {
                 self.dismissHUD()
                 self.showAlertErrorIfNeeded(error: err)
             } else {
-                FIRRepository.shared.auth.checkSession(nil)
+                FIRAuthentication.checkIsSessionActive()
             }
         }
     }
 
     func signup(withCredentials credentials: AuthCredentials) {
         showHUD("Creating Account")
-        FIRRepository.shared.auth.performRegisteration(usingCredentials: credentials) { (error) in
+        FIRAuthentication.register(usingCredentials: credentials) { (error) in
             if let err = error {
                 self.dismissHUD()
                 self.showAlertErrorIfNeeded(error: err)
             } else {
-                CurrentUser.shared.refreshCurrentUser {
+                CurrentUser.shared.refresh {
                     let sb = UIStoryboard(name: "Main", bundle: nil)
                     let vc = sb.instantiateViewController(withIdentifier: "UploadProfilePhotoVC")
                     self.goTo(vc: vc, forWindow: nil)

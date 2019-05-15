@@ -15,9 +15,9 @@ import AWSS3
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var moduleHandler: ModuleHandler?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        var moduleHandler: ModuleHandler?
         moduleHandler = ModuleHandler()
         return true
     }

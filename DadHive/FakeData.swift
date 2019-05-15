@@ -110,6 +110,6 @@ class FakeDataGenerator {
 
     func deleteFakeUsers() {
         FIRFirestoreDB.shared.deleteAllUsers()
-        FIRAuthentication.shared.signout()
+        FIRAuthentication.signout()
     }
 }

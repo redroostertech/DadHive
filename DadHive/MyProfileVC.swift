@@ -227,7 +227,7 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
 
         guard let userId = CurrentUser.shared.user?.uid else {
             print("User ID not available")
-            FIRAuthentication.shared.signout()
+            FIRAuthentication.signout()
             return
         }
 
@@ -271,7 +271,7 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
                                 self.reset(self.selectedBtn!)
                             } else {
                                 if let urlString = url?.absoluteString {
-                                    CurrentUser.shared.updateUser(withData: [
+                                    CurrentUser.shared.updateProfile(withData: [
                                         "userProfilePicture_\(buttonTag)_url": urlString
                                         ], completion: { (erorr) in
                                             if let err = error {

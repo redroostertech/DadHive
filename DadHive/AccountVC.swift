@@ -63,7 +63,7 @@ class AccountVC: UITableViewController {
             }
         case 3:
             switch indexPath.row {
-            case 0: FIRAuthentication.shared.signout()
+            case 0: FIRAuthentication.signout()
             case 1: print("Delete Account")
             default: print("Do Nothing")
             }

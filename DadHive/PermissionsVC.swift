@@ -1,21 +1,13 @@
-//
-//  PermissionsVC.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 2/10/19.
-//  Copyright © 2019 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 import SVProgressHUD
 
 class PermissionsVC: UIViewController {
 
-    @IBOutlet weak var lblTitle: UILabel!
-    @IBOutlet weak var btnEnableLocation: UIButton!
-    @IBOutlet weak var btnEnableNotification: UIButton!
-    @IBOutlet weak var btnContinue: UIButton!
-    @IBOutlet weak var lblDescription: UILabel!
+    @IBOutlet private weak var lblTitle: UILabel!
+    @IBOutlet private weak var btnEnableLocation: UIButton!
+    @IBOutlet private weak var btnEnableNotification: UIButton!
+    @IBOutlet private weak var btnContinue: UIButton!
+    @IBOutlet private weak var lblDescription: UILabel!
 
     let notificationCenter = NotificationCenter.default
     let notificationManager = NotificationsManagerModule.shared
@@ -72,7 +64,7 @@ class PermissionsVC: UIViewController {
         CurrentUser.shared.user?.setInitialState(true, {
             (error) in
             if error == nil {
-                FIRAuthentication.shared.sessionCheck()
+                FIRAuthentication.checkIsSessionActive()
             }
         })
     }

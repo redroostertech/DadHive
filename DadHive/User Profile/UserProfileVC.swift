@@ -1,11 +1,3 @@
-//
-//  Main.swift
-//  codewithmike
-//
-//  Created by Michael Westbrooks on 11/23/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 import SVProgressHUD
 import APESuperHUD
@@ -15,8 +7,8 @@ var count = 0
 
 class UserProfileVC: UIViewController {
 
-    @IBOutlet weak var tblMain: UITableView!
-    @IBOutlet weak var btnNext: UIButton!
+    @IBOutlet private var tblMain: UITableView!
+    @IBOutlet private var btnNext: UIButton!
 
     var emptyCell: UITableViewCell {
         let cell = UITableViewCell()

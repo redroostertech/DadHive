@@ -1,11 +1,3 @@
-//
-//  Configuration.swift
-//  test
-//
-//  Created by Michael Westbrooks on 10/13/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import ChameleonFramework
@@ -13,8 +5,8 @@ import ChameleonFramework
 let kAppName = "DadHive"
 let kAdMobEnabled = false
 
-let kAdMobApplicationID = ""
-let kAdMobUnitID = ""
+let kAdMobApplicationID = "ca-app-pub-7049078720741277~8479527267"
+let kAdMobInterstitialUnitID = "ca-app-pub-7049078720741277/2652485512"
 
 let kCloudServerKey = "AAAAJ40j48U:APA91bGS-kcu3AOqWNE7v6OUhR0HuelyqaJBAgX7zZTS065O1-_zktiCiHxASFWsF3nx7EDdbi6otwhmxxeCHaGFEi2r0YFiaULG8otoKADnGiforxN6Pc-9X4POYWMoQhr_AMzb3te2"
 
@@ -101,7 +93,7 @@ let kLocationEnabled = "Location services enabled"
 let kLocationDisabled = "Location services not enabled"
 let kNotificationEnabled = "Notification services enabled"
 let kNotificationDisabled = "Notification services not enabled"
-let kLoginText = "Login"
+let kLoginText = "Sign In"
 let kSignUpText = "Sign Up"
 let kLoginSwitchText = kLoginText
 let kSignUpSwitchText = kSignUpText

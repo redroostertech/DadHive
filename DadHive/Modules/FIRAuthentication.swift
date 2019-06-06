@@ -59,10 +59,10 @@ class FIRAuthentication: NSObject {
         }
     }
     
-    static func checkIsSessionActive(_ window: UIWindow? = nil) {
+    static func checkIsSessionActive(_ window: UIWindow? = nil, goToVC vcID: String = "PermissionsVC") {
         CurrentUser.shared.refresh {
             if let initialSetup = CurrentUser.shared.user?.settings?.initialSetup, initialSetup == false {
-                FIRAuthentication.sessionCheck(window, goToVC: "PermissionsVC")
+                FIRAuthentication.sessionCheck(window, goToVC: vcID)
             } else {
                 FIRAuthentication.sessionCheck(window)
             }

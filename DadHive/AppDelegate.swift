@@ -1,14 +1,5 @@
-//
-//  AppDelegate.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks II on 11/20/17.
-//  Copyright © 2017 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 import CoreData
-import IQKeyboardManagerSwift
 import AWSS3
 
 @UIApplicationMain

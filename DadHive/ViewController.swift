@@ -1,23 +1,19 @@
 import UIKit
-import AVFoundation
 import FirebaseAuth
 import APESuperHUD
 import SVProgressHUD
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var btnAuthenticate: UIButton!
-    @IBOutlet weak var lblGDPR: UILabel!
-    @IBOutlet weak var vwAuthenticationTypeContainer: UIView!
-    @IBOutlet weak var txtFullname: UITextField!
-    @IBOutlet weak var txtPassword: UITextField!
-    @IBOutlet weak var txtPasswordConfirm: UITextField!
-    @IBOutlet var btnGenerate: UIButton!
-    @IBOutlet var btnDelete: UIButton!
-    @IBOutlet weak var txtEmail: UITextField!
+    @IBOutlet private var btnAuthenticate: UIButton!
+    @IBOutlet private var lblGDPR: UILabel!
+    @IBOutlet private var txtPassword: UITextField!
+    @IBOutlet private var btnGenerate: UIButton!
+    @IBOutlet private var btnDelete: UIButton!
+    @IBOutlet private var txtEmail: UITextField!
 
-    var player : AVPlayer?
-    var playerLayer : AVPlayerLayer?
+    var videobackground: VideoBackground?
+    
     var authenticationSwitch: AnimatedSegmentSwitch?
 
     override func viewDidLoad() {
@@ -26,9 +22,11 @@ class ViewController: UIViewController {
         btnGenerate.isHidden = true
         btnDelete.isHidden = true
 
-        loadVideoBG()
+        videobackground = VideoBackground(withPathFromBundle: "DadHiveBG-Vid", ofFileType: "mp4", forView: self.view)
+        videobackground?.isLoopingEnabled = true
+        videobackground?.videoOverlayColor = .white
+
         setupSuperHUD()
-        setupSwitch()
         loadGDPR()
 
         DispatchQueue.main.async {
@@ -36,80 +34,33 @@ class ViewController: UIViewController {
                 if let textField = view as? UITextField {
                     textField.delegate = self
                     textField.addLeftPadding(withWidth: kTextFieldPadding)
+                    textField.clearsOnBeginEditing = true
                 }
             }
 
             self.btnAuthenticate.applyCornerRadius()
             self.btnAuthenticate.addGradientLayer(using: kAppCGColors)
-
-            if self.authenticationSwitch!.selectedIndex == 0 {
-                self.txtPasswordConfirm.isHidden = true
-                self.txtFullname.isHidden = true
-                self.btnAuthenticate.setText(kLoginText)
-            } else {
-                self.txtPasswordConfirm.isHidden = false
-                self.txtFullname.isHidden = false
-                self.btnAuthenticate.setText(kSignUpText)
-            }
+            self.btnAuthenticate.setText(kLoginText)
+            
         }
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.player?.play()
+        super.viewDidAppear(animated)
+        videobackground?.displayVideo()
+        videobackground?.play()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc func appWillEnterForegroundNotification() {
-        self.player?.play()
-    }
-    
-    @objc func loopVideo(){
-        DispatchQueue.main.async {
-            self.player?.seek(to: kCMTimeZero)
-            self.player?.play()
-        }
-    }
-
-    @objc
-    func switchAuthenticationType() {
-        if authenticationSwitch!.selectedIndex == 0 {
-            txtPasswordConfirm.isHidden = true
-            txtFullname.isHidden = true
-            btnAuthenticate.setText(kLoginText)
-        } else {
-            txtPasswordConfirm.isHidden = false
-            txtFullname.isHidden = false
-            btnAuthenticate.setText(kSignUpText)
-        }
+        videobackground?.destroy()
     }
 
     @IBAction func authenticate(_ sender: UIButton) {
-        if authenticationSwitch!.selectedIndex == 0 {
-            if let credentials = AuthCredentials(JSON: [
-                "email": txtEmail.text ?? "",
-                "password": txtPassword.text ?? ""
-                ]),
-                credentials.isValid() {
-                login(withCredentials: credentials)
-            } else {
-                showErrorAlert(message: DadHiveError.signInCredentialsError.rawValue)
-            }
-        } else {
-            if let credentials = AuthCredentials(JSON: ["email": txtEmail.text ?? "",
-                                                         "password": txtPassword.text ?? "",
-                                                         "confirmPassword": txtPasswordConfirm.text ?? "",
-                                                         "fullname": txtFullname.text ?? ""]),
-                credentials.isValid() == true {
-                signup(withCredentials: credentials)
-            } else {
-                showErrorAlert(message: DadHiveError.signUpCredentialsError.rawValue)
-            }
+        guard let email = txtEmail.text, let password = txtPassword.text, let credentials = AuthCredentials(JSON: ["email": email, "password": password]), credentials.isValid() == true else {
+            return showErrorAlert(message: DadHiveError.signInCredentialsError.rawValue)
         }
+        login(withCredentials: credentials)
     }
 
     @IBAction func generate(_ sender: UIButton) {
@@ -132,80 +83,9 @@ class ViewController: UIViewController {
             }
         }
     }
-
-    func signup(withCredentials credentials: AuthCredentials) {
-        showHUD("Creating Account")
-        FIRAuthentication.register(usingCredentials: credentials) { (error) in
-            if let err = error {
-                self.dismissHUD()
-                self.showAlertErrorIfNeeded(error: err)
-            } else {
-                CurrentUser.shared.refresh {
-                    let sb = UIStoryboard(name: "Main", bundle: nil)
-                    let vc = sb.instantiateViewController(withIdentifier: "UploadProfilePhotoVC")
-                    self.goTo(vc: vc, forWindow: nil)
-                }
-            }
-        }
-    }
-
-    private func goTo(vc: UIViewController, forWindow window: UIWindow? = nil) {
-        if window == nil {
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.window?.rootViewController = vc
-        } else {
-            window?.rootViewController = vc
-            window?.makeKeyAndVisible()
-        }
-    }
-
 }
 
 extension ViewController {
-    func loadVideoBG() {
-        let path = Bundle.main.url(forResource: "DadHiveBG-Vid",
-                                   withExtension: "mp4")
-        self.player = AVPlayer(url: path!)
-        self.playerLayer = AVPlayerLayer(player: self.player)
-        self.playerLayer?.videoGravity = .resizeAspectFill
-        self.playerLayer?.frame = self.view.frame
-        self.view.layer.insertSublayer(self.playerLayer!,
-                                       at: 0)
-
-        let colorOverlay = UIView()
-        colorOverlay.backgroundColor = UIColor.white.withAlphaComponent(0.6)
-        colorOverlay.frame = self.view.frame
-        self.view.insertSubview(colorOverlay,
-                                at: 1)
-
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(loopVideo),
-                                               name: .AVPlayerItemDidPlayToEndTime,
-                                               object: self.player?.currentItem)
-
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(appWillEnterForegroundNotification),
-                                               name: .UIApplicationDidBecomeActive,
-                                               object: nil)
-    }
-}
-
-extension ViewController {
-
-    func setupSwitch() {
-        vwAuthenticationTypeContainer.backgroundColor = .clear
-        authenticationSwitch = AnimatedSegmentSwitch()
-        authenticationSwitch!.frame = vwAuthenticationTypeContainer.bounds
-        authenticationSwitch!.autoresizingMask = [.flexibleWidth]
-        authenticationSwitch!.backgroundColor = .white
-        authenticationSwitch!.selectedTitleColor = .white
-        authenticationSwitch!.titleColor = AppColors.lightGreen
-        authenticationSwitch!.font = UIFont(name: kFontButton, size: kFontSizeButton)
-        authenticationSwitch!.thumbColor = AppColors.lightGreen
-        authenticationSwitch!.items = [kLoginSwitchText, kSignUpSwitchText]
-        authenticationSwitch!.addTarget(self, action: #selector(switchAuthenticationType), for: .valueChanged)
-        vwAuthenticationTypeContainer.addSubview(authenticationSwitch!)
-    }
 
     func setupSuperHUD() {
         HUDAppearance.cornerRadius = 10

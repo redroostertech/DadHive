@@ -1,11 +1,3 @@
-//
-//  GoogleAdMobManager.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 12/24/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import GoogleMobileAds
 
@@ -14,5 +6,14 @@ class GoogleAdMobManager {
     private init() {
         print(" \(kAppName) | GoogleAdMobManager Handler Initialized")
         GADMobileAds.configure(withApplicationID: kAdMobApplicationID)
+    }
+   
+    func generateInterstitialAd(_ delegate: GADInterstitialDelegate) -> GADInterstitial {
+        let ad = GADInterstitial(adUnitID: kAdMobInterstitialUnitID)
+        let adRequest = GADRequest()
+        adRequest.testDevices = [kGADSimulatorID]
+        ad.load(adRequest)
+        ad.delegate = delegate
+        return ad
     }
 }

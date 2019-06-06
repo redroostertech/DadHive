@@ -1,11 +1,3 @@
-//
-//  FinishProfileVC.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 12/26/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 
 class ProfileSetupFlowManager {

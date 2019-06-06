@@ -1,11 +1,3 @@
-//
-//  UIViewController+Ext.swift
-//  Gumbo
-//
-//  Created by Michael Westbrooks on 5/19/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import SVProgressHUD

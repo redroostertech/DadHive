@@ -3,11 +3,11 @@ import SVProgressHUD
 
 class PermissionsVC: UIViewController {
 
-    @IBOutlet private weak var lblTitle: UILabel!
-    @IBOutlet private weak var btnEnableLocation: UIButton!
-    @IBOutlet private weak var btnEnableNotification: UIButton!
-    @IBOutlet private weak var btnContinue: UIButton!
-    @IBOutlet private weak var lblDescription: UILabel!
+    @IBOutlet private var lblTitle: UILabel!
+    @IBOutlet private var btnEnableLocation: UIButton!
+    @IBOutlet private var btnEnableNotification: UIButton!
+    @IBOutlet private var btnContinue: UIButton!
+    @IBOutlet private var lblDescription: UILabel!
 
     let notificationCenter = NotificationCenter.default
     let notificationManager = NotificationsManagerModule.shared

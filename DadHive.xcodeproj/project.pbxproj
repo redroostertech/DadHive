@@ -112,6 +112,7 @@
 		BAA7E466223D72C5008B58F5 /* MatchVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = BAA7E464223D72C5008B58F5 /* MatchVC.xib */; };
 		BAC8E76A2211A4880003651E /* AgeRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC8E7692211A4880003651E /* AgeRange.swift */; };
 		BAC8E76E2213D4030003651E /* FakeGeoPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC8E76D2213D4030003651E /* FakeGeoPoints.swift */; };
+		BAD5D882228C76C400CAB622 /* VideoBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD5D881228C76C400CAB622 /* VideoBackground.swift */; };
 		BAE1AFAE224161A500F5E824 /* UploadProfilePhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE1AFAD224161A500F5E824 /* UploadProfilePhotoVC.swift */; };
 		BAE1AFB1224177B200F5E824 /* ViewProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE1AFAF224177B200F5E824 /* ViewProfileVC.swift */; };
 		BAE7E700222C7B3600663A2D /* DHKidsInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE7E6FE222C7B3600663A2D /* DHKidsInfoCell.swift */; };
@@ -233,6 +234,7 @@
 		BAA7E464223D72C5008B58F5 /* MatchVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MatchVC.xib; sourceTree = "<group>"; };
 		BAC8E7692211A4880003651E /* AgeRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeRange.swift; sourceTree = "<group>"; };
 		BAC8E76D2213D4030003651E /* FakeGeoPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeGeoPoints.swift; sourceTree = "<group>"; };
+		BAD5D881228C76C400CAB622 /* VideoBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoBackground.swift; sourceTree = "<group>"; };
 		BAE1AFAD224161A500F5E824 /* UploadProfilePhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadProfilePhotoVC.swift; sourceTree = "<group>"; };
 		BAE1AFAF224177B200F5E824 /* ViewProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewProfileVC.swift; sourceTree = "<group>"; };
 		BAE7E6FE222C7B3600663A2D /* DHKidsInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DHKidsInfoCell.swift; sourceTree = "<group>"; };
@@ -286,23 +288,23 @@
 			children = (
 				BA8D93CE21D2894C003A76FC /* DadHive.entitlements */,
 				9BAEE4111FC309920034356D /* AppDelegate.swift */,
-				BA63D2E921D7D948002BD8CF /* LaunchVC.swift */,
-				9BAEE4131FC309920034356D /* ViewController.swift */,
-				BA63D2EB21D8087F002BD8CF /* SettingsVC.swift */,
-				BA63D2ED21D8107C002BD8CF /* MyProfileVC.swift */,
-				BA8D933821CF01BE003A76FC /* Configuration.swift */,
 				BA8D934321CF0212003A76FC /* ModuleHandler.swift */,
+				BA8D933821CF01BE003A76FC /* Configuration.swift */,
 				9BAEE41D1FC309920034356D /* LaunchScreen.storyboard */,
 				9BAEE4151FC309920034356D /* Main.storyboard */,
+				BA63D2E921D7D948002BD8CF /* LaunchVC.swift */,
+				9BAEE4131FC309920034356D /* ViewController.swift */,
+				BAE1AFAD224161A500F5E824 /* UploadProfilePhotoVC.swift */,
 				BA9CCC47221053FD000C47E3 /* PermissionsVC.swift */,
+				BA8D93B921D13E6A003A76FC /* User Profile */,
+				BA63D2EB21D8087F002BD8CF /* SettingsVC.swift */,
+				BA63D2ED21D8107C002BD8CF /* MyProfileVC.swift */,
 				BA8D4F712207D63500754053 /* FakeData.swift */,
 				BAC8E76D2213D4030003651E /* FakeGeoPoints.swift */,
 				BA864B0021D9AD3200A97BFA /* ChatVC.swift */,
 				BA63D2C921D4096A002BD8CF /* ProfileSetup.swift */,
 				BA8D93C221D163AD003A76FC /* MessagesVC.swift */,
-				BAE1AFAD224161A500F5E824 /* UploadProfilePhotoVC.swift */,
 				BAE1AFAF224177B200F5E824 /* ViewProfileVC.swift */,
-				BA8D93B921D13E6A003A76FC /* User Profile */,
 				9B4B91DA1FC71FF0003F6282 /* NetworkingLayer.swift */,
 				9B6F8FF41FC35F8D0050B25D /* RegisterViewController.swift */,
 				9B6F8FFC1FC37D460050B25D /* HomeCellCollectionViewCell.swift */,
@@ -380,6 +382,7 @@
 				BA8D93C821D1815E003A76FC /* GoogleAdMobManager.swift */,
 				BA9CCC41220E078C000C47E3 /* LocationManagerModule.swift */,
 				BA9CCC45220E1C86000C47E3 /* NotificationsManagerModule.swift */,
+				BAD5D881228C76C400CAB622 /* VideoBackground.swift */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -404,12 +407,12 @@
 		BA8D93B921D13E6A003A76FC /* User Profile */ = {
 			isa = PBXGroup;
 			children = (
+				BA8D930D21CF0181003A76FC /* UserProfileVC.swift */,
 				BA8D93BA21D13F17003A76FC /* Intro Cell */,
 				BA8D93BB21D13F25003A76FC /* Image Cell */,
 				BA8D93BC21D13F37003A76FC /* Question Cell */,
 				BA8D93BD21D13F45003A76FC /* Primary Info */,
 				BA8D93BE21D13F58003A76FC /* Carousel Cell */,
-				BA8D930D21CF0181003A76FC /* UserProfileVC.swift */,
 				BAE7E6FE222C7B3600663A2D /* DHKidsInfoCell.swift */,
 				BAE7E6FF222C7B3600663A2D /* DHKidsInfoCell.xib */,
 			);
@@ -805,6 +808,7 @@
 				BA8D936A21CF2FC3003A76FC /* DefaultsManager.swift in Sources */,
 				BA63D2C821D3FC77002BD8CF /* CustomTabBar.swift in Sources */,
 				BA8D933021CF0188003A76FC /* UILabel+Extensions.swift in Sources */,
+				BAD5D882228C76C400CAB622 /* VideoBackground.swift in Sources */,
 				BA8D932D21CF0188003A76FC /* UIView+Extensions.swift in Sources */,
 				BAC8E76A2211A4880003651E /* AgeRange.swift in Sources */,
 				BA63D2EE21D8107C002BD8CF /* MyProfileVC.swift in Sources */,

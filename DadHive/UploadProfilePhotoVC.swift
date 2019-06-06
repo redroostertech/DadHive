@@ -1,19 +1,11 @@
-//
-//  UploadProfilePhotoVC.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 3/19/19.
-//  Copyright © 2019 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 import Firebase
 import APESuperHUD
 
 class UploadProfilePhotoVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
-    @IBOutlet var imgMain: UIImageView!
-    @IBOutlet var btnContinue: UIButton!
+    @IBOutlet private weak var imgMain: UIImageView!
+    @IBOutlet private weak var btnContinue: UIButton!
 
     var imagePicker: UIImagePickerController?
 
@@ -41,7 +33,6 @@ class UploadProfilePhotoVC: UIViewController, UINavigationControllerDelegate, UI
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
 
         guard let userId = CurrentUser.shared.user?.uid else {
-            print("User ID not available")
             FIRAuthentication.signout()
             return
         }

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2D37797C1B1E2C95D349F8FC /* Pods_DadHive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABE688022BEB659713E2960C /* Pods_DadHive.framework */; };
 		9B4B91DB1FC71FF0003F6282 /* NetworkingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B91DA1FC71FF0003F6282 /* NetworkingLayer.swift */; };
-		9B6F8FF51FC35F8D0050B25D /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6F8FF41FC35F8D0050B25D /* RegisterViewController.swift */; };
 		9B6F8FF91FC375D80050B25D /* FireFliesParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9B6F8FF81FC3752D0050B25D /* FireFliesParticle.sks */; };
 		9B6F8FFE1FC37D460050B25D /* HomeCellCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6F8FFC1FC37D460050B25D /* HomeCellCollectionViewCell.swift */; };
 		9B6F8FFF1FC37D460050B25D /* HomeCellCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9B6F8FFD1FC37D460050B25D /* HomeCellCollectionViewCell.xib */; };
@@ -121,13 +120,15 @@
 		BAF6B2BD2219DB4700D39C52 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF6B2BC2219DB4700D39C52 /* Message.swift */; };
 		BAF6B2C2221A104C00D39C52 /* MaxDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF6B2C1221A104C00D39C52 /* MaxDistance.swift */; };
 		BAF6B2C4221B78FE00D39C52 /* Success.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF6B2C3221B78FE00D39C52 /* Success.swift */; };
+		BAF9F85322AC06B4002F17F3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF9F85222AC06B3002F17F3 /* MapViewController.swift */; };
+		BAF9F85522AC192C002F17F3 /* UserDetailMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF9F85422AC192C002F17F3 /* UserDetailMapView.swift */; };
+		BAF9F85722AC195E002F17F3 /* UserDetailMapView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BAF9F85622AC195E002F17F3 /* UserDetailMapView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3C4AB1FBE5BC0D185D12AFA2 /* Pods-DadHive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DadHive.release.xcconfig"; path = "Pods/Target Support Files/Pods-DadHive/Pods-DadHive.release.xcconfig"; sourceTree = "<group>"; };
 		983B8A0E41E649CE82FF3F25 /* Pods-DadHive.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DadHive.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DadHive/Pods-DadHive.debug.xcconfig"; sourceTree = "<group>"; };
 		9B4B91DA1FC71FF0003F6282 /* NetworkingLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingLayer.swift; sourceTree = "<group>"; };
-		9B6F8FF41FC35F8D0050B25D /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		9B6F8FF81FC3752D0050B25D /* FireFliesParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = FireFliesParticle.sks; sourceTree = "<group>"; };
 		9B6F8FFC1FC37D460050B25D /* HomeCellCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCellCollectionViewCell.swift; sourceTree = "<group>"; };
 		9B6F8FFD1FC37D460050B25D /* HomeCellCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeCellCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -243,6 +244,9 @@
 		BAF6B2BC2219DB4700D39C52 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		BAF6B2C1221A104C00D39C52 /* MaxDistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxDistance.swift; sourceTree = "<group>"; };
 		BAF6B2C3221B78FE00D39C52 /* Success.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Success.swift; sourceTree = "<group>"; };
+		BAF9F85222AC06B3002F17F3 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		BAF9F85422AC192C002F17F3 /* UserDetailMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailMapView.swift; sourceTree = "<group>"; };
+		BAF9F85622AC195E002F17F3 /* UserDetailMapView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserDetailMapView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -306,11 +310,13 @@
 				BA8D93C221D163AD003A76FC /* MessagesVC.swift */,
 				BAE1AFAF224177B200F5E824 /* ViewProfileVC.swift */,
 				9B4B91DA1FC71FF0003F6282 /* NetworkingLayer.swift */,
-				9B6F8FF41FC35F8D0050B25D /* RegisterViewController.swift */,
 				9B6F8FFC1FC37D460050B25D /* HomeCellCollectionViewCell.swift */,
 				BA63D2C721D3FC77002BD8CF /* CustomTabBar.swift */,
 				9B6F8FFD1FC37D460050B25D /* HomeCellCollectionViewCell.xib */,
 				9BAEE41B1FC309920034356D /* Assets.xcassets */,
+				BAF9F85222AC06B3002F17F3 /* MapViewController.swift */,
+				BAF9F85422AC192C002F17F3 /* UserDetailMapView.swift */,
+				BAF9F85622AC195E002F17F3 /* UserDetailMapView.xib */,
 				9BAEE4201FC309920034356D /* Info.plist */,
 				9BAEE4181FC309920034356D /* DadHive.xcdatamodeld */,
 				9BAEE4291FC31D9F0034356D /* DadHiveBG-Vid.mp4 */,
@@ -616,6 +622,7 @@
 				BA8D937C21CFDDAB003A76FC /* DHPrimaryInfoCell.xib in Resources */,
 				BAA7E466223D72C5008B58F5 /* MatchVC.xib in Resources */,
 				9B6F8FFF1FC37D460050B25D /* HomeCellCollectionViewCell.xib in Resources */,
+				BAF9F85722AC195E002F17F3 /* UserDetailMapView.xib in Resources */,
 				BA8D937421CFDD8A003A76FC /* DHImageCell.xib in Resources */,
 				BA8D937821CFDD9B003A76FC /* DHQuestionCell.xib in Resources */,
 			);
@@ -630,7 +637,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-DadHive/Pods-DadHive-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-DadHive/Pods-DadHive-resources.sh",
 				"${PODS_ROOT}/FirebaseInvites/Resources/GINInviteResources.bundle",
 				"${PODS_ROOT}/FirebaseInvites/Resources/GPPACLPickerResources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAnonymousAuthUI.bundle",
@@ -639,9 +646,6 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseGoogleAuthUI.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebasePhoneAuthUI.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseTwitterAuthUI.bundle",
-				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
-				"${PODS_ROOT}/GooglePlacePicker/Frameworks/GooglePlacePicker.framework/Resources/GooglePlacePicker.bundle",
-				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
 			);
@@ -655,15 +659,12 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseGoogleAuthUI.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebasePhoneAuthUI.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseTwitterAuthUI.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlacePicker.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TwitterKitResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DadHive/Pods-DadHive-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DadHive/Pods-DadHive-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5C3864A7578F0D47FAE638EA /* [CP] Embed Pods Frameworks */ = {
@@ -672,46 +673,32 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-DadHive/Pods-DadHive-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-DadHive/Pods-DadHive-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/APESuperHUD/APESuperHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/AWSCore/AWSCore.framework",
 				"${BUILT_PRODUCTS_DIR}/AWSS3/AWSS3.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/BoringSSL-GRPC/openssl_grpc.framework",
 				"${BUILT_PRODUCTS_DIR}/CVCalendar/CVCalendar.framework",
 				"${BUILT_PRODUCTS_DIR}/Cachable/Cachable.framework",
 				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
-				"${BUILT_PRODUCTS_DIR}/CountryList/CountryList.framework",
 				"${BUILT_PRODUCTS_DIR}/DatePicker/DatePicker.framework",
 				"${BUILT_PRODUCTS_DIR}/Extended/Extended.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FontAwesome.swift/FontAwesome_swift.framework",
-				"${BUILT_PRODUCTS_DIR}/Fuse/Fuse.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/GiphyCoreSDK/GiphyCoreSDK.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleAPIClientForREST/GoogleAPIClientForREST.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/ImageSlideshow/ImageSlideshow.framework",
-				"${PODS_ROOT}/Instabug/Instabug.framework",
-				"${PODS_ROOT}/Instabug/Instabug.framework.dSYM",
-				"${BUILT_PRODUCTS_DIR}/JSQMessagesViewController/JSQMessagesViewController.framework",
-				"${BUILT_PRODUCTS_DIR}/JSQSystemSoundPlayer/JSQSystemSoundPlayer.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
-				"${BUILT_PRODUCTS_DIR}/NextGrowingTextView/NextGrowingTextView.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
-				"${BUILT_PRODUCTS_DIR}/Poi/Poi.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/Pulsator/Pulsator.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
-				"${BUILT_PRODUCTS_DIR}/SkyFloatingLabelTextField/SkyFloatingLabelTextField.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftGifOrigin/SwiftGifOrigin.framework",
 				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
 				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
@@ -727,41 +714,27 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSS3.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl_grpc.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CVCalendar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cachable.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CountryList.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DatePicker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Extended.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontAwesome_swift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Fuse.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GiphyCoreSDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleAPIClientForREST.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hero.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ImageSlideshow.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Instabug.framework",
-				"${DWARF_DSYM_FOLDER_PATH}/Instabug.framework.dSYM",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQMessagesViewController.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQSystemSoundPlayer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NextGrowingTextView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Poi.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pulsator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SkyFloatingLabelTextField.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftGifOrigin.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
@@ -773,7 +746,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DadHive/Pods-DadHive-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DadHive/Pods-DadHive-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A9429D9168E8B65EFBC52FE6 /* [CP] Check Pods Manifest.lock */ = {
@@ -825,7 +798,6 @@
 				BA8D93C521D1676F003A76FC /* Media.swift in Sources */,
 				BAF6B2C4221B78FE00D39C52 /* Success.swift in Sources */,
 				BA864B0721DA6C7F00A97BFA /* EditAccountVC.swift in Sources */,
-				9B6F8FF51FC35F8D0050B25D /* RegisterViewController.swift in Sources */,
 				BA63D2F221D81839002BD8CF /* AccountVC.swift in Sources */,
 				BA9CCC44220E1AF7000C47E3 /* Location.swift in Sources */,
 				BA8D932721CF0188003A76FC /* Array+Extensions.swift in Sources */,
@@ -837,6 +809,7 @@
 				BA8D933421CF0188003A76FC /* UIColors+Extensions.swift in Sources */,
 				BA8D93B821D11EB8003A76FC /* Info.swift in Sources */,
 				9BAEE4121FC309920034356D /* AppDelegate.swift in Sources */,
+				BAF9F85322AC06B4002F17F3 /* MapViewController.swift in Sources */,
 				BA8D932521CF0188003A76FC /* AttributedString+Extensions.swift in Sources */,
 				BA8D932A21CF0188003A76FC /* UIDevice+Extensions.swift in Sources */,
 				BA8D93B221D11E64003A76FC /* PaymentMethod.swift in Sources */,
@@ -853,6 +826,7 @@
 				9BAEE41A1FC309920034356D /* DadHive.xcdatamodeld in Sources */,
 				BA8D936921CF2FC3003A76FC /* User.swift in Sources */,
 				BA8D935621CF0251003A76FC /* WowzaService.swift in Sources */,
+				BAF9F85522AC192C002F17F3 /* UserDetailMapView.swift in Sources */,
 				BAE7E700222C7B3600663A2D /* DHKidsInfoCell.swift in Sources */,
 				BA8D932F21CF0188003A76FC /* numberToMoney.swift in Sources */,
 				BA8D932B21CF0188003A76FC /* UIButton+Extensions.swift in Sources */,

@@ -1,11 +1,3 @@
-//
-//  MessagesVC.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 12/24/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 import Firebase
 import Foundation
@@ -44,12 +36,6 @@ class MessagesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     var conversations = [Conversation]()
 
-    var emptyCell: UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = "No Data"
-        return cell
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         hideNavigationBar()
@@ -58,7 +44,7 @@ class MessagesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         tblMain.delegate = self
         tblMain.dataSource = self
 
-        showHUD()
+        showHUD("Loading Messages")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -111,34 +97,15 @@ class MessagesVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 self.showError("There was an error loading conversations. Please try again later.")
                 completion()
             } else {
-                if let res = response as? [String: Any], let data = res["data"] as? [String: Any], let conversationsData = Conversations(JSON: data)?.conversations {
-                    self.conversations = conversationsData
+                if let res = response as? [String: Any], let data = res["data"] as? [String: Any], let conversationsData = Conversations(JSON: data), let conversations = conversationsData.conversations {
+                    self.conversations = conversations
                     completion()
                 } else {
                     self.showError("There was an error loading conversations. Please try again later.")
-                    //completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.jsonResponseError.rawValue]))
                     completion()
                 }
             }
         }
-    }
-
-    func setupSuperHUD() {
-        HUDAppearance.cornerRadius = 10
-        HUDAppearance.animateInTime = 1.0
-        HUDAppearance.animateOutTime = 1.0
-        HUDAppearance.iconColor = UIColor.flatGreen
-        HUDAppearance.titleTextColor =  UIColor.flatGreen
-        HUDAppearance.loadingActivityIndicatorColor = UIColor.flatGreen
-        HUDAppearance.cancelableOnTouch = true
-        HUDAppearance.iconSize = CGSize(width: kIconSizeWidth, height: kIconSizeHeight)
-        HUDAppearance.messageFont = UIFont(name: kFontBody, size: kFontSizeBody) ?? UIFont.systemFont(ofSize: kFontSizeBody, weight: .regular)
-        HUDAppearance.titleFont = UIFont(name: kFontTitle, size: kFontSizeTitle) ?? UIFont.systemFont(ofSize: kFontSizeTitle, weight: .bold)
-        showHUD()
-    }
-
-    func showHUD() {
-        APESuperHUD.show(style: .icon(image: UIImage(named: "dadhive-hive")!, duration: 4.0), title: nil, message: "Loading Inbox", completion: nil)
     }
 
     @IBAction func refresh(_ sender: UIButton) {

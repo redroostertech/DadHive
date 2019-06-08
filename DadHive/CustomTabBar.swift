@@ -17,7 +17,8 @@ class CustomTabBar:
     let arrayOfImagesForTabBar = [
         "home",
         "message",
-        "profile"
+        "profile",
+        "home"
     ]
 
     override func viewDidLoad() {

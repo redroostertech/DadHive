@@ -3,10 +3,15 @@ set -e
 set -u
 set -o pipefail
 
+function on_error {
+  echo "$(realpath -mq "${0}"):$1: error: Unexpected failure"
+}
+trap 'on_error $LINENO' ERR
+
 if [ -z ${UNLOCALIZED_RESOURCES_FOLDER_PATH+x} ]; then
-    # If UNLOCALIZED_RESOURCES_FOLDER_PATH is not set, then there's nowhere for us to copy
-    # resources to, so exit 0 (signalling the script phase was successful).
-    exit 0
+  # If UNLOCALIZED_RESOURCES_FOLDER_PATH is not set, then there's nowhere for us to copy
+  # resources to, so exit 0 (signalling the script phase was successful).
+  exit 0
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
@@ -100,9 +105,6 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseGoogleAuthUI.bundle"
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebasePhoneAuthUI.bundle"
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseTwitterAuthUI.bundle"
-  install_resource "${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle"
-  install_resource "${PODS_ROOT}/GooglePlacePicker/Frameworks/GooglePlacePicker.framework/Resources/GooglePlacePicker.bundle"
-  install_resource "${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle"
   install_resource "${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle"
   install_resource "${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle"
 fi
@@ -115,9 +117,6 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseGoogleAuthUI.bundle"
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebasePhoneAuthUI.bundle"
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseTwitterAuthUI.bundle"
-  install_resource "${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle"
-  install_resource "${PODS_ROOT}/GooglePlacePicker/Frameworks/GooglePlacePicker.framework/Resources/GooglePlacePicker.bundle"
-  install_resource "${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle"
   install_resource "${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle"
   install_resource "${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle"
 fi

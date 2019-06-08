@@ -44,10 +44,10 @@ class MatchVC: UIViewController {
             "id": Utilities.randomString(length: 25),
             "senderId": CurrentUser.shared.user?.uid ?? "",
             "recipientId": user?.uid ?? "",
+            "conversationKey": "\(CurrentUser.shared.user?.uid ?? "")\(user?.uid ?? "")",
             "createdAt": Date().toString(format: CustomDateFormat.timeDate.rawValue),
             "updatedAt": Date().toString(format: CustomDateFormat.timeDate.rawValue)
         ]
-
         //  MARK:- Add conversation object
         FIRFirestoreDB.shared.add(data: conversation, to: kConversations, completion: { (success, docID, error) in
 

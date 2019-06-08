@@ -1,11 +1,3 @@
-//
-//  ViewProfileVC.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 3/19/19.
-//  Copyright © 2019 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 import SDWebImage
 import SVProgressHUD
@@ -17,12 +9,6 @@ class ViewProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var btnBack: UIButton!
 
     var user: User?
-
-    var emptyCell: UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = ""
-        return cell
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,28 +98,6 @@ class ViewProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
 }
 
 extension ViewProfileVC {
-    func setupSuperHUD() {
-        HUDAppearance.cornerRadius = 10
-        HUDAppearance.animateInTime = 1.0
-        HUDAppearance.animateOutTime = 1.0
-        HUDAppearance.iconColor = UIColor.flatGreen
-        HUDAppearance.titleTextColor =  UIColor.flatGreen
-        HUDAppearance.loadingActivityIndicatorColor = UIColor.flatGreen
-        HUDAppearance.cancelableOnTouch = true
-        HUDAppearance.iconSize = CGSize(width: kIconSizeWidth, height: kIconSizeHeight)
-        HUDAppearance.messageFont = UIFont(name: kFontBody, size: kFontSizeBody) ?? UIFont.systemFont(ofSize: kFontSizeBody, weight: .regular)
-        HUDAppearance.titleFont = UIFont(name: kFontTitle, size: kFontSizeTitle) ?? UIFont.systemFont(ofSize: kFontSizeTitle, weight: .bold)
-        showHUD()
-    }
-
-    func showHUD(_ text: String = "Loading User") {
-        APESuperHUD.show(style: .icon(image: UIImage(named: "dadhive-hive")!, duration: 4.0), title: nil, message: text, completion: nil)
-    }
-
-    func dismissHUD() {
-        APESuperHUD.dismissAll(animated: true)
-    }
-
     func setupUI() {
 
         tblMain.delegate = self

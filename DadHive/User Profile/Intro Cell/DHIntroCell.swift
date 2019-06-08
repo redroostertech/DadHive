@@ -1,11 +1,3 @@
-//
-//  DHIntroCell.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 12/23/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 
 class DHIntroCell: UITableViewCell {

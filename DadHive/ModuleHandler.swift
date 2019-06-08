@@ -17,7 +17,6 @@ class ModuleHandler {
         self.awsService = AWSService.shared
         self.firebaseRepository = FIRRepository.shared
         self.testDataGrabberModule = TestDataGrabberModule.shared
-        SDWebImageManager.shared().imageDownloader?.maxConcurrentDownloads = kMaxConcurrentImageDownloads
         self.googleAdMobManager = GoogleAdMobManager.shared
         self.locationManager = LocationManagerModule.shared
         self.notificationManager = NotificationsManagerModule.shared

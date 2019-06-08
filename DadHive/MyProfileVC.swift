@@ -1,13 +1,4 @@
-//
-//  MyProfileVC.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 12/29/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
-import FontAwesome_swift
 import Firebase
 
 class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
@@ -172,53 +163,40 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
             self.selectedBtn = UIButton()
         }
         let buttonTag = sender.tag + 1
-        let alert = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let replaceAction = UIAlertAction(title: "Replace Photo", style: .default) { (action) in
-
+            self.uploadPhoto(sender)
         }
         let deleteAction = UIAlertAction(title: "Delete Photo", style: .default) { (action) in
+            self.showHUD("")
             let storageRef = Storage.storage().reference().child("images/\(userId)/userProfilePicture_\(buttonTag)_url")
-//            guard let uploadData = UIImageJPEGRepresentation(selectedImage, 0.75) else {
-//                return
-//            }
-//            storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
-//                if let err = error {
-//                    print("PutData error : \(err.localizedDescription)")
-//                    self.reset(self.selectedBtn!)
-//                } else {
-//                    storageRef.downloadURL(completion: { (url, error) in
-//                        if let err = error {
-//                            print("Download url error : \(err.localizedDescription)")
-//                            self.reset(self.selectedBtn!)
-//                        } else {
-//                                btn.removeTarget(self, action: #selector(MyProfileVC.uploadPhoto(_:)), for: .touchUpInside)
-//                                btn.add(self, action: #selector(MyProfileVC.deletePhoto(_:)), for: .touchUpInside)
-//                            if let urlString = url?.absoluteString {
-//                                CurrentUser.shared.updateUser(withData: [
-//                                    "userProfilePicture_\(buttonTag)_url": urlString
-//                                    ], completion: { (erorr) in
-//                                        if let err = error {
-//                                            print("Current user upload error: \(err.localizedDescription)")
-//                                            self.reset(self.selectedBtn!)
-//                                        } else {
-//                                            print("Completed uploading image")
-//                                        }
-//                                })
-//                            }
-//                        }
-//                    })
-//                }
-//            })
-//            DispatchQueue.main.async {
-//                alert.dismissViewController()
-//            }
+            storageRef.delete { error in
+                if let error = error {
+                    self.dismissHUD()
+                } else {
+                    CurrentUser.shared.updateProfileToNil(withData: [
+                        "userProfilePicture_\(buttonTag)_url": nil
+                        ], completion: { (erorr) in
+                            self.dismissHUD()
+                            if let err = error {
+                                print("Current photo delete error: \(err.localizedDescription)")
+                            } else {
+                                print("Completed deleting image")
+                                self.popViewController()
+                            }
+                    })
+
+                }
+            }
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             self.reset(self.selectedBtn!)
             alert.dismissViewController()
         }
         alert.addAction(replaceAction)
-        alert.addAction(deleteAction)
+        if sender.tag != 0 {
+            alert.addAction(deleteAction)
+        }
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
     }
@@ -231,15 +209,16 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
             return
         }
 
-        guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
+        guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage, let scaledImage = selectedImage.resize(withWidth: 300) else {
             self.showError("Image unavailable. Please try again.")
             return
         }
+        
         guard let selectedBtn = self.selectedBtn else {
             self.showError("Image unavailable. Please try again.")
             return
         }
-
+        
         let buttonTag = selectedBtn.tag + 1
 
         dismiss(animated:true, completion: {
@@ -254,7 +233,7 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
 
                 let storageRef = Storage.storage().reference().child("images/\(userId)/userProfilePicture_\(buttonTag)_url")
 
-                guard let uploadData = UIImageJPEGRepresentation(selectedImage, 0.75) else {
+                guard let uploadData = UIImageJPEGRepresentation(scaledImage, 1.0) else {
                     return
                 }
 

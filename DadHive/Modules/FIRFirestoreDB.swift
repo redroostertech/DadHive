@@ -1,15 +1,6 @@
-//
-//  FIRFirestoreDB.swift
-//  Gumbo
-//
-//  Created by Michael Westbrooks on 9/18/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import Firebase
 import FirebaseFirestore
-import Geofirestore
 import CoreLocation
 
 class FIRFirestoreDB {
@@ -18,12 +9,10 @@ class FIRFirestoreDB {
     private var docRef: DocumentReference?
     private var colRef: CollectionReference?
     private var lastUser: QueryDocumentSnapshot?
-    var geoFire: GeoFirestore!
     let limit = 50
 
     private init() {
         self.dbRef = Firestore.firestore()
-        self.geoFire = GeoFirestore(collectionRef: self.dbRef.collection(kUsers))
     }
 
     private func clearDocReference() {

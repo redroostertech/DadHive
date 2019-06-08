@@ -86,46 +86,9 @@ class ViewController: UIViewController {
 }
 
 extension ViewController {
-
-    func setupSuperHUD() {
-        HUDAppearance.cornerRadius = 10
-        HUDAppearance.animateInTime = 1.0
-        HUDAppearance.animateOutTime = 1.0
-        HUDAppearance.iconColor = UIColor.flatGreen
-        HUDAppearance.titleTextColor =  UIColor.flatGreen
-        HUDAppearance.loadingActivityIndicatorColor = UIColor.flatGreen
-        HUDAppearance.cancelableOnTouch = true
-        HUDAppearance.iconSize = CGSize(width: kIconSizeWidth, height: kIconSizeHeight)
-        HUDAppearance.messageFont = UIFont(name: kFontBody, size: kFontSizeBody) ?? UIFont.systemFont(ofSize: kFontSizeBody, weight: .regular)
-        HUDAppearance.titleFont = UIFont(name: kFontTitle, size: kFontSizeTitle) ?? UIFont.systemFont(ofSize: kFontSizeTitle, weight: .bold)
-    }
-
-    func showHUD(_ text: String = "Finding Users") {
-        APESuperHUD.show(style: .icon(image: UIImage(named: "dadhive-hive")!, duration: 4.0), title: nil, message: text, completion: nil)
-    }
-
-    func dismissHUD() {
-        APESuperHUD.dismissAll(animated: true)
-    }
-
     func loadGDPR() {
         lblGDPR.font = UIFont(name: kFontCaption, size: kFontSizeCaption)
         lblGDPR.textColor = .flatBlack
-    }
-
-    func showErrorAlert(message: String?) {
-        SVProgressHUD.showError(withStatus: message ?? "")
-        SVProgressHUD.setDefaultStyle(.dark)
-        SVProgressHUD.setDefaultMaskType(.gradient)
-        SVProgressHUD.setMinimumDismissTimeInterval(1)
-    }
-
-    func showAlertErrorIfNeeded(error: Error?) {
-        if let e = error {
-            showErrorAlert(message: e.localizedDescription)
-        } else {
-            SVProgressHUD.dismiss()
-        }
     }
 }
 

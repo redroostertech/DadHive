@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1010"
+   LastUpgradeVersion = "0930"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "61CCE1DDAC245E91DCC14D23B4D4D6F4"
+               BlueprintIdentifier = "4EE3D3CEC90FA5BA51EB004FE0E4AADF"
                BuildableName = "RxLibrary.framework"
                BlueprintName = "gRPC-RxLibrary"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "61CCE1DDAC245E91DCC14D23B4D4D6F4"
+            BlueprintIdentifier = "4EE3D3CEC90FA5BA51EB004FE0E4AADF"
             BuildableName = "RxLibrary.framework"
             BlueprintName = "gRPC-RxLibrary"
             ReferencedContainer = "container:Pods.xcodeproj">

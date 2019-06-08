@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1010"
+   LastUpgradeVersion = "0930"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D9F4134889409A5C4D13C0EDBE497BDE"
+               BlueprintIdentifier = "28FB5BC01F8B5C562F67FD806F98BF38"
                BuildableName = "ProtoRPC.framework"
                BlueprintName = "gRPC-ProtoRPC"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D9F4134889409A5C4D13C0EDBE497BDE"
+            BlueprintIdentifier = "28FB5BC01F8B5C562F67FD806F98BF38"
             BuildableName = "ProtoRPC.framework"
             BlueprintName = "gRPC-ProtoRPC"
             ReferencedContainer = "container:Pods.xcodeproj">

@@ -79,10 +79,6 @@ class FIRAuthentication: NSObject {
         }
     }
     
-    private static func checkInitialSetup() {
-        
-    }
-    
     static func signout(_ window: UIWindow? = nil, goToVC vcID: String = "ViewController") {
         CurrentUser.shared.signout { (success) in
             let sb = UIStoryboard(name: "Main", bundle: nil)

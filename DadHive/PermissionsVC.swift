@@ -108,11 +108,4 @@ class PermissionsVC: UIViewController {
         }
         CurrentUser.shared.user?.setNotificationToggle(access)
     }
-
-    func showErrorAlert(_ error: DadHiveError) {
-        SVProgressHUD.showError(withStatus: error.rawValue)
-        SVProgressHUD.setDefaultStyle(.dark)
-        SVProgressHUD.setDefaultMaskType(.gradient)
-        SVProgressHUD.setMinimumDismissTimeInterval(1)
-    }
 }

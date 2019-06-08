@@ -1,10 +1,3 @@
-//
-//  EditAccountVC.swift
-//  Alamofire
-//
-//  Created by Michael Westbrooks on 12/31/18.
-//
-
 import UIKit
 
 class EditAccountVC: UIViewController {

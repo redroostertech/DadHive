@@ -42,7 +42,7 @@ let kBarBtnPoint = CGPoint(x: 0.0, y: 0.0)
 
 let kTextFieldPadding: CGFloat = 10.0
 
-public let kTestBaseURL = "https://dadhive-test.herokuapp.com/"
+public let kTestBaseURL = "https://dadhive-test.herokuapp.com/" //"http://localhost:3000/"
 public let kTestURL = kTestBaseURL + "api/v1/"
 public let kLiveBaseURL = "https://dadhive.herokuapp.com/"
 public let kLiveURL = kLiveBaseURL + "api/v1/"

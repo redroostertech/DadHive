@@ -85,6 +85,22 @@ extension CurrentUser {
             }
         }
     }
+    
+    func updateProfileToNil(withData data: [String: Any?], completion: @escaping (Error?) -> Void) {
+        guard let user = self.user else {
+            completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]))
+            return
+        }
+        FIRFirestoreDB.shared.update(withData: data, from: kUsers, at: user.key ?? "") { (success, error) in
+            if let err = error {
+                completion(err)
+            } else {
+                self.refresh({
+                    completion(nil)
+                })
+            }
+        }
+    }
 }
 
 

@@ -277,27 +277,6 @@ class EditVC: UIViewController {
         self.view.endEditing(true)
     }
 
-    func showErrorAlert(_ error: DadHiveError) {
-        SVProgressHUD.showError(withStatus: error.rawValue)
-        SVProgressHUD.setDefaultStyle(.dark)
-        SVProgressHUD.setDefaultMaskType(.gradient)
-        SVProgressHUD.setMinimumDismissTimeInterval(1)
-    }
-
-    func showHUD() {
-        SVProgressHUD.show()
-        UIApplication.shared.beginIgnoringInteractionEvents()
-        SVProgressHUD.setBackgroundColor(AppColors.darkGreen)
-        SVProgressHUD.setForegroundColor(UIColor.white)
-    }
-
-    func hideHUD() {
-        if SVProgressHUD.isVisible() {
-            SVProgressHUD.dismiss()
-        }
-        UIApplication.shared.endIgnoringInteractionEvents()
-    }
-
 }
 
 extension EditVC: UIPickerViewDelegate, UIPickerViewDataSource {

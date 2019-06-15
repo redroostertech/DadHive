@@ -1,15 +1,7 @@
-//
-//  AttributedString+Extensions.swift
-//  PopViewers
-//
-//  Created by Michael Westbrooks II on 4/25/18.
-//  Copyright © 2018 MVPGurus. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
-//  MARK:- Formatting
+// MARK: - NSMutableAttributedString
 extension NSMutableAttributedString {
     
     func makeBold(_ text: String, ofSize size: CGFloat) -> NSMutableAttributedString {
@@ -48,10 +40,6 @@ extension NSMutableAttributedString {
         append(string)
     }
     
-}
-
-//  MARK:- Manipulation
-extension NSMutableAttributedString {
     func addImage(_ image: String, andFont font: UIFont) {
         if let image = UIImage(named: image) {
             let attachment = NSTextAttachment()

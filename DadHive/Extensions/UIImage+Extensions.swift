@@ -1,16 +1,9 @@
-//
-//  UIImage+Extensions.swift
-//  boothnoire
-//
-//  Created by Michael Westbrooks on 10/5/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
 let imageCache = NSCache <AnyObject,AnyObject>()
-//  MARK:- Extensions for UIImageView
+
+// MARK: - UIImageView
 extension UIImageView {
     func makeCircular() {
         self.applyCornerRadius()

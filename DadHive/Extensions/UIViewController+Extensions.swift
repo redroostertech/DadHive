@@ -39,14 +39,14 @@ extension UIViewController {
     func updateNavigationBar(withBackgroundColor bgColor: UIColor?,
                              tintColor: UIColor?,
                              andText text: String?) {
-        if (self.navigationController != nil) {
-            self.navigationController?.navigationBar.isTranslucent = false
-            if bgColor != nil {
-                self.navigationController?.navigationBar.barTintColor = bgColor!
+        if let navigationcontroller = self.navigationController {
+            navigationcontroller.navigationBar.isTranslucent = false
+            if let bgcolor = bgColor {
+                navigationcontroller.navigationBar.barTintColor = bgcolor
             }
-            if tintColor != nil {
-                self.navigationController?.navigationBar.tintColor = tintColor!
-                self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: tintColor]
+            if let tintcolor = tintColor {
+                navigationcontroller.navigationBar.tintColor = tintcolor
+                navigationcontroller.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: tintcolor]
             }
             if text != nil {
                 updateNavigationBar(title: text!)
@@ -208,7 +208,6 @@ extension UIViewController {
 //    }
 
     func showToast(message : String) {
-
         let toastLabel = UILabel(frame: CGRect(x: 16, y: self.view.frame.size.height-150, width: self.view.frame.size.width - 32, height: 70))
         toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         toastLabel.textColor = UIColor.white
@@ -233,6 +232,7 @@ extension UIViewController {
         cell.textLabel?.text = ""
         return cell
     }
+    
 }
 
 extension UIViewController {

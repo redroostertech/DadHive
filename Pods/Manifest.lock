@@ -21,9 +21,7 @@ PODS:
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
   - CVCalendar (1.6.2)
-  - DatePicker (1.0.0):
-    - Extended (~> 1.0.4)
-  - Extended (1.0.5)
+  - DateTimePicker (2.1.3)
   - FBSDKCoreKit (4.41.0):
     - Bolts (~> 1.9)
   - FBSDKLoginKit (4.41.0):
@@ -231,6 +229,7 @@ PODS:
   - IQKeyboardManagerSwift (6.2.0)
   - Kingfisher (5.2.0)
   - leveldb-library (1.20)
+  - LGButton (1.1.6)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
@@ -255,7 +254,7 @@ DEPENDENCIES:
   - Cachable
   - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
   - CVCalendar
-  - DatePicker (= 1.0.0)
+  - DateTimePicker
   - Firebase (~> 5.0)
   - Firebase/AdMob (~> 5.0)
   - Firebase/Auth (~> 5.0)
@@ -271,6 +270,7 @@ DEPENDENCIES:
   - Hero
   - IQKeyboardManagerSwift
   - Kingfisher
+  - LGButton
   - ObjectMapper (~> 3.1)
   - Pulsator
   - SDWebImage
@@ -285,8 +285,7 @@ SPEC REPOS:
     - BoringSSL-GRPC
     - Cachable
     - CVCalendar
-    - DatePicker
-    - Extended
+    - DateTimePicker
     - FBSDKCoreKit
     - FBSDKLoginKit
     - Firebase
@@ -319,6 +318,7 @@ SPEC REPOS:
     - IQKeyboardManagerSwift
     - Kingfisher
     - leveldb-library
+    - LGButton
     - nanopb
     - ObjectMapper
     - Protobuf
@@ -352,8 +352,7 @@ SPEC CHECKSUMS:
   Cachable: af3b7624756db339513c83fedeac67b046f22638
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   CVCalendar: 515092247b9c5059855643c2a2220f259bd5417f
-  DatePicker: 7eb10cf9d75d2ff975e3724763d4df8f2cf96ce1
-  Extended: c463225e0c29b2823847866c1b106827772ac678
+  DateTimePicker: 1d34181c5e9cd6a32ca87174fdf66c9710e483ef
   FBSDKCoreKit: 974810fe3806173f3777c68062fa8ed6fa59b59d
   FBSDKLoginKit: 159a5c2eebe6a0774c3b128f5085128679233d2b
   Firebase: 355bd535bfdacaa82a7fe8d9784115edefd6fc03
@@ -386,6 +385,7 @@ SPEC CHECKSUMS:
   IQKeyboardManagerSwift: b07ccf9d8cafe993dcd6cb794eb4ba34611a0c4e
   Kingfisher: 07067cfacf371117330dceb4b4b8f5c4b691ab42
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
+  LGButton: 9f0a7f9d3030e3f504108342f6b66d64a429371b
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   ObjectMapper: 0d4402610f4e468903ae64629eec4784531e5c51
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
@@ -395,6 +395,6 @@ SPEC CHECKSUMS:
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
   TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: 3ce678c0e210bf39cc20beb7a0e5862baa4f0e62
+PODFILE CHECKSUM: 9ed80cc01a309f56660937d945f18e232dec5310
 
 COCOAPODS: 1.6.1

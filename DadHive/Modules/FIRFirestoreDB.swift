@@ -106,19 +106,6 @@ class FIRFirestoreDB {
             })
         }
     }
-
-    func addGeofireObject(forDocumentID id: String, atLat lat: Double, andLong long: Double, completion: @escaping ()-> Void) {
-        let geoPoint = GeoPoint(latitude: lat, longitude: long)
-        self.geoFire.setLocation(geopoint: geoPoint, forDocumentWithID: id, completion: { (error) in
-            if let err = error {
-                print(err.localizedDescription)
-                completion()
-            } else {
-                print("Saved location")
-                completion()
-            }
-        })
-    }
 }
 
 //  MARK:- All User Methods
@@ -166,78 +153,7 @@ extension FIRFirestoreDB {
             })
         }
     }
-
-    func retrieveUsersByLocation(atLat lat: Double, andLong long: Double, withRadius radius: Double, completion: @escaping() -> Void) {
-        let geoPoint = GeoPoint(latitude: lat, longitude: long)
-        let _ = self.geoFire.query(withCenter: geoPoint, radius: radius).observe(.documentEntered) { (id, location) in
-            if let id = id {
-                self.retrieveUserFromGeoPoint(withId: id, completion: { (success, document, error) in
-                    if var doc = document?.data() {
-                        doc["snapshotKey"] = document!.documentID
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: kAddUserObservationKey), object: nil, userInfo: ["user": doc])
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: kLoadFirstUserObservationKey), object: nil, userInfo: ["user": doc])
-                        completion()
-                    } else {
-                        completion()
-                    }
-                })
-            } else {
-                print("ID not available from geoquery.")
-                completion()
-            }
-        }
-    }
-
-    func retrieveUsersByLocationWithPagination(atLat lat: Double, andLong long: Double, withRadius radius: Double, completion: @escaping() -> Void) {
-        let geoPoint = GeoPoint(latitude: lat, longitude: long)
-        let limit = 20
-        if let lastUserKey = DefaultsManager().retrieveStringDefault(forKey: kLastUser) {
-            print("LastUserKey exists")
-            self.retrieveUser(withId: lastUserKey) {
-                (success, object, error) in
-                if error == nil, let document = object {
-                    let query = self.geoFire.query(withCenter: geoPoint, radius: radius)
-                    let _ = query.observeWithPagination(startingAtDocument: document, orderedByKey: "uid", withPreferences: nil, limitedTo: limit, .documentEntered, with: { (id, location) in
-                        if let id = id {
-                            self.retrieveUserFromGeoPoint(withId: id, completion: { (success, document, error) in
-                                if var doc = document?.data() {
-                                    doc["snapshotKey"] = document!.documentID
-                                    NotificationCenter.default.post(name: Notification.Name(rawValue: kAddUserObservationKey), object: nil, userInfo: ["user": doc])
-                                    completion()
-                                } else {
-                                    completion()
-                                }
-                            })
-                        } else {
-                            print("ID not available from geoquery.")
-                            completion()
-                        }
-                    })
-                } else {
-                    completion()
-                }
-            }
-        } else {
-            print("LastUserKey does not exists")
-            let _ = self.geoFire.query(withCenter: geoPoint, radius: radius).observeWithPagination(startingAtDocument: nil, orderedByKey: "uid", withPreferences: nil, limitedTo: limit, .documentEntered, with: { (id, location) in
-                if let id = id {
-                    self.retrieveUserFromGeoPoint(withId: id, completion: { (success, document, error) in
-                        if var doc = document?.data() {
-                            doc["snapshotKey"] = document!.documentID
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: kAddUserObservationKey), object: nil, userInfo: ["user": doc])
-                            completion()
-                        } else {
-                            completion()
-                        }
-                    })
-                } else {
-                    print("ID not available from geoquery.")
-                    completion()
-                }
-            })
-        }
-    }
-
+    
     private func retrieveUserFromGeoPoint(withId id: String, completion: @escaping(Bool, DocumentSnapshot?, Error?) -> Void) {
         self.retrieve(atDocument: id, from: kUsers) { (success, document, error) in
             if error == nil, let document = document {

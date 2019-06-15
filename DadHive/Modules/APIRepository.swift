@@ -16,14 +16,9 @@ class APIRepository {
         let urlString = path
         let method = method
         let parameters = parameters
-        let apiKey = api
-        let accessKey = access
+        /*let apiKey = api
+        let accessKey = access*/
         
-//        var headers = [
-//            "Accept": "application/json",
-//            "wsc-api-key": apiKey,
-//            "wsc-access-key": accessKey
-//        ]
         var headers = [
             "Accept": "application/json",
         ]

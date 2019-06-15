@@ -32,6 +32,7 @@ pod 'SVProgressHUD'
 pod 'Kingfisher'
 pod 'Pulsator'
 pod 'Hero'
-pod 'DatePicker', '1.0.0'
+pod 'DateTimePicker'
+pod 'LGButton'
 
 end

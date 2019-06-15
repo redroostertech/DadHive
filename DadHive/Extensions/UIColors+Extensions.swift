@@ -1,11 +1,3 @@
-//
-//  UIColors+Ext.swift
-//  boothnoire
-//
-//  Created by Michael Westbrooks on 8/26/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import UIKit
 

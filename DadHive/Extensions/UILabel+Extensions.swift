@@ -1,15 +1,6 @@
-//
-//  UILabel+Additions.swift
-//  boothnoire
-//
-//  Created by Michael Westbrooks on 8/29/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
-//  MARK:- Generic
 extension UILabel {
     func resizeAccordingToString() -> Void {
         guard let text = self.text else {

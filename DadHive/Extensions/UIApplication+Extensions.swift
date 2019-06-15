@@ -1,10 +1,3 @@
-//
-//  UIApplication+Extensions.swift
-//
-//  Created by Michael Westbrooks on 1/11/19.
-//  Copyright © 2019 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import UIKit
 

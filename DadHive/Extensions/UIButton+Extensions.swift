@@ -1,16 +1,7 @@
-//
-//  UIButton+Ext.swift
-//  boothnoire
-//
-//  Created by Michael Westbrooks on 8/26/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import ChameleonFramework
 
-//  MARK:- Generic
 extension UIButton {
 
     func makeCircular() {
@@ -57,11 +48,7 @@ extension UIButton {
         let xInset = (buttonSize.width - imageSize.width) / 2
         self.imageEdgeInsets = UIEdgeInsets(top: yInset, left: xInset, bottom: yInset, right: xInset)
     }
-    
-}
 
-//  MARK:- Wrappers
-extension UIButton {
     func setTitleWithAttributes(_ text: String?, withColor color: UIColor) {
         if let text = text {
             self.setText(text)

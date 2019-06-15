@@ -1,11 +1,3 @@
-//
-//  JSONStringToIntTransform.swift
-//  CheftHandedOwner
-//
-//  Created by Iziah Reid on 7/13/18.
-//  Copyright © 2018 NuraCode. All rights reserved.
-//
-
 import Foundation
 import ObjectMapper
 

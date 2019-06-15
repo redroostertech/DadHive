@@ -1,11 +1,3 @@
-//
-//  UIDevice+Extensions.swift
-//  PopViewers
-//
-//  Created by Michael Westbrooks on 3/27/18.
-//  Copyright © 2018 MVPGurus. All rights reserved.
-//
-
 import Foundation
 import UIKit
 

@@ -1,11 +1,3 @@
-//
-//  DateFormatter+Extensions.swift
-//  test
-//
-//  Created by Michael Westbrooks on 11/14/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 
 extension DateFormatter {
@@ -19,14 +11,6 @@ extension DateFormatter {
         return formattedCurrentTime.range(of: formatter.amSymbol) == nil && formattedCurrentTime.range(of: formatter.pmSymbol) == nil
     }
     
-//    public class func getFormattedDate(_ date: String) -> String {
-//        return self.stringWithFormatEEEMMMddy(forTimestamp: date)
-//    }
-//    
-//    public class func getFormattedTime(_ date: String) -> String {
-//        return self.DateFormatter.stringWithLocalizedTimeFormat(forTimestamp: date)
-//    }
-//    
     public class func stringWithFormatMMMDDCOMMAYYYY(_ date: String, timeZone: TimeZone) -> String {
         if let date = dateWithFormatMMMDDCOMMAYYYY(date, timeZone: timeZone) {
             let dateFormatter = DateFormatter()

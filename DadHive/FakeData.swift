@@ -1,11 +1,3 @@
-//
-//  FakeData.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 2/3/19.
-//  Copyright © 2019 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import Firebase
 

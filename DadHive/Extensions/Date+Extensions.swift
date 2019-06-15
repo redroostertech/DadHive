@@ -1,14 +1,6 @@
-//
-//  Date+Ext.swift
-//  boothnoire
-//
-//  Created by Michael Westbrooks on 9/23/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 
-//  MARK:- Custom date formats
+//  MARK:- CustomDateFormat
 enum CustomDateFormat: String {
     case normal = "MMMM dd YYYY"
     case abbr = "MMM d YY"
@@ -20,9 +12,10 @@ enum CustomDateFormat: String {
     case abbrMonth = "MMM"
     case timeDate = "yyyy-MM-dd'T'HH:mm:ssZ"
     case regular = "yyyy-MM-dd hh:mm a"
+    case new = "@ hh:mm a"
 }
 
-//  MARK:- Initializers
+//  MARK:- Date initializers
 extension Date {
     public init?(day: Int, month: Int, year: Int) {
         guard let date = Calendar.current.date(from: DateComponents(year: year, month: month, day: day)) else { return nil }

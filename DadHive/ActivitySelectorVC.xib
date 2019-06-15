@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ActivitySelectorVC" customModule="DadHive" customModuleProvider="target">
+            <connections>
+                <outlet property="cancelButton" destination="jY7-Ve-3ua" id="d8x-NI-XQf"/>
+                <outlet property="findHiveButton" destination="9EI-0S-wQs" id="2UF-zo-BpJ"/>
+                <outlet property="startHiveButton" destination="ojh-ls-cx7" id="S7r-Pz-5FN"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9EI-0S-wQs" customClass="LGButton" customModule="LGButton">
+                    <rect key="frame" x="0.0" y="36" width="375" height="50"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="eGx-fA-xvt"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="titleString" value="Find a Hive"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="titleColor">
+                            <color key="value" cocoaTouchSystemColor="darkTextColor"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                            <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="leftAligned" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="findHiveAction:" destination="-1" eventType="touchUpInside" id="rvh-ps-Te3"/>
+                    </connections>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jY7-Ve-3ua" customClass="LGButton" customModule="LGButton">
+                    <rect key="frame" x="0.0" y="136" width="375" height="50"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="fbI-7B-9qc"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="titleString" value="Cancel"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="titleColor">
+                            <color key="value" cocoaTouchSystemColor="darkTextColor"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                            <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="leftAligned" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="cancelAction:" destination="-1" eventType="touchUpInside" id="dmq-Oa-6ku"/>
+                    </connections>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h0m-Gz-sDB">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="36"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="36" id="fYN-it-fPO"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ojh-ls-cx7" customClass="LGButton" customModule="LGButton">
+                    <rect key="frame" x="0.0" y="86" width="375" height="50"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="RLX-n0-3kh"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="titleString" value="Start a Hive"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="titleColor">
+                            <color key="value" cocoaTouchSystemColor="darkTextColor"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                            <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="leftAligned" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="startHiveAction:" destination="-1" eventType="touchUpInside" id="aJR-lQ-p7k"/>
+                    </connections>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="9EI-0S-wQs" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="1PN-Tu-fkG"/>
+                <constraint firstItem="jY7-Ve-3ua" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="32H-bb-2sy"/>
+                <constraint firstItem="h0m-Gz-sDB" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="VHE-vz-WtR"/>
+                <constraint firstItem="ojh-ls-cx7" firstAttribute="top" secondItem="9EI-0S-wQs" secondAttribute="bottom" id="Xws-b6-8JM"/>
+                <constraint firstItem="jY7-Ve-3ua" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="eyM-kt-D2g"/>
+                <constraint firstItem="jY7-Ve-3ua" firstAttribute="top" secondItem="ojh-ls-cx7" secondAttribute="bottom" id="f4v-wW-3e5"/>
+                <constraint firstItem="h0m-Gz-sDB" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="ffl-M2-iH8"/>
+                <constraint firstItem="9EI-0S-wQs" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="kot-DC-HBs"/>
+                <constraint firstItem="ojh-ls-cx7" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="mVt-4I-Umk"/>
+                <constraint firstItem="h0m-Gz-sDB" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="nem-jL-84I"/>
+                <constraint firstItem="9EI-0S-wQs" firstAttribute="top" secondItem="h0m-Gz-sDB" secondAttribute="bottom" id="u4L-NF-xlP"/>
+                <constraint firstItem="ojh-ls-cx7" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="uMX-HC-e8P"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="136.80000000000001" y="146.17691154422789"/>
+        </view>
+    </objects>
+</document>

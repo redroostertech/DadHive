@@ -19,6 +19,8 @@ enum Errors: Error {
     
     //  Add additional custom errors as needed
     //  ...
+    case LocationAccessDisabled
+    case NotificationAccessDisabled
 
 }
 
@@ -40,6 +42,10 @@ extension Errors: LocalizedError {
             return NSLocalizedString("\(Errors.self)_\(self)", tableName: String(describing: self), bundle: Bundle.main, value: "You have reached the maximum numbebr of swipes today. Either upgrade for unlimited swipes or come back tomorrow.", comment: "")
         case .NoMoreUsersAvailable:
             return NSLocalizedString("\(Errors.self)_\(self)", tableName: String(describing: self), bundle: Bundle.main, value: "No more users in your area.", comment: "")
+        case .LocationAccessDisabled:
+            return NSLocalizedString("\(Errors.self)_\(self)", tableName: String(describing: self), bundle: Bundle.main, value: DadHiveError.locationAccessDisabled.rawValue, comment: "")
+        case .NotificationAccessDisabled:
+            return NSLocalizedString("\(Errors.self)_\(self)", tableName: String(describing: self), bundle: Bundle.main, value: DadHiveError.notificationAccessDisabled.rawValue, comment: "")
         }
     }
 }

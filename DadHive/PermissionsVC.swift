@@ -11,43 +11,33 @@ class PermissionsVC: UIViewController {
 
     let notificationCenter = NotificationCenter.default
     let notificationManager = NotificationsManagerModule.shared
+    let locationManager = LocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        notificationCenter.addObserver(self,
-                                       selector: #selector(PermissionsVC.observeLocationAccessCheck(_:)),
-                                       name: Notification.Name(rawValue: kLocationAccessCheckObservationKey),
-                                       object: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(PermissionsVC.saveLocation(_:)),
-                                       name: Notification.Name(rawValue: kSaveLocationObservationKey),
-                                       object: nil)
         notificationCenter.addObserver(self,
                                        selector: #selector(PermissionsVC.observeNotificationsAccessCheck(_:)),
                                        name: Notification.Name(rawValue: kNotificationAccessCheckObservationKey),
                                        object: nil)
+        locationManager.delegate = self
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        LocationManagerModule.shared.getLocationAccess { (access) in
-            self.updateLocationButton(access: access)
-        }
+        super.viewDidAppear(animated)
+        updateLocationButton(access: locationManager.isAuthorizationGranted)
 
         notificationManager.getNotificationAccess { (access) in
             self.updateNotificationButton(access: access)
         }
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        notificationCenter.removeObserver(self, name: Notification.Name(rawValue: kNotificationAccessCheckObservationKey), object: nil)
+    }
 
     @IBAction func enableLocation(_ sender: UIButton) {
-        LocationManagerModule.shared.checkLocationPermissions { (error) in
-            if let error = error {
-                self.showErrorAlert(error)
-            } else {
-                LocationManagerModule.shared.requestLocation()
-                print("Check location permissions finished")
-            }
-        }
+        locationManager.checkPermissions()
     }
 
     @IBAction func enableNotification(_ sender: UIButton) {
@@ -64,25 +54,9 @@ class PermissionsVC: UIViewController {
         CurrentUser.shared.user?.setInitialState(true, {
             (error) in
             if error == nil {
-                FIRAuthentication.checkIsSessionActive()
+                FIRAuthentication.checkSession()
             }
         })
-    }
-
-    @objc
-    func observeLocationAccessCheck(_ notification: Notification) {
-        if let access = notification.userInfo?["access"] as? Bool {
-            self.updateLocationButton(access: access)
-        } else {
-            self.updateLocationButton(access: false)
-        }
-    }
-
-    @objc
-    func saveLocation(_ notification: Notification) {
-        LocationManagerModule.shared.getUserLocation { (location) in
-           print("Location is \(location)")
-        }
     }
 
     @objc
@@ -107,5 +81,27 @@ class PermissionsVC: UIViewController {
             self.btnEnableNotification.setTextColor(access ? kEnabledTextColor : kDisabledTextColor)
         }
         CurrentUser.shared.user?.setNotificationToggle(access)
+    }
+}
+
+// MARK: - LocationManagerDelegate
+extension PermissionsVC: LocationManagerDelegate {
+    func didRetrieveStatus(_ manager: LocationManager, authorizationStatus: Bool) {
+        self.updateLocationButton(access: authorizationStatus)
+        manager.start()
+    }
+    
+    func willRetrieveLocation(_ manager: LocationManager, location: LocationObject, center: LocationCenter, data: Any?) {
+        if let _data = data as? [String: Any], let location = Location(JSON: _data) {
+            CurrentUser.shared.user?.setLocation(location, { (error) in
+                if let err = error {
+                    print(err.localizedDescription)
+                }
+            })
+        }
+    }
+    
+    func willShowError(_ manager: LocationManager, error: Error) {
+        self.showAlertErrorIfNeeded(error: error)
     }
 }

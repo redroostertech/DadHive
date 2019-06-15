@@ -1,7 +1,7 @@
 import UIKit
-import FirebaseAuth
-import APESuperHUD
-import SVProgressHUD
+
+private var videoBackground: VideoBackground?
+private var authenticationSwitch: AnimatedSegmentSwitch?
 
 class ViewController: UIViewController {
 
@@ -12,19 +12,17 @@ class ViewController: UIViewController {
     @IBOutlet private var btnDelete: UIButton!
     @IBOutlet private var txtEmail: UITextField!
 
-    var videobackground: VideoBackground?
-    
-    var authenticationSwitch: AnimatedSegmentSwitch?
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         btnGenerate.isHidden = true
         btnDelete.isHidden = true
 
-        videobackground = VideoBackground(withPathFromBundle: "DadHiveBG-Vid", ofFileType: "mp4", forView: self.view)
-        videobackground?.isLoopingEnabled = true
-        videobackground?.videoOverlayColor = .white
+        videoBackground = VideoBackground(withPathFromBundle: "DadHiveBG-Vid", ofFileType: "mp4", forView: self.view)
+        if let videobackground = videoBackground {
+            videobackground.isLoopingEnabled = true
+            videobackground.videoOverlayColor = .white
+        }
 
         setupSuperHUD()
         loadGDPR()
@@ -37,27 +35,33 @@ class ViewController: UIViewController {
                     textField.clearsOnBeginEditing = true
                 }
             }
-
-            self.btnAuthenticate.applyCornerRadius()
-            self.btnAuthenticate.addGradientLayer(using: kAppCGColors)
-            self.btnAuthenticate.setText(kLoginText)
-            
         }
+        
+        btnAuthenticate.applyCornerRadius()
+        btnAuthenticate.addGradientLayer(using: kAppCGColors)
+        btnAuthenticate.setText(kLoginText)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        videobackground?.displayVideo()
-        videobackground?.play()
+        if let videobackground = videoBackground {
+            videobackground.show()
+            videobackground.play()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        videobackground?.destroy()
+        if let videobackground = videoBackground {
+            videobackground.destroy()
+        }
     }
 
     @IBAction func authenticate(_ sender: UIButton) {
-        guard let email = txtEmail.text, let password = txtPassword.text, let credentials = AuthCredentials(JSON: ["email": email, "password": password]), credentials.isValid() == true else {
+        guard let email = txtEmail.text,
+            let password = txtPassword.text,
+            let credentials = AuthCredentials(JSON: ["email": email, "password": password]),
+            credentials.isValid()else {
             return showErrorAlert(message: DadHiveError.signInCredentialsError.rawValue)
         }
         login(withCredentials: credentials)
@@ -71,15 +75,14 @@ class ViewController: UIViewController {
         FakeDataGenerator().deleteFakeUsers()
     }
 
-
     func login(withCredentials credentials: AuthCredentials) {
         showHUD("Logging In")
         FIRAuthentication.login(credentials: credentials) { (error) in
             if let err = error {
-                self.dismissHUD()
+                self.hideHUD()
                 self.showAlertErrorIfNeeded(error: err)
             } else {
-                FIRAuthentication.checkIsSessionActive()
+                FIRAuthentication.checkSession()
             }
         }
     }

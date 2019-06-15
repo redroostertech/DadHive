@@ -1,11 +1,3 @@
-//
-//  EditVC.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 12/31/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 import SVProgressHUD
 
@@ -30,6 +22,8 @@ class EditVC: UIViewController {
     var kidsCount = [1, 2, 3, 4, 5, 6, 7, 8]
     var selectedKidsCount = 0
     var type: EditVCPickerViewTypesString?
+    
+    let locationManager = LocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +41,7 @@ class EditVC: UIViewController {
             showAgeRangePicker()
             DispatchQueue.global(qos: .background).async {
                 FIRFirestoreDB.shared.retrieve(from: kAgeRange) { (success, documents, error) in
-                    if let err = error {
+                    if let _ = error {
                         print("Was unable to get ageRanges")
                     } else {
                         if let docs = documents, docs.count > 0 {
@@ -70,36 +64,15 @@ class EditVC: UIViewController {
         }
 
         if let type = userInfo?.type, type == "location" {
+            locationManager.delegate = self
             self.btnSave.setText("Update Location")
             self.btnSave.addTarget(self, action: #selector(EditVC.updateLocation), for: .touchUpInside)
         } else {
             self.btnSave.setText("Update \(userInfo?.title ?? "")")
             self.btnSave.addTarget(self, action: #selector(EditVC.updateProfile), for: .touchUpInside)
         }
-
-        notificationCenter.addObserver(self,
-                                       selector: #selector(EditVC.saveLocation(_:)),
-                                       name: Notification.Name(rawValue: kSaveLocationObservationKey),
-                                       object: nil)
     }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        notificationCenter.removeObserver(self, name: Notification.Name(rawValue: kSaveLocationObservationKey), object: nil)
-    }
-
-    @objc
-    func updateLocation() {
-        showHUD()
-        LocationManagerModule.shared.checkLocationPermissions { (error) in
-            if let error = error {
-                self.showErrorAlert(error)
-            } else {
-                LocationManagerModule.shared.requestLocation()
-                print("Check location permissions finished")
-            }
-        }
-    }
-
+    
     @objc
     func updateProfile() {
         showHUD()
@@ -144,21 +117,6 @@ class EditVC: UIViewController {
             userInfo.info = txtField.text
         } else {
             self.showError("Field cannot be empty.")
-        }
-    }
-
-    @objc
-    func saveLocation(_ notification: Notification) {
-        LocationManagerModule.shared.getUserLocation {
-            (location) in
-            if let _ = location {
-                DispatchQueue.main.async {
-                    self.hideHUD()
-                    self.popViewController()
-                }
-            } else {
-                self.showErrorAlert(DadHiveError.noMoreUsersAvailable)
-            }
         }
     }
 
@@ -279,6 +237,7 @@ class EditVC: UIViewController {
 
 }
 
+// MARK: - UIPickerViewDelegate, UIPickerViewDataSource
 extension EditVC: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -302,5 +261,38 @@ extension EditVC: UIPickerViewDelegate, UIPickerViewDataSource {
         case .KidsCount:
             return "\(String(describing: kidsCount[row]) == "8" ? "7+": String(describing: kidsCount[row]))"
         }
+    }
+}
+
+// MARK: - LocationManagerDelegate
+extension EditVC: LocationManagerDelegate {
+    
+    @objc
+    func updateLocation() {
+        showHUD()
+        locationManager.checkPermissions()
+    }
+
+    func didRetrieveStatus(_ manager: LocationManager, authorizationStatus: Bool) {
+        manager.start()
+    }
+    
+    func willRetrieveLocation(_ manager: LocationManager, location: LocationObject, center: LocationCenter, data: Any?) {
+        if let _data = data as? [String: Any], let location = Location(JSON: _data) {
+            CurrentUser.shared.user?.setLocation(location, { (error) in
+                if let err = error {
+                    print(err.localizedDescription)
+                } else {
+                    DispatchQueue.main.async {
+                        self.hideHUD()
+                        self.popViewController()
+                    }
+                }
+            })
+        }
+    }
+    
+    func willShowError(_ manager: LocationManager, error: Error) {
+        self.showAlertErrorIfNeeded(error: error)
     }
 }

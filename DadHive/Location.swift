@@ -1,11 +1,3 @@
-//
-//  Location.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 2/8/19.
-//  Copyright © 2019 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import ObjectMapper
 

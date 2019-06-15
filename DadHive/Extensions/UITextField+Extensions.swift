@@ -1,14 +1,15 @@
-//
-//  UITextField+Additions.swift
-//  Gumbo
-//
-//  Created by Michael Westbrooks on 7/18/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 
 extension UITextField {
+    @IBInspectable var placeHolderColor: UIColor? {
+        get {
+            return self.placeHolderColor
+        }
+        set {
+            self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : "", attributes:[NSAttributedStringKey.foregroundColor: newValue!])
+        }
+    }
+    
     func addLeftPadding(withWidth width: CGFloat) {
         let padding = UIView(frame: CGRect(x: 0,
                                                y: 0,
@@ -35,14 +36,5 @@ extension UITextField {
 
         print("Size of UIElement \(sender)")
         print(sender.frame.width)
-    }
-
-    @IBInspectable var placeHolderColor: UIColor? {
-        get {
-            return self.placeHolderColor
-        }
-        set {
-            self.attributedPlaceholder = NSAttributedString(string:self.placeholder != nil ? self.placeholder! : "", attributes:[NSAttributedStringKey.foregroundColor: newValue!])
-        }
     }
 }

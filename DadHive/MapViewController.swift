@@ -1,48 +1,49 @@
 import UIKit
 import MapKit
+import LGButton
 
-private let kUserMapPinImage = UIImage(named: "unknown")!.resize(withWidth: 32)
-private let kUserMapAnimationTime = 0.300
 private let kUserAnnotationName = "kUserAnnotationName"
 
 class MapViewController: UIViewController {
     
-    @IBOutlet weak var toggleButton: UIButton!
+    @IBOutlet private weak var toggleButton: LGButton!
+    @IBOutlet private weak var actionSectionContainer: UIView!
+    @IBOutlet private weak var mapView: MKMapView!
+    @IBOutlet private weak var recenterButton: UIButton!
     
-    var map: MKMapView!
-    var users: Users?
     var apiRepository = APIRepository()
+    var users = [User]()
     var annotations = [MKAnnotation]()
-    
+    let locationManager = LocationManager()
+    let notificationCenter = NotificationCenter.default
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        map = MKMapView(frame: view.frame)
-        view.addSubview(map)
-        map.delegate = self
-        map.showsUserLocation = true
-        map.showsPointsOfInterest = true
+        locationManager.delegate = self
+        locationManager.checkPermissions()
+        recenterButton.applyCornerRadius()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        retrieveUsers()
+    @IBAction func toogleButtonAction(_ sender: LGButton) {
+        let destination = ActivitySelectorVC(nibName: "ActivitySelectorVC", bundle: nil)
+        destination.activitySelectorDelegate = self
+        destination.modalPresentationStyle = .overFullScreen
+        destination.modalTransitionStyle = .coverVertical
+        self.present(destination, animated: true, completion: nil)
     }
     
-    @IBAction func toggleButtonAction(_ sender: UIButton) {
-        toggleAction(sender)
+    @IBAction func recenterButtonAction(_ sender: UIButton) {
+        mapView(mapView, didUpdate: mapView.userLocation)
     }
 }
 
-// MARK: - Methods
+// MARK: - Class methods
 extension MapViewController {
-    func toggleAction(_ sender: UIButton) {
-        
-    }
-    
-    func retrieveUsers() {
+    func retrieveUsers(_ sender: LGButton) {
         showHUD("Finding Users", withDuration: 30.0)
         loadUsers { (error, results) in
             self.dismissHUD()
+            sender.isLoading = false
             if let err = error {
                 print(err.localizedDescription)
                 self.showErrorAlert(DadHiveError.noMoreUsersAvailable)
@@ -55,8 +56,8 @@ extension MapViewController {
                         let annotation = UserAnnotation(user: user)
                         self.annotations.append(annotation)
                     }
-                    //self.map.removeAnnotations(self.map.annotations)
-                    self.map.addAnnotations(self.annotations)
+                    self.mapView.removeAnnotations(self.mapView.annotations)
+                    self.mapView.addAnnotations(self.annotations)
                 } else {
                     self.showErrorAlert(DadHiveError.noMoreUsersAvailable)
                 }
@@ -109,22 +110,30 @@ extension MapViewController {
     }
 }
 
+// MARK: - ActivitySelectorDelegate
+extension MapViewController: ActivitySelectorDelegate {
+    func didStartHive(_ viewController: UIViewController, button: LGButton) {
+        print("didStartHive")
+        toggleButton.titleString = button.titleString
+    }
+    
+    func didFindHive(_ viewController: UIViewController, button: LGButton) {
+        print("didFindHive")
+        retrieveUsers(button)
+        toggleButton.titleString = button.titleString
+    }
+    
+    func didCancel(_ viewController: UIViewController, button: LGButton) {
+        print("didCancel")
+    }
+}
+
 // MARK: - MKMapViewDelegate
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        guard let currentUser = CurrentUser.shared.user else {
-            return
-        }
-        
-        guard let long = currentUser.settings?.location?.addressLong, let lat = currentUser.settings?.location?.addressLat else {
-            return
-        }
-        guard let longDegrees = CLLocationDegrees(exactly: long), let latDegrees = CLLocationDegrees(exactly: lat) else {
-            return
-        }
-        let center = CLLocationCoordinate2D(latitude: latDegrees, longitude: longDegrees)
-        let visibleRegion = MKCoordinateRegionMakeWithDistance(center, 1000, 1000)
-        self.map.setRegion(self.map.regionThatFits(visibleRegion), animated: true)
+        guard let currentUser = CurrentUser.shared.user else { return }
+        let visibleRegion = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 5000, 5000)
+        mapView.setRegion(mapView.regionThatFits(visibleRegion), animated: true)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -153,114 +162,24 @@ extension MapViewController: UserDetailMapViewDelegate {
     }
 }
 
-class UserAnnotation: NSObject, MKAnnotation {
-    var user: User
-    var coordinate: CLLocationCoordinate2D {
-        guard let long = user.settings?.location?.addressLong, let lat = user.settings?.location?.addressLat else {
-            return CLLocationCoordinate2D(latitude: CLLocationDegrees.zero, longitude: CLLocationDegrees.zero)
-        }
-        guard let longDegrees = CLLocationDegrees(exactly: long), let latDegrees = CLLocationDegrees(exactly: lat) else {
-            return CLLocationCoordinate2D(latitude: CLLocationDegrees.zero, longitude: CLLocationDegrees.zero)
-        }
-        return CLLocationCoordinate2D(latitude: longDegrees, longitude: latDegrees)
+// MARK: - LocationManagerDelegate
+extension MapViewController: LocationManagerDelegate {
+    func didRetrieveStatus(_ manager: LocationManager, authorizationStatus: Bool) {
+        print("Authorization Status: \(authorizationStatus)")
+        manager.start()
     }
     
-    init(user: User) {
-        self.user = user
-        super.init()
-    }
-    
-    var title: String? {
-        return user.name?.fullName
-    }
-    
-    var subTitle: String? {
-        return user.kidsNames
-    }
-}
-
-class UserAnnotationView: MKAnnotationView {
-    weak var userDetailDelegate: UserDetailMapViewDelegate?
-    weak var customCalloutView: UserDetailMapView?
-    override var annotation: MKAnnotation? {
-        willSet { customCalloutView?.removeFromSuperview() }
-    }
-    
-    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
-        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        self.canShowCallout = false
-        self.image = kUserMapPinImage
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.canShowCallout = false // This is important: Don't show default callout.
-        self.image = kUserMapPinImage
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        if selected {
-            self.customCalloutView?.removeFromSuperview() // remove old custom callout (if any)
-            
-            if let newCustomCalloutView = loadUserDetailMapView() {
-                // fix location from top-left to its right place.
-                newCustomCalloutView.frame.origin.x -= newCustomCalloutView.frame.width / 2.0 - (self.frame.width / 2.0)
-                newCustomCalloutView.frame.origin.y -= newCustomCalloutView.frame.height
-                
-                // set custom callout view
-                self.addSubview(newCustomCalloutView)
-                self.customCalloutView = newCustomCalloutView
-                
-                // animate presentation
-                if animated {
-                    self.customCalloutView!.alpha = 0.0
-                    UIView.animate(withDuration: kUserMapAnimationTime, animations: {
-                        self.customCalloutView!.alpha = 1.0
-                    })
+    func willRetrieveLocation(_ manager: LocationManager, location: LocationObject, center: LocationCenter, data: Any?) {
+        if let _data = data as? [String: Any], let location = Location(JSON: _data) {
+            CurrentUser.shared.user?.setLocation(location, { (error) in
+                if let err = error {
+                    print(err.localizedDescription)
                 }
-            }
-        } else {
-            if customCalloutView != nil {
-                if animated { // fade out animation, then remove it.
-                    UIView.animate(withDuration: kUserMapAnimationTime, animations: {
-                        self.customCalloutView!.alpha = 0.0
-                    }, completion: { (success) in
-                        self.customCalloutView!.removeFromSuperview()
-                    })
-                } else { self.customCalloutView!.removeFromSuperview() } // just remove it.
-            }
+            })
         }
     }
     
-    func loadUserDetailMapView() -> UserDetailMapView? {
-        if let views = Bundle.main.loadNibNamed("UserDetailMapView", owner: self, options: nil) as? [UserDetailMapView], views.count > 0 {
-            let userDetailMapView = views.first!
-            userDetailMapView.delegate = self.userDetailDelegate
-            if let userAnnotation = annotation as? UserAnnotation {
-                let user = userAnnotation.user
-                userDetailMapView.configureWithUser(user: user)
-            }
-            return userDetailMapView
-        }
-        return nil
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.customCalloutView?.removeFromSuperview()
-    }
-    
-    // MARK: - Detecting and reaction to taps on custom callout.
-    
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        // if super passed hit test, return the result
-        if let parentHitView = super.hitTest(point, with: event) { return parentHitView }
-        else { // test in our custom callout.
-            if customCalloutView != nil {
-                return customCalloutView!.hitTest(convert(point, to: customCalloutView!), with: event)
-            } else { return nil }
-        }
+    func willShowError(_ manager: LocationManager, error: Error) {
+        self.showAlertErrorIfNeeded(error: error)
     }
 }

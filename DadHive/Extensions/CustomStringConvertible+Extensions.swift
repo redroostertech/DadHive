@@ -1,11 +1,3 @@
-//
-//  CustomStringConvertible.swift
-//  Wisk_App
-//
-//  Created by Michael Westbrooks on 5/28/18.
-//  Copyright © 2018 redroostertechnologiesinc. All rights reserved.
-//
-
 import Foundation
 
 extension CustomStringConvertible {
@@ -19,20 +11,6 @@ extension CustomStringConvertible {
         }
         return description
     }
-    
-//    public var toDict: [String: Any] {
-//        var dictionary: [String: Any] = [String: Any]()
-//        let selfMirror = Mirror(reflecting: self)
-//        for child in selfMirror.children {
-//            if let propertyName = child.label {
-//                if !(child.value is [String: Any]) && child.value is Name || child.value is [Info] || child.value is [Media] || child.value is PaymentMethod || child.value is Settings {
-//                    dictionary[propertyName] = (child.value as AnyObject).toDict
-//                }
-//                dictionary[propertyName] = child.value
-//            }
-//        }
-//        return dictionary
-//    }
 }
 
 extension Encodable {

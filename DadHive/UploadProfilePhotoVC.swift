@@ -1,14 +1,13 @@
 import UIKit
 import Firebase
-import APESuperHUD
+
+private var imagePicker: UIImagePickerController?
 
 class UploadProfilePhotoVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
     @IBOutlet private weak var imgMain: UIImageView!
     @IBOutlet private weak var btnContinue: UIButton!
-
-    var imagePicker: UIImagePickerController?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         imgMain.applyCornerRadius()
@@ -17,17 +16,19 @@ class UploadProfilePhotoVC: UIViewController, UINavigationControllerDelegate, UI
         btnContinue.isHidden = true
         
         imagePicker = UIImagePickerController()
-        imagePicker?.delegate = self
-        imagePicker?.allowsEditing = false
-        imagePicker?.sourceType = .photoLibrary
-        if let mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary) {
-            imagePicker?.mediaTypes = mediaTypes
+        if let imagepicker = imagePicker {
+            imagepicker.delegate = self
+            imagepicker.allowsEditing = false
+            imagepicker.sourceType = .photoLibrary
+            if let mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary) {
+                imagepicker.mediaTypes = mediaTypes
+            }
         }
     }
     
     @IBAction func takePhoto(_ sender: UIButton) {
-        guard let imagePicker = imagePicker else { return }
-        present(imagePicker, animated: true, completion: nil)
+        guard let imagepicker = imagePicker else { return }
+        present(imagepicker, animated: true, completion: nil)
     }
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -112,5 +113,4 @@ class UploadProfilePhotoVC: UIViewController, UINavigationControllerDelegate, UI
     private func reset() {
         self.imgMain.image = UIImage(named: "unknown")
     }
-
 }

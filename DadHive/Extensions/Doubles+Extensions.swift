@@ -1,11 +1,3 @@
-//
-//  Doubles+Extensions.swift
-//  test
-//
-//  Created by Michael Westbrooks on 10/13/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 
 extension Double {

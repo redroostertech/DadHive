@@ -303,11 +303,11 @@
 				BA8D93CE21D2894C003A76FC /* DadHive.entitlements */,
 				9BAEE4111FC309920034356D /* AppDelegate.swift */,
 				BA8D933821CF01BE003A76FC /* Configuration.swift */,
-				BA714EE622AD6A2300B32BA8 /* LocationSearchVC.swift */,
-				BA714EE722AD6A2300B32BA8 /* LocationSearchVC.xib */,
 				9BAEE41D1FC309920034356D /* LaunchScreen.storyboard */,
 				9BAEE4151FC309920034356D /* Main.storyboard */,
 				BA63D2E921D7D948002BD8CF /* LaunchVC.swift */,
+				BA714EE622AD6A2300B32BA8 /* LocationSearchVC.swift */,
+				BA714EE722AD6A2300B32BA8 /* LocationSearchVC.xib */,
 				BAF9F85222AC06B3002F17F3 /* MapViewController.swift */,
 				BA714EE422AD60B200B32BA8 /* StartHiveVC.swift */,
 				BA714EEC22B18A3900B32BA8 /* UserAnnotation.swift */,
@@ -412,7 +412,8 @@
 			isa = PBXGroup;
 			children = (
 				BA8D936121CF2FBC003A76FC /* CurrentUser.swift */,
-				BAF6B2BE2219DB6500D39C52 /* Chat */,
+				BA8D936221CF2FBE003A76FC /* Conversation.swift */,
+				BAF6B2BC2219DB4700D39C52 /* Message.swift */,
 				BAF6B2C02219DBAB00D39C52 /* User */,
 				BAF6B2BA2219DB3100D39C52 /* Match.swift */,
 				BA8D936421CF2FC0003A76FC /* AuthCredentials.swift */,
@@ -511,15 +512,6 @@
 				BA8D93AE21D02AAF003A76FC /* DHCarouselImage.xib */,
 			);
 			path = "Carousel Image";
-			sourceTree = "<group>";
-		};
-		BAF6B2BE2219DB6500D39C52 /* Chat */ = {
-			isa = PBXGroup;
-			children = (
-				BA8D936221CF2FBE003A76FC /* Conversation.swift */,
-				BAF6B2BC2219DB4700D39C52 /* Message.swift */,
-			);
-			name = Chat;
 			sourceTree = "<group>";
 		};
 		BAF6B2BF2219DBA400D39C52 /* Settings */ = {

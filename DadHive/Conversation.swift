@@ -1,47 +1,37 @@
-//
-//  Conversation.swift
-//  boothnoire
-//
-//  Created by Michael Westbrooks on 10/10/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import ObjectMapper
 import Firebase
 
 class Conversations: Mappable {
     var conversations: [Conversation]?
+    var count: Int?
 
     required init?(map: Map) { }
 
     func mapping(map: Map) {
+        self.count <- map["count"]
         self.conversations <- map["conversations"]
     }
 }
 
 public class Conversation: Mappable, CustomStringConvertible {
 
-    var key: String?
+    var _id: String?
     var id: String?
-    var senderId: String?
-    var recipientId: String?
+    var participants: [String]?
     var createdAt: String?
     var updatedAt: String?
-    var trueRecipient: User?
-    var lastMessage: Message?
+    var lastMessageId: String?
 
     required public init?(map: Map) { }
     
     public func mapping(map: Map) {
-        key <- map["key"]
+        _id <- map["_id"]
         id <- map["id"]
-        senderId <- map["senderId"]
-        recipientId <- map["recipientId"]
+        participants <- map["participants"]
         createdAt <- map["createdAt"]
         updatedAt <- map["updatedAt"]
-        trueRecipient <- map["trueRecipient"]
-        lastMessage <- map["lastMessage"]
+        lastMessageId <- map["lastMessageId"]
     }
 
     var conversationDate: Date? {

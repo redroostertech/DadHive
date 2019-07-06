@@ -1,35 +1,49 @@
-//
-//  User.swift
-//  Gumbo
-//
-//  Created by Michael Westbrooks on 9/17/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import ObjectMapper
 import Firebase
 
 class Users: Mappable {
     var users: [User]?
-
     required init?(map: Map) { }
-
     func mapping(map: Map) {
         self.users <- map["users"]
     }
 }
 
+// MARK: - Private properties
+private var timestamp: String?
+private var dob: String?
+private var swipeDateTimestamp: String?
+
+private func getDate(fromString dateString: String) -> Date? {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.timeZone = TimeZone.current
+    formatter.dateFormat = CustomDateFormat.regular.rawValue
+    guard let date = formatter.date(from: dateString) else {
+        return nil
+    }
+    return date
+}
+
 class User: Mappable, CustomStringConvertible {
 
+    // MARK: - Public properties
     var key: String?
     var uid: String?
     var id: String?
     var name: Name?
-    private var timestamp: String?
     var email: String?
     var type: Double?
     var settings: Settings?
+    var canSwipe: Bool?
+    var profileCreation: Bool?
+    var currentPage: Int?
+    var docId: String?
+    var lastId: String?
+    var matches: [String]?
+    
+    // MARK: - Public computed properties
     var media: [Media]? {
         didSet {
             guard let mediaArray = self.media, mediaArray.count > 0 else { return }
@@ -47,7 +61,6 @@ class User: Mappable, CustomStringConvertible {
             }
         }
     }
-    private var dob: String?
     var bio: String? {
         guard let userInfo = self.infoSectionOne else {
             return ""
@@ -202,13 +215,86 @@ class User: Mappable, CustomStringConvertible {
         let result = results.first
         return result?.info ?? nil
     }
-    var canSwipe: Bool?
-    private var swipeDateTimestamp: String?
-    var profileCreation: Bool?
-    var currentPage: Int?
-    var docId: String?
-    var lastId: String?
-    var matches: [String]?
+    var createdAt: Date? {
+        return getDate(fromString: timestamp ?? "")
+    }
+    var age: Int? {
+        guard let dob = dob else { return nil }
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "MM/dd/yyyy"
+        guard let birthdayDate = dateFormater.date(from: dob) else { return nil }
+        let calendar: NSCalendar! = NSCalendar(calendarIdentifier: .gregorian)
+        let now = Date()
+        let calcAge = calendar.components(.year, from: birthdayDate, to: now, options: [])
+        guard let age = calcAge.year else { return nil }
+        return age
+    }
+    var nextSwipeDate: Date? {
+        return getDate(fromString: swipeDateTimestamp ?? "")
+    }
+    var countForSection1: Int {
+        guard let infoSec1 = self.infoSectionOne else { return 0 }
+        let infoSec1Array = infoSec1.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        return 2 + infoSec1Array.count
+    }
+    var countForSection2: Int {
+        guard let infoSec1 = self.infoSectionOne, let infoSec2 = self.infoSectionTwo else { return 0 }
+        let infoSec1Array = infoSec1.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        let infoSec2Array = infoSec2.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        return 2 + infoSec1Array.count + infoSec2Array.count
+    }
+    var countForSection3: Int {
+        guard let infoSec1 = self.infoSectionOne, let infoSec2 = self.infoSectionTwo, let infoSec3 = self.infoSectionThree else { return 0 }
+        let infoSec1Array = infoSec1.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        let infoSec2Array = infoSec2.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        let infoSec3Array = infoSec3.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        return 2 + infoSec1Array.count + infoSec2Array.count + infoSec3Array.count
+    }
+    var countForTable: Int {
+        guard let infoSec1 = self.infoSectionOne, let infoSec2 = self.infoSectionTwo, let infoSec3 = self.infoSectionThree else { return 2 }
+        let infoSec1Array = infoSec1.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        let infoSec2Array = infoSec2.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        let infoSec3Array = infoSec3.filter({
+            (item) -> Bool in
+            return item.info != nil
+        })
+        return 2 + infoSec1Array.count + infoSec2Array.count + infoSec3Array.count
+    }
+    var newNextSwipeDate: String? {
+        guard let newNextSwipeDate = Date().add(days: 1) else { return nil }
+        return newNextSwipeDate.toString()
+    }
+    var maxSwipes: Int {
+        if type ?? 0.0 == 1.0 {
+            return 10
+        } else {
+            return Int.max
+        }
+    }
 
     //  MARK:- This is for displaying my profile to other users
     var infoSectionOne: [Info]?
@@ -218,6 +304,7 @@ class User: Mappable, CustomStringConvertible {
     var imageSectionOne = [Media]()
     var imageSectionTwo = [Media]()
 
+    // MARK: - Lifecycle methods
     required init?(map: Map) { }
     
     func mapping(map: Map) {
@@ -248,105 +335,15 @@ class User: Mappable, CustomStringConvertible {
         }
     }
 
-    var createdAt: Date? {
-        return getDate(fromString: self.timestamp ?? "")
-    }
-
-    var age: Int? {
-        guard let dob = self.dob else { return nil }
-        let dateFormater = DateFormatter()
-        dateFormater.dateFormat = "MM/dd/yyyy"
-        guard let birthdayDate = dateFormater.date(from: dob) else { return nil }
-        let calendar: NSCalendar! = NSCalendar(calendarIdentifier: .gregorian)
-        let now = Date()
-        let calcAge = calendar.components(.year, from: birthdayDate, to: now, options: [])
-        guard let age = calcAge.year else { return nil }
-        return age
-    }
-
-    var nextSwipeDate: Date? {
-        return getDate(fromString: self.swipeDateTimestamp ?? "")
-    }
-
-    var countForSection1: Int {
-        guard let infoSec1 = self.infoSectionOne else { return 0 }
-        let infoSec1Array = infoSec1.filter({
-            (item) -> Bool in
-            return item.info != nil
-        })
-        return 2 + infoSec1Array.count
-    }
-
-    var countForSection2: Int {
-        guard let infoSec1 = self.infoSectionOne, let infoSec2 = self.infoSectionTwo else { return 0 }
-        let infoSec1Array = infoSec1.filter({
-            (item) -> Bool in
-            return item.info != nil
-        })
-        let infoSec2Array = infoSec2.filter({
-            (item) -> Bool in
-            return item.info != nil
-        })
-        return 2 + infoSec1Array.count + infoSec2Array.count
-    }
-
-    var countForSection3: Int {
-        guard let infoSec1 = self.infoSectionOne, let infoSec2 = self.infoSectionTwo, let infoSec3 = self.infoSectionThree else { return 0 }
-        let infoSec1Array = infoSec1.filter({
-            (item) -> Bool in
-            return item.info != nil
-        })
-        let infoSec2Array = infoSec2.filter({
-            (item) -> Bool in
-            return item.info != nil
-        })
-        let infoSec3Array = infoSec3.filter({
-            (item) -> Bool in
-            return item.info != nil
-        })
-        return 2 + infoSec1Array.count + infoSec2Array.count + infoSec3Array.count
-    }
-
-    var countForTable: Int {
-        guard let infoSec1 = self.infoSectionOne, let infoSec2 = self.infoSectionTwo, let infoSec3 = self.infoSectionThree else { return 2 }
-        let infoSec1Array = infoSec1.filter({
-            (item) -> Bool in
-            return item.info != nil
-        })
-        let infoSec2Array = infoSec2.filter({
-            (item) -> Bool in
-            return item.info != nil
-        })
-        let infoSec3Array = infoSec3.filter({
-            (item) -> Bool in
-            return item.info != nil
-        })
-        return 2 + infoSec1Array.count + infoSec2Array.count + infoSec3Array.count
-    }
-
-    var newNextSwipeDate: String? {
-        guard let newNextSwipeDate = Date().add(days: 1) else { return nil }
-        return newNextSwipeDate.toString()
-    }
-
-    var maxSwipes: Int {
-        if type ?? 0.0 == 1.0 {
-            return 10
-        } else {
-            return Int.max
-        }
-    }
-}
-
-//  MARK:- Model modification methods
-extension User {
-
+    // MARK: Public member functions
     func change(email: String, _ completion: @escaping(Error?) -> Void) {
         Auth.auth().currentUser?.updateEmail(to: email, completion: { (error) in
             guard error == nil else {
                 return completion(error!)
             }
-            CurrentUser.shared.updateProfile(withData: ["email" : email]) { (error) in
+            CurrentUser.shared.updateProfile(withData: [
+                "type": "email",
+                "value": email]) { (error) in
                 if error == nil {
                     self.email = email
                     completion(nil)
@@ -358,7 +355,7 @@ extension User {
     }
 
     func change(name: String, _ completion: @escaping(Error?) -> Void) {
-        CurrentUser.shared.updateProfile(withData: ["name" : name]) { (error) in
+        CurrentUser.shared.updateProfile(withData: ["type": "name", "value": name]) { (error) in
             if error == nil {
                 self.name?.fullName = name
                 completion(nil)
@@ -428,16 +425,18 @@ extension User {
 
     func disableSwiping() {
         guard let newNextDate = newNextSwipeDate else { return }
-        CurrentUser.shared.updateProfile(withData:["canSwipe" : false, "nextSwipeDate" : newNextDate]) { (error) in
+        CurrentUser.shared.updateProfile(withData:[
+            "type": "canSwipe",
+            "value": false]) { (error) in
             if error == nil {
                 self.canSwipe = false
-                self.swipeDateTimestamp = newNextDate
+                swipeDateTimestamp = newNextDate
             }
         }
     }
 
     func enableSwiping() {
-        CurrentUser.shared.updateProfile(withData: ["canSwipe" : true]) { (error) in
+        CurrentUser.shared.updateProfile(withData: ["type": "canSwipe", "value" : true]) { (error) in
             if error == nil {
                 self.canSwipe = true
             }
@@ -445,7 +444,9 @@ extension User {
     }
 
     func setNotificationToggle(_ state: Bool) {
-        CurrentUser.shared.updateProfile(withData: ["notifications" : state]) { (error) in
+        CurrentUser.shared.updateProfile(withData: [
+            "type": "notifications",
+            "value": state]) { (error) in
             if error == nil {
                 self.settings?.notifications = state
             }
@@ -453,7 +454,9 @@ extension User {
     }
 
     func setMaximumDistance(_ distance: Double) {
-        CurrentUser.shared.updateProfile(withData: ["maxDistance" : distance]) { (error) in
+        CurrentUser.shared.updateProfile(withData: [
+            "type": "maxDistance",
+            "value": distance]) { (error) in
             if error == nil {
                 self.settings?.maxDistance = distance
             }
@@ -461,7 +464,9 @@ extension User {
     }
 
     func setInitialState(_ state: Bool, _ completion: @escaping(Error?) -> Void) {
-        CurrentUser.shared.updateProfile(withData: ["initialSetup" : state]) { (error) in
+        CurrentUser.shared.updateProfile(withData: [
+            "type": "initialSetup",
+            "value": state]) { (error) in
             if error == nil {
                 self.settings?.initialSetup = state
                 completion(nil)
@@ -472,9 +477,13 @@ extension User {
     }
 
     func setLocation(_ location: Location, _ completion: @escaping(Error?)->Void) {
-        if let lat = location.addressLat, let long = location.addressLong, let documentID = CurrentUser.shared.user?.key {
+        if
+            let currentuser = CurrentUser.shared.user,
+            let lat = location.addressLat,
+            let long = location.addressLong {
+            
             let parameters: [String: Any] = [
-                "userId": CurrentUser.shared.user!.uid!,
+                "userId": currentuser.uid ?? "",
                 "latitude": lat,
                 "longitude": long
             ]
@@ -483,16 +492,7 @@ extension User {
                     print(err)
                     completion(err)
                 } else {
-                    print("Successfully updated user data & added a geofire obbject.")
-                    self.settings?.location = location
-                    CurrentUser.shared.updateProfile(withData: location.toDict) {
-                        (error) in
-                        if let error = error {
-                            completion(error)
-                        } else {
-                            completion(nil)
-                        }
-                    }
+                   completion(nil)
                 }
             }
         } else {
@@ -505,7 +505,9 @@ extension User {
             print("Did not update user data.")
             return
         }
-        CurrentUser.shared.updateProfile(withData: ["ageRangeId" : rangeId, "ageRangeMax" : rangeMax, "ageRangeMin" : rangeMin]) {
+        CurrentUser.shared.updateProfile(withData: [
+            "type": "ageRanges",
+            "value" : rangeId]) {
             (error) in
             if error == nil {
                 print("Successfully updated user data")
@@ -521,7 +523,9 @@ extension User {
             print("Did not update user data.")
             return
         }
-        CurrentUser.shared.updateProfile(withData: ["kidsAges" : range]) {
+        CurrentUser.shared.updateProfile(withData: [
+            "type": "kidsAges",
+            "value": range]) {
             (error) in
             if error == nil {
                 print("Successfully updated user data")
@@ -532,7 +536,9 @@ extension User {
     }
 
     func updateCurrentPage(_ page: Int) {
-        CurrentUser.shared.updateProfile(withData: ["currentPage" : page]) {
+        CurrentUser.shared.updateProfile(withData: [
+            "type": "currentPage",
+            "value": page]) {
             (error) in
             if error == nil {
                 print("Successfully updated user data")
@@ -543,7 +549,9 @@ extension User {
     }
 
     func updateLastId(_ id: String) {
-        CurrentUser.shared.updateProfile(withData: ["lastId" : id]) {
+        CurrentUser.shared.updateProfile(withData: [
+            "type": "lastId",
+            "value": id]) {
             (error) in
             if error == nil {
                 print("Successfully updated user data")
@@ -552,26 +560,4 @@ extension User {
             }
         }
     }
-
-    func addMatches(withValue value: [String], _ completion: @escaping(Error?) -> Void) {
-        CurrentUser.shared.updateProfile(withData: ["matches" : value]) { (error) in
-            if error == nil {
-                print("Successfully updated user data")
-            } else {
-                print("Did not update user data.")
-            }
-        }
-    }
-
-    private func getDate(fromString dateString: String) -> Date? {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone.current
-        formatter.dateFormat = CustomDateFormat.regular.rawValue
-        guard let date = formatter.date(from: dateString) else {
-            return nil
-        }
-        return date
-    }
-
 }

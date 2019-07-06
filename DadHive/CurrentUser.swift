@@ -36,6 +36,25 @@ class CurrentUser {
             }
         }
     }
+    
+    fileprivate func updateUser(_ data: [String: Any],  completion: @escaping (User?, Error?, [String: Any]?) -> Void) {
+        guard let convertedData = data as? [String: String] else {
+            return completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]), nil)
+        }
+        let parameters: [String: String] = convertedData
+        apiRepo.performRequest(path: Api.Endpoint.editUserProfile, method: .post, parameters: parameters) { (response, error) in
+            if let err = error {
+                print(err)
+                completion(nil, err, nil)
+            } else {
+                if let res = response as? [String: Any], let data = res["data"] as? [String: Any], let userData = data["user"] as? [String: Any], let user = User(JSON: userData) {
+                    completion(user, nil, userData)
+                } else {
+                    FIRAuthentication.signout()
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Class methods
@@ -70,12 +89,14 @@ extension CurrentUser {
         })
     }
 
-    func updateProfile(withData data: [String: Any], completion: @escaping (Error?) -> Void) {
+    func updateProfile(withData data: [String: Any?], completion: @escaping (Error?) -> Void) {
         guard let user = self.user else {
             completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]))
             return
         }
-        FIRFirestoreDB.shared.update(withData: data, from: kUsers, at: user.key ?? "") { (success, error) in
+        var params = data
+        params["userId"] = user.uid ?? ""
+        updateUser(params) { (user, error, userDict) in
             if let err = error {
                 completion(err)
             } else {
@@ -85,88 +106,4 @@ extension CurrentUser {
             }
         }
     }
-    
-    func updateProfileToNil(withData data: [String: Any?], completion: @escaping (Error?) -> Void) {
-        guard let user = self.user else {
-            completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]))
-            return
-        }
-        FIRFirestoreDB.shared.update(withData: data, from: kUsers, at: user.key ?? "") { (success, error) in
-            if let err = error {
-                completion(err)
-            } else {
-                self.refresh({
-                    completion(nil)
-                })
-            }
-        }
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-//  Using RealtimeDB
-extension CurrentUser {
-//    private func retrieveUser(withId id: String, completion: @escaping (User?, Error?, [String: Any]?) -> Void) {
-//        FIRRealtimeDB.shared.retrieveDataOnce(atChild: kUsers, whereKey: "uid", isEqualTo: id) {
-//            (success, snapshot, error) in
-//            if let err = error {
-//                completion(nil, err, nil)
-//            } else {
-//                guard let data = snapshot, data.childrenCount > 0 else {
-//                    return
-//                }
-//                print(data)
-//                if let rawItem = data.children.allObjects.first as? DataSnapshot, var item = rawItem.value as? [String: Any] {
-//                    item["snapshotKey"] = String(describing: rawItem.key)
-//                    completion(User(JSON: item), nil, item)
-//                } else {
-//                    completion(nil, Errors.EmptyAPIResponse, nil)
-//                }
-//            }
-//        }
-//     }
-
-//    func updateUser(withData data: [String: Any], completion: @escaping (Error?) -> Void) {
-//        guard let user = self.user else {
-//            completion(Errors.EmptyAPIResponse)
-//            return
-//        }
-//        FIRRealtimeDB
-//            .shared
-//            .update(withData: data,
-//                    atChild: kUsers + "/" + user.userKey) { (success, random, error) in
-//                        if let err = error {
-//                            completion(err)
-//                        } else {
-//                            self.refreshCurrentUser()
-//                            completion(nil)
-//                        }
-//        }
-//    }
-
-    //        FIRFirestoreDB.shared.retrieveUser(withId: id, completion: {
-    //            (success, document, error) in
-    //            if let error = error {
-    //                print(error)
-    //                completion(nil, error, nil)
-    //            } else {
-    //                if let document = document {
-    //                    var userData = document.data()
-    //                    userData["snapshotKey"] = document.documentID
-    //                    let user = User(JSON: userData)
-    //                    completion(user, nil, userData)
-    //                } else {
-    //                    FIRAuthentication.signout()
-    //                }
-    //            }
-    //        })
 }

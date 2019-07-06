@@ -1,26 +1,11 @@
-//
-//  CustomTabBar.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 12/26/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 import ChameleonFramework
 
-class CustomTabBar:
-    UITabBarController,
-    UITabBarControllerDelegate
-{
+private let arrayOfImagesForTabBar = [ "home", "message", "profile", "home"]
 
-    let arrayOfImagesForTabBar = [
-        "home",
-        "message",
-        "profile",
-        "home"
-    ]
+class CustomTabBar: UITabBarController, UITabBarControllerDelegate {
 
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBarItems()
@@ -29,11 +14,9 @@ class CustomTabBar:
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
-}
-
-extension CustomTabBar {
-    func setupTabBarItems() {
+    
+    // MARK: - Private member functions
+    private func setupTabBarItems() {
         guard let arrayOfTabBarItems = self.tabBar.items else { return }
         let selectedColor = AppColors.darkGreen
         let unselectedColor = UIColor.flatBlack

@@ -5,19 +5,16 @@ private var authenticationSwitch: AnimatedSegmentSwitch?
 
 class ViewController: UIViewController {
 
+    // MARK: - IBOutlets
     @IBOutlet private var btnAuthenticate: UIButton!
     @IBOutlet private var lblGDPR: UILabel!
     @IBOutlet private var txtPassword: UITextField!
-    @IBOutlet private var btnGenerate: UIButton!
-    @IBOutlet private var btnDelete: UIButton!
     @IBOutlet private var txtEmail: UITextField!
 
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        btnGenerate.isHidden = true
-        btnDelete.isHidden = true
-
+        
         videoBackground = VideoBackground(withPathFromBundle: "DadHiveBG-Vid", ofFileType: "mp4", forView: self.view)
         if let videobackground = videoBackground {
             videobackground.isLoopingEnabled = true
@@ -56,26 +53,14 @@ class ViewController: UIViewController {
             videobackground.destroy()
         }
     }
-
-    @IBAction func authenticate(_ sender: UIButton) {
-        guard let email = txtEmail.text,
-            let password = txtPassword.text,
-            let credentials = AuthCredentials(JSON: ["email": email, "password": password]),
-            credentials.isValid()else {
-            return showErrorAlert(message: DadHiveError.signInCredentialsError.rawValue)
-        }
-        login(withCredentials: credentials)
+    
+    // MARK: - Private member functions
+    private func loadGDPR() {
+        lblGDPR.font = UIFont(name: kFontCaption, size: kFontSizeCaption)
+        lblGDPR.textColor = .flatBlack
     }
-
-    @IBAction func generate(_ sender: UIButton) {
-        FakeDataGenerator().generateFakeUserAccounts(20)
-    }
-
-    @IBAction func deleteAllUsers(_ sender: UIButton) {
-        FakeDataGenerator().deleteFakeUsers()
-    }
-
-    func login(withCredentials credentials: AuthCredentials) {
+    
+    private func login(withCredentials credentials: AuthCredentials) {
         showHUD("Logging In")
         FIRAuthentication.login(credentials: credentials) { (error) in
             if let err = error {
@@ -86,15 +71,20 @@ class ViewController: UIViewController {
             }
         }
     }
-}
 
-extension ViewController {
-    func loadGDPR() {
-        lblGDPR.font = UIFont(name: kFontCaption, size: kFontSizeCaption)
-        lblGDPR.textColor = .flatBlack
+    // MARK: - IBActions
+    @IBAction func authenticate(_ sender: UIButton) {
+        guard let email = txtEmail.text,
+            let password = txtPassword.text,
+            let credentials = AuthCredentials(JSON: ["email": email, "password": password]),
+            credentials.isValid()else {
+            return showErrorAlert(message: DadHiveError.signInCredentialsError.rawValue)
+        }
+        login(withCredentials: credentials)
     }
 }
 
+// MARK: - UITextFieldDelegate
 extension ViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()

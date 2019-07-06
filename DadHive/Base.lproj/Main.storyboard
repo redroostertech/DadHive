@@ -90,40 +90,10 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4nE-qL-2P6">
-                                <rect key="frame" x="16" y="20" width="125" height="36"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="36" id="QlT-0q-2Zr"/>
-                                    <constraint firstAttribute="width" constant="125" id="grD-Q5-YfL"/>
-                                </constraints>
-                                <state key="normal" title="Generate">
-                                    <color key="titleColor" red="0.98039215690000003" green="0.0" blue="0.1019607843" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="generate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="f2u-M4-kNo"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TSd-02-q9m">
-                                <rect key="frame" x="234" y="20" width="125" height="36"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="36" id="El6-vC-muK"/>
-                                    <constraint firstAttribute="width" constant="125" id="YTV-FB-P0N"/>
-                                </constraints>
-                                <state key="normal" title="Delete Users">
-                                    <color key="titleColor" red="0.98039215690000003" green="0.0" blue="0.1019607843" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="deleteAllUsers:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3in-0m-WmT"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="xV3-Zb-9OV" firstAttribute="top" secondItem="0Qc-m0-Lcx" secondAttribute="bottom" constant="40" id="C9R-Vi-CKK"/>
-                            <constraint firstItem="TSd-02-q9m" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="CDc-dC-sI8"/>
-                            <constraint firstItem="4nE-qL-2P6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="EVn-Zg-9HQ"/>
                             <constraint firstItem="LhU-J1-bkL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="64" id="Htv-qW-lPp"/>
                             <constraint firstItem="D5v-AH-ctB" firstAttribute="leading" secondItem="xXh-dA-Gtc" secondAttribute="leading" id="I2H-Pa-u1m"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="LhU-J1-bkL" secondAttribute="trailing" constant="64" id="Jk4-aR-UNz"/>
@@ -134,21 +104,17 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xV3-Zb-9OV" secondAttribute="trailing" constant="16" id="Nfp-fL-cFV"/>
                             <constraint firstItem="0Qc-m0-Lcx" firstAttribute="leading" secondItem="xXh-dA-Gtc" secondAttribute="leading" id="OxY-Lj-w4X"/>
                             <constraint firstItem="xV3-Zb-9OV" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Vxb-Mp-yOa"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="TSd-02-q9m" secondAttribute="trailing" constant="16" id="Wgk-r4-u0M"/>
                             <constraint firstItem="D5v-AH-ctB" firstAttribute="trailing" secondItem="xXh-dA-Gtc" secondAttribute="trailing" id="Yz5-xv-fb0"/>
                             <constraint firstItem="D5v-AH-ctB" firstAttribute="top" secondItem="xXh-dA-Gtc" secondAttribute="bottom" id="jCm-un-jud"/>
                             <constraint firstItem="xXh-dA-Gtc" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="lj2-bz-bUh"/>
                             <constraint firstItem="0Qc-m0-Lcx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="64" id="mbu-bw-I8T"/>
                             <constraint firstItem="D5v-AH-ctB" firstAttribute="height" secondItem="xXh-dA-Gtc" secondAttribute="height" id="p22-Re-u17"/>
-                            <constraint firstItem="4nE-qL-2P6" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="pcO-YO-te7"/>
                             <constraint firstItem="xXh-dA-Gtc" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="qUS-gu-drA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="btnAuthenticate" destination="0Qc-m0-Lcx" id="2Jb-wY-M7t"/>
-                        <outlet property="btnDelete" destination="TSd-02-q9m" id="1RD-YI-sL5"/>
-                        <outlet property="btnGenerate" destination="4nE-qL-2P6" id="iYT-FK-dlT"/>
                         <outlet property="lblGDPR" destination="xV3-Zb-9OV" id="Jox-1n-ZRZ"/>
                         <outlet property="txtEmail" destination="xXh-dA-Gtc" id="4CM-Ww-LYe"/>
                         <outlet property="txtPassword" destination="D5v-AH-ctB" id="kds-gx-7ae"/>

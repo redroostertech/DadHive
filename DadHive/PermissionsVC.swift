@@ -1,18 +1,20 @@
 import UIKit
 import SVProgressHUD
 
+private let notificationCenter = NotificationCenter.default
+private let notificationManager = NotificationsManagerModule.shared
+private let locationManager = LocationManager()
+
 class PermissionsVC: UIViewController {
 
+    // MARK: - IBOutlets
     @IBOutlet private var lblTitle: UILabel!
     @IBOutlet private var btnEnableLocation: UIButton!
     @IBOutlet private var btnEnableNotification: UIButton!
     @IBOutlet private var btnContinue: UIButton!
     @IBOutlet private var lblDescription: UILabel!
 
-    let notificationCenter = NotificationCenter.default
-    let notificationManager = NotificationsManagerModule.shared
-    let locationManager = LocationManager()
-
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         notificationCenter.addObserver(self,
@@ -35,7 +37,33 @@ class PermissionsVC: UIViewController {
         super.viewDidDisappear(animated)
         notificationCenter.removeObserver(self, name: Notification.Name(rawValue: kNotificationAccessCheckObservationKey), object: nil)
     }
-
+    
+    // MARK: - Public member functions
+    @objc
+    func observeNotificationsAccessCheck(_ notification: Notification) {
+        if let access = notification.userInfo?["access"] as? Bool {
+            self.updateNotificationButton(access: access)
+        } else {
+            self.updateNotificationButton(access: false)
+        }
+    }
+    
+    func updateLocationButton(access: Bool) {
+        DispatchQueue.main.async {
+            self.btnEnableLocation.setText((access == true) ? kLocationEnabled : kLocationDisabled)
+            self.btnEnableLocation.setTextColor((access == true) ? kEnabledTextColor : kDisabledTextColor)
+        }
+    }
+    
+    func updateNotificationButton(access: Bool) {
+        DispatchQueue.main.async {
+            self.btnEnableNotification.setText(access ? kNotificationEnabled : kNotificationDisabled)
+            self.btnEnableNotification.setTextColor(access ? kEnabledTextColor : kDisabledTextColor)
+        }
+        CurrentUser.shared.user?.setNotificationToggle(access)
+    }
+    
+    // MARK: - IBActions
     @IBAction func enableLocation(_ sender: UIButton) {
         locationManager.checkPermissions()
     }
@@ -57,30 +85,6 @@ class PermissionsVC: UIViewController {
                 FIRAuthentication.checkSession()
             }
         })
-    }
-
-    @objc
-    func observeNotificationsAccessCheck(_ notification: Notification) {
-        if let access = notification.userInfo?["access"] as? Bool {
-            self.updateNotificationButton(access: access)
-        } else {
-            self.updateNotificationButton(access: false)
-        }
-    }
-
-    func updateLocationButton(access: Bool) {
-        DispatchQueue.main.async {
-            self.btnEnableLocation.setText((access == true) ? kLocationEnabled : kLocationDisabled)
-            self.btnEnableLocation.setTextColor((access == true) ? kEnabledTextColor : kDisabledTextColor)
-        }
-    }
-
-    func updateNotificationButton(access: Bool) {
-        DispatchQueue.main.async {
-            self.btnEnableNotification.setText(access ? kNotificationEnabled : kNotificationDisabled)
-            self.btnEnableNotification.setTextColor(access ? kEnabledTextColor : kDisabledTextColor)
-        }
-        CurrentUser.shared.user?.setNotificationToggle(access)
     }
 }
 

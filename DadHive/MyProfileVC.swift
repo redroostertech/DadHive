@@ -171,11 +171,12 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
             self.showHUD("")
             let storageRef = Storage.storage().reference().child("images/\(userId)/userProfilePicture_\(buttonTag)_url")
             storageRef.delete { error in
-                if let error = error {
+                if error != nil {
                     self.dismissHUD()
                 } else {
-                    CurrentUser.shared.updateProfileToNil(withData: [
-                        "userProfilePicture_\(buttonTag)_url": nil
+                    CurrentUser.shared.updateProfile(withData: [
+                        "type": "userProfilePicture_\(buttonTag)",
+                        "value": nil
                         ], completion: { (erorr) in
                             self.dismissHUD()
                             if let err = error {
@@ -251,7 +252,8 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
                             } else {
                                 if let urlString = url?.absoluteString {
                                     CurrentUser.shared.updateProfile(withData: [
-                                        "userProfilePicture_\(buttonTag)_url": urlString
+                                        "type": "userProfilePicture_\(buttonTag)",
+                                        "value": urlString
                                         ], completion: { (erorr) in
                                             if let err = error {
                                                 print("Current user upload error: \(err.localizedDescription)")

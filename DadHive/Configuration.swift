@@ -101,3 +101,8 @@ let kSignUpSwitchText = kSignUpText
 //  MARK:- Colors
 let kEnabledTextColor: UIColor = .darkText
 let kDisabledTextColor: UIColor = .gray
+
+// MARK: - ViewController ID's
+let kPermissionsVC = "PermissionsVC"
+let kCustomTabBar = "CustomTabBar" // Primary container for main view of app
+let kViewController = "ViewController" // View controller for login view

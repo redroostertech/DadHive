@@ -1,11 +1,3 @@
-//
-//  AgeRange.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 2/11/19.
-//  Copyright © 2019 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import ObjectMapper
 
@@ -21,10 +13,6 @@ class AgeRange: Mappable, CustomStringConvertible {
         id <- map["ageRangeId"]
         min <- map["ageRangeMin"]
         max <- map["ageRangeMax"]
-
-        id <- map["id"]
-        min <- map["min"]
-        max <- map["max"]
     }
 
     public var toDict: [String: Any] {

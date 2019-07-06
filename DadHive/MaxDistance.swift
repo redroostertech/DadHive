@@ -1,11 +1,3 @@
-//
-//  MaxDistance.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 2/17/19.
-//  Copyright © 2019 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import ObjectMapper
 

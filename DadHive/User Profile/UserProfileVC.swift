@@ -3,17 +3,19 @@ import SVProgressHUD
 import APESuperHUD
 import Firebase
 
-var count = 0
-
 class UserProfileVC: UIViewController {
-
+    
+    // MARK: - IBOutlets
     @IBOutlet private var tblMain: UITableView!
     @IBOutlet private var btnNext: UIButton!
     
-    var users: Users?
-    var currentUser: User?
-    var apiRepository = APIRepository()
-
+    // MARK: - Properties
+    fileprivate var count = 0
+    fileprivate var users: Users?
+    fileprivate var currentUser: User?
+    fileprivate var apiRepository = APIRepository()
+    
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -24,6 +26,22 @@ class UserProfileVC: UIViewController {
         retrieveUsers()
     }
 
+    // MARK: - Public member functions
+    func setupUI() {
+        btnNext.applyCornerRadius()
+        
+        tblMain.delegate = self
+        tblMain.dataSource = self
+        
+        tblMain.register(UINib(nibName: "DHIntroCell", bundle: nil), forCellReuseIdentifier: "DHIntroCell")
+        tblMain.register(UINib(nibName: "DHImageCell", bundle: nil), forCellReuseIdentifier: "DHImageCell")
+        tblMain.register(UINib(nibName: "DHPrimaryInfoCell", bundle: nil), forCellReuseIdentifier: "DHPrimaryInfoCell")
+        tblMain.register(UINib(nibName: "DHKidsInfoCell", bundle: nil), forCellReuseIdentifier: "DHKidsInfoCell")
+        tblMain.register(UINib(nibName: "DHQuestionCell", bundle: nil), forCellReuseIdentifier: "DHQuestionCell")
+        
+        retrieveUsers()
+    }
+    
     func retrieveUsers() {
         showHUD("Finding Users", withDuration: 30.0)
         loadUsers { (error, results) in
@@ -66,25 +84,9 @@ class UserProfileVC: UIViewController {
         tblMain.reloadData()
     }
     
+    // MARK: - IBActions
     @IBAction func goToNext(_ sender: UIButton) {
         goToNextUser()
-    }
-}
-
-extension UserProfileVC {
-    func setupUI() {
-        btnNext.applyCornerRadius()
-
-        tblMain.delegate = self
-        tblMain.dataSource = self
-
-        tblMain.register(UINib(nibName: "DHIntroCell", bundle: nil), forCellReuseIdentifier: "DHIntroCell")
-        tblMain.register(UINib(nibName: "DHImageCell", bundle: nil), forCellReuseIdentifier: "DHImageCell")
-        tblMain.register(UINib(nibName: "DHPrimaryInfoCell", bundle: nil), forCellReuseIdentifier: "DHPrimaryInfoCell")
-        tblMain.register(UINib(nibName: "DHKidsInfoCell", bundle: nil), forCellReuseIdentifier: "DHKidsInfoCell")
-        tblMain.register(UINib(nibName: "DHQuestionCell", bundle: nil), forCellReuseIdentifier: "DHQuestionCell")
-
-        retrieveUsers()
     }
 }
 
@@ -106,10 +108,10 @@ extension UserProfileVC {
                 "userId": userId,
                 "latitude": Double(lat),
                 "longitude": Double(long),
-                "maxDistance": Double(25.0) /*Double(radius)*/,
+                "maxDistance": Double(radius),
                 "pageNo": pageNo,
                 "lastId": lastId,
-                "ageRangeId": currentUser.settings?.ageRange?.id,
+                "ageRangeId": currentUser.settings?.ageRange?.id ?? 0,
                 "perPage": 1
             ]
             self.apiRepository.performRequest(path: Api.Endpoint.getNearbyUsers, method: .post, parameters: parameters) { (response, error) in

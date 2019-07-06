@@ -1,11 +1,3 @@
-//
-//  Media.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 12/24/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import Foundation
 import ObjectMapper
 import SDWebImage
@@ -33,7 +25,7 @@ class Media: Mappable, CustomStringConvertible {
     }
 
     var url: URL? {
-        guard let urlString = self.urlString as? String, let url = URL(string: urlString) else { return nil }
+        guard let urlString = self.urlString, let url = URL(string: urlString) else { return nil }
         return url
     }
     

@@ -1,11 +1,3 @@
-//
-//  ChatVC.swift
-//  DadHive
-//
-//  Created by Michael Westbrooks on 12/30/18.
-//  Copyright © 2018 RedRooster Technologies Inc. All rights reserved.
-//
-
 import UIKit
 import APESuperHUD
 import Firebase
@@ -44,13 +36,13 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var btnSettings: UIButton!
     @IBOutlet weak var btnProfilePic: UIButton!
     
-    var conversation: Conversation?
+    var conversationWrapper: ConversationWrapper?
     var messagesToDisplay = [Message]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let conversation = self.conversation, let id = conversation.id, let trueRecipient = conversation.trueRecipient else {
+        guard let conversationwrapper = self.conversationWrapper, let conversation = conversationwrapper.conversation, let id = conversation.id else {
             self.showError("Conversation no longer exists. Please go back.")
             return
         }
@@ -62,8 +54,8 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
         DispatchQueue.main.async {
             self.btnProfilePic.applyCornerRadius()
-            self.btnProfilePic.sd_setImage(with: trueRecipient.imageSectionOne[0].url, for: .normal, placeholderImage: UIImage(named: "unknown")!, options: .continueInBackground, completed: nil)
-            self.lblUserName.text = trueRecipient.name?.fullName ?? ""
+//            self.btnProfilePic.sd_setImage(with: trueRecipient.imageSectionOne[0].url, for: .normal, placeholderImage: UIImage(named: "unknown")!, options: .continueInBackground, completed: nil)
+//            self.lblUserName.text = trueRecipient.name?.fullName ?? ""
         }
 
         getMessages(conversationId: id)
@@ -125,10 +117,13 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
 
     @IBAction func sendMessage(_ sender: UIButton) {
+      guard let conversationwrapper = self.conversationWrapper, let conversation = conversationwrapper.conversation, let id = conversation.id else {
+        self.showError("Conversation no longer exists. Please go back.")
+        return
+      }
         let parameters: [String: Any] = [
             "createdAt" : Date().toString(format: CustomDateFormat.timeDate.rawValue),
-            "conversationKey": self.conversation?.key ?? "",
-            "conversationId": self.conversation?.id ?? "",
+            "conversationId": id,
             "message": txtField.text!,
             "senderId": CurrentUser.shared.user?.uid ?? "",
         ]
@@ -139,20 +134,7 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 print(err.localizedDescription)
                 self.showError("There was an error sending message. Please try again.")
             } else {
-                DispatchQueue.global(qos: .background).async {
-                    guard let key = results else { return }
-                    let updateParams: [String: Any] = [
-                        "lastMessageId": key,
-                        "updatedAt": Date().toString(format: CustomDateFormat.timeDate.rawValue),
-                    ]
-                    FIRFirestoreDB.shared.update(withData: updateParams, from: kConversations, at: self.conversation!.key!, completion: { (success, error) in
-                        if let err = error {
-                            print(err.localizedDescription)
-                        } else {
-                            print("Successful updating.")
-                        }
-                    })
-                }
+              print("Successful updating.")
             }
         })
     }
@@ -185,7 +167,7 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToViewProfile" {
             let vc = segue.destination as! ViewProfileVC
-            vc.user = self.conversation?.trueRecipient!
+            //vc.user = self.conversation?.trueRecipient!
         }
     }
 }

@@ -1,6 +1,5 @@
 import Foundation
 import ObjectMapper
-import Firebase
 
 class Messages: Mappable {
     var messages: [Message]?
@@ -37,7 +36,7 @@ public class Message: Mappable {
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.timeZone = TimeZone.current
         formatter.dateFormat = CustomDateFormat.regular.rawValue
-        guard let createdDate = self.createdAt as? String, let date = formatter.date(from: createdDate) else {
+      guard let createdDate = self.createdAt, let date = formatter.date(from: createdDate) else {
             return nil
         }
         return date

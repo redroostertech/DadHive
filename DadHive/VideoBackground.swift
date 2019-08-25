@@ -21,8 +21,12 @@ class VideoBackground: NSObject {
     
     init(withPathFromBundle path: String,
          ofFileType fileType: String,
-         forView view: UIView) {
-        videoLayerContainer = view
+         forView view: UIView? = nil) {
+        if let view = view {
+          videoLayerContainer = view
+        } else {
+          videoLayerContainer = UIApplication.shared.keyWindow?.rootViewController!.view
+        }
         if let path = Bundle.main.url(forResource: path, withExtension: fileType) {
             videoPlayer = AVPlayer(url: path)
             videoPlayerLayer = AVPlayerLayer(player: videoPlayer)

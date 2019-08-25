@@ -5,20 +5,6 @@ import ChameleonFramework
 import SDWebImage
 import Foundation
 
-class DHButton: UIButton {
-    override func awakeFromNib() {
-        self.titleLabel?.font = UIFont(name: kFontButton, size: kFontSizeButton)
-        self.setTextColor(.flatBlack)
-    }
-}
-
-class ChatMessageLabel: UILabel {
-    override func awakeFromNib() {
-        self.font = UIFont(name: kFontButton, size: kFontSizeButton)
-        self.makeMultipleLines()
-    }
-}
-
 class SenderCell: UITableViewCell {
     @IBOutlet weak var lblMessage: ValueLabel!
 }
@@ -31,13 +17,14 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tblMain: UITableView!
     @IBOutlet weak var txtField: UITextView!
-    @IBOutlet weak var btnSend: DHButton!
+    @IBOutlet weak var btnSend: UIButton!
     @IBOutlet weak var lblUserName: TitleLabel!
     @IBOutlet weak var btnSettings: UIButton!
     @IBOutlet weak var btnProfilePic: UIButton!
     
     var conversationWrapper: ConversationWrapper?
     var messagesToDisplay = [Message]()
+    var recipients = [User]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,9 +40,12 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         showHUD()
 
         DispatchQueue.main.async {
+          self.recipients = conversationwrapper.getRecipients()
+          if let recipient = self.recipients.first {
             self.btnProfilePic.applyCornerRadius()
-//            self.btnProfilePic.sd_setImage(with: trueRecipient.imageSectionOne[0].url, for: .normal, placeholderImage: UIImage(named: "unknown")!, options: .continueInBackground, completed: nil)
-//            self.lblUserName.text = trueRecipient.name?.fullName ?? ""
+            self.btnProfilePic.sd_setImage(with: recipient.imageSectionOne[0].url, for: .normal, placeholderImage: UIImage(named: "unknown")!, options: .continueInBackground, completed: nil)
+            self.lblUserName.text = recipient.name?.fullName ?? ""
+          }
         }
 
         getMessages(conversationId: id)
@@ -146,10 +136,58 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBAction func openSettings(_ sender: UIButton) {
         let alert = UIAlertController(title: "", message: "More options", preferredStyle: .actionSheet)
         let unmatch = UIAlertAction(title: "Unmatch User", style: .default) { (action) in
-            alert.dismissViewController()
+          guard let currentuser = CurrentUser.shared.user else { return }
+          let parameters: [String: Any] = [
+            "senderId": currentuser.uid ?? "",
+            "recipientId": self.recipients[0].uid ?? ""
+          ]
+          APIRepository().performRequest(path: Api.Endpoint.deleteMatch, method: .post, parameters: parameters) { (response, error) in
+            if let err = error {
+              print(err.localizedDescription)
+              self.showError("There was an error unmatching user. Please try again later.")
+              alert.dismissViewController()
+            } else {
+              if
+                let res = response as? [String: Any],
+                let data = res["success"] as? [String: Any],
+                let success = Success(JSON: data),
+                let result = success.result,
+                (result) {
+                alert.dismissViewController()
+              } else {
+                self.showError("There was an error unmatching user. Please try again later.")
+                alert.dismissViewController()
+              }
+            }
+          }
         }
         let reportUser = UIAlertAction(title: "Report User", style: .destructive) { (action) in
-            alert.dismissViewController()
+          guard let currentuser = CurrentUser.shared.user else { return }
+          let parameters: [String: Any] = [
+            "senderId": currentuser.uid ?? "",
+            "senderEmail": currentuser.email ?? "",
+            "reportingUserId": self.recipients[0].uid ?? "",
+            "reportingUserEmail": self.recipients[0].email ?? ""
+          ]
+          APIRepository().performRequest(path: Api.Endpoint.reportUser, method: .post, parameters: parameters) { (response, error) in
+            if let err = error {
+              print(err.localizedDescription)
+              self.showError("There was an error reporting user. Please try again later.")
+              alert.dismissViewController()
+            } else {
+              if
+                let res = response as? [String: Any],
+                let data = res["success"] as? [String: Any],
+                let success = Success(JSON: data),
+                let result = success.result,
+                (result) {
+                alert.dismissViewController()
+              } else {
+                self.showError("There was an error reporting user. Please try again later.")
+                alert.dismissViewController()
+              }
+            }
+          }
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             alert.dismissViewController()
@@ -165,9 +203,8 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToViewProfile" {
-            let vc = segue.destination as! ViewProfileVC
-            //vc.user = self.conversation?.trueRecipient!
+      if segue.identifier == "goToViewProfile", let vc = segue.destination as? ViewProfileVC {
+            vc.user = self.recipients[0]
         }
     }
 }

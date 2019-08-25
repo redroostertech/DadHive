@@ -1,5 +1,9 @@
 import Foundation
 import Firebase
+import FirebaseAuth
+
+private let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+private let locationManager = LocationManager()
 
 private var errorInvalidCredentials: DadHiveError {
     return DadHiveError.invalidCredentials
@@ -10,10 +14,6 @@ private var errorJsonResponse: DadHiveError {
 private func generateError(fromError error: DadHiveError) -> NSError {
     return NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : error.rawValue])
 }
-private let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-
-private let locationManager = LocationManager()
-
 private func goTo(vc: UIViewController, forWindow window: UIWindow? = nil) {
     if window == nil {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -28,12 +28,13 @@ typealias SessionIsActive = Bool
 
 // MARK: - Primary Authentication
 class FIRAuthentication {
+
+    static var uid: String? {
+        return Auth.auth().currentUser == nil ? nil: Auth.auth().currentUser!.uid
+    }
     
-    static func login(credentials: AuthCredentials?, completion: @escaping (Error?) -> Void) {
-        guard let credentials = credentials else {
-            return completion(generateError(fromError: errorInvalidCredentials))
-        }
-        Auth.auth().signIn(withEmail: credentials.email ?? "", password: credentials.password ?? "") { (results, error) in
+    static func login(credentials: AuthCredentials, completion: @escaping (Error?) -> Void) {
+        Auth.auth().signIn(withEmail: credentials.email, password: credentials.password) { (results, error) in
             if let error = error {
                 completion(error)
             } else {
@@ -44,33 +45,45 @@ class FIRAuthentication {
             }
         }
     }
-}
 
-// MARK: - Session management
-extension FIRAuthentication {
-    
-    // TODO: Refactor navigation from class/method
+    static func signout() {
+        CurrentUser.shared.signout { (isSignedOut) in
+          if isSignedOut {
+            let vc = storyBoard.instantiateViewController(withIdentifier: "GetStarted")
+            UIApplication.shared.keyWindow?.rootViewController = vc
+          }
+      }
+    }
+
     static func checkSession(_ window: UIWindow? = nil, goToVC vcID: String = kPermissionsVC) {
-        CurrentUser.shared.refresh {
-            
-            // MARK: - Update user location
-            locationManager.updateUserLocation()
-            
-            // MARK: - Check if `initial setup` for user profile has been completed
-            if let initialSetup = CurrentUser.shared.user?.settings?.initialSetup, initialSetup == false {
+
+        if Auth.auth().currentUser != nil {
+
+            CurrentUser.shared.refresh {
+
+              // MARK: - Update user location
+              locationManager.updateUserLocation()
+
+              // MARK: - Check if `initial setup` for user profile has been completed
+              if let initialSetup = CurrentUser.shared.user?.settings?.initialSetup, initialSetup == false {
+
                 let vc = storyBoard.instantiateViewController(withIdentifier: vcID)
                 goTo(vc: vc, forWindow: window)
-            } else {
+
+              } else {
+
                 let vc = storyBoard.instantiateViewController(withIdentifier: kCustomTabBar)
                 goTo(vc: vc, forWindow: window)
+
+              }
+
             }
+
+        } else {
+
+            FIRAuthentication.signout()
+
         }
     }
 
-    static func signout(_ window: UIWindow? = nil, goToVC vcID: String = kViewController) {
-        CurrentUser.shared.signout { (success) in
-            let vc = storyBoard.instantiateViewController(withIdentifier: vcID)
-            goTo(vc: vc, forWindow: window)
-        }
-    }
 }

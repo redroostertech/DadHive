@@ -18,6 +18,12 @@ public class Api {
         static let getMatches: String = {
             return Api.init().baseURL + "getMatches"
         }()
+        static let deleteMatch: String = {
+            return Api.init().baseURL + "deleteMatch"
+        }()
+        static let reportUser: String = {
+            return Api.init().baseURL + "reportUser"
+        }()
         static let addParticipant: String = {
             return Api.init().baseURL + "addParticipant"
         }()

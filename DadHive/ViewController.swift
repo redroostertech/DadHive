@@ -1,8 +1,5 @@
 import UIKit
 
-private var videoBackground: VideoBackground?
-private var authenticationSwitch: AnimatedSegmentSwitch?
-
 class ViewController: UIViewController {
 
     // MARK: - IBOutlets
@@ -10,16 +7,17 @@ class ViewController: UIViewController {
     @IBOutlet private var lblGDPR: UILabel!
     @IBOutlet private var txtPassword: UITextField!
     @IBOutlet private var txtEmail: UITextField!
+    @IBOutlet private var imageLogo: UIImageView!
 
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        videoBackground = VideoBackground(withPathFromBundle: "DadHiveBG-Vid", ofFileType: "mp4", forView: self.view)
-        if let videobackground = videoBackground {
-            videobackground.isLoopingEnabled = true
-            videobackground.videoOverlayColor = .white
-        }
+
+        view.bringSubview(toFront: imageLogo)
+        view.bringSubview(toFront: btnAuthenticate)
+        view.bringSubview(toFront: lblGDPR)
+        view.bringSubview(toFront: txtEmail)
+        view.bringSubview(toFront: txtPassword)
 
         setupSuperHUD()
         loadGDPR()
@@ -34,24 +32,7 @@ class ViewController: UIViewController {
             }
         }
         
-        btnAuthenticate.applyCornerRadius()
-        btnAuthenticate.addGradientLayer(using: kAppCGColors)
         btnAuthenticate.setText(kLoginText)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if let videobackground = videoBackground {
-            videobackground.show()
-            videobackground.play()
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        if let videobackground = videoBackground {
-            videobackground.destroy()
-        }
     }
     
     // MARK: - Private member functions
@@ -61,7 +42,6 @@ class ViewController: UIViewController {
     }
     
     private func login(withCredentials credentials: AuthCredentials) {
-        showHUD("Logging In")
         FIRAuthentication.login(credentials: credentials) { (error) in
             if let err = error {
                 self.hideHUD()
@@ -75,12 +55,12 @@ class ViewController: UIViewController {
     // MARK: - IBActions
     @IBAction func authenticate(_ sender: UIButton) {
         guard let email = txtEmail.text,
-            let password = txtPassword.text,
-            let credentials = AuthCredentials(JSON: ["email": email, "password": password]),
-            credentials.isValid()else {
+            let password = txtPassword.text else {
             return showErrorAlert(message: DadHiveError.signInCredentialsError.rawValue)
         }
-        login(withCredentials: credentials)
+      let credentials = AuthCredentials(email: email, password: password)
+      guard credentials.isValid() else { return showErrorAlert(message: DadHiveError.signInCredentialsError.rawValue) }
+      login(withCredentials: credentials)
     }
 }
 

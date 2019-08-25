@@ -48,14 +48,14 @@ class PermissionsVC: UIViewController {
         }
     }
     
-    func updateLocationButton(access: Bool) {
+    private func updateLocationButton(access: Bool) {
         DispatchQueue.main.async {
             self.btnEnableLocation.setText((access == true) ? kLocationEnabled : kLocationDisabled)
             self.btnEnableLocation.setTextColor((access == true) ? kEnabledTextColor : kDisabledTextColor)
         }
     }
     
-    func updateNotificationButton(access: Bool) {
+    private func updateNotificationButton(access: Bool) {
         DispatchQueue.main.async {
             self.btnEnableNotification.setText(access ? kNotificationEnabled : kNotificationDisabled)
             self.btnEnableNotification.setTextColor(access ? kEnabledTextColor : kDisabledTextColor)

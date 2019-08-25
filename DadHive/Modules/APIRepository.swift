@@ -21,6 +21,7 @@ class APIRepository {
         
         var headers = [
             "Accept": "application/json",
+            "Agent": kMobileApiAgent
         ]
 
         for key in headers.keys {

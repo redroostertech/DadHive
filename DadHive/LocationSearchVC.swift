@@ -88,8 +88,7 @@ extension LocationSearchVC: UITableViewDelegate {
     }
 }
 
-extension UISearchBar
-{
+extension UISearchBar {
     func setPlaceholderTextColorTo(color: UIColor) {
         let textFieldInsideSearchBar = self.value(forKey: "searchField") as? UITextField
         textFieldInsideSearchBar?.textColor = color

@@ -3,14 +3,20 @@ import ObjectMapper
 
 class Conversations: Mappable {
     var count: Int?
-    var conversationWrapper: [ConversationWrapper]?
+    var conversationWrappers: [ConversationWrapper]?
 
     required init?(map: Map) { }
 
     func mapping(map: Map) {
         self.count <- map["count"]
-        self.conversationWrapper <- map["data"]
+        self.conversationWrappers <- map["data"]
     }
+}
+
+public enum ConversationType {
+  case single
+  case group
+  case none
 }
 
 class ConversationWrapper: Mappable {
@@ -25,16 +31,31 @@ class ConversationWrapper: Mappable {
   }
 
   func getChatParticipants() -> String {
+    switch getChatType() {
+      case .none: return "There are no participants."
+      case .group: return "This is a group chat."
+      case .single: return "There is 1 participant."
+    }
+  }
+
+  func getChatType() -> ConversationType {
     guard let array = self.participants?.filter({ (user) -> Bool in
       return user.uid != CurrentUser.shared.user?.uid
-    }) else { return "There are no participants." }
+    }) else { return .none }
     if array.count > 1 {
-      return "This is a group chat."
+      return .group
     } else if array.count == 1 {
-      return "There is 1 participant."
+      return .single
     } else {
-      return "There are no participants."
+      return .none
     }
+  }
+
+  func getRecipients() -> [User] {
+    guard let array = self.participants?.filter({ (user) -> Bool in
+      return user.uid != CurrentUser.shared.user?.uid
+    }) else { return [User]() }
+    return array
   }
 }
 

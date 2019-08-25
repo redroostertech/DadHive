@@ -6,7 +6,7 @@ import SDWebImage
 class ConversationCell: UITableViewCell {
     @IBOutlet weak var imgvwRecipient: UIImageView!
     @IBOutlet weak var lblRecipientName: TitleLabel!
-    @IBOutlet weak var lblLastMessage: ChatMessageLabel!
+    @IBOutlet weak var lblLastMessage: UILabel!
     @IBOutlet weak var lblMessageSentDate: UILabel!
 
     var conversationWrapper: ConversationWrapper? {
@@ -32,11 +32,11 @@ class ConversationCell: UITableViewCell {
 class MessagesVC: UIViewController {
 
   // MARK: - IBOutlets
-    @IBOutlet weak var tblMain: UITableView!
-    @IBOutlet var btnRefresh: UIButton!
+    @IBOutlet private weak var tblMain: UITableView!
+    @IBOutlet private var btnRefresh: UIButton!
 
   // MARK: - Public properties
-    var conversations = [ConversationWrapper]()
+    var conversationWrappers = [ConversationWrapper]()
 
   // MARK: - Lifecycle methods
     override func viewDidLoad() {
@@ -48,9 +48,6 @@ class MessagesVC: UIViewController {
         tblMain.dataSource = self
 
         showHUD("Loading Messages")
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
         getConversations {
             self.tblMain.reloadData()
             APESuperHUD.dismissAll(animated: true)
@@ -64,7 +61,7 @@ class MessagesVC: UIViewController {
   // MARK: - Public member methods
     func getConversations(_ completion: @escaping () -> Void) {
       guard let currentuser = CurrentUser.shared.user else { return }
-        conversations.removeAll()
+        conversationWrappers.removeAll()
         let parameters: [String: Any] = [
             "userId": currentuser.uid ?? "",
         ]
@@ -78,8 +75,8 @@ class MessagesVC: UIViewController {
                   let res = response as? [String: Any],
                   let data = res["data"] as? [String: Any],
                   let conversationResponse = Conversations(JSON: data),
-                  let conversationWrapper = conversationResponse.conversationWrapper {
-                    self.conversations = conversationWrapper
+                  let conversationWrappers = conversationResponse.conversationWrappers {
+                    self.conversationWrappers = conversationWrappers
                     completion()
                 } else {
                     self.showError("There was an error loading conversations. Please try again later.")
@@ -103,13 +100,13 @@ class MessagesVC: UIViewController {
 extension MessagesVC: UITableViewDelegate, UITableViewDataSource {
   func configureCell(forTable tableView: UITableView, atIndexPath indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "ConversationCell") as! ConversationCell
-    let item = conversations[indexPath.row]
+    let item = conversationWrappers[indexPath.row]
     cell.conversationWrapper = item
     return cell
   }
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return conversations.count
+    return conversationWrappers.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -121,7 +118,7 @@ extension MessagesVC: UITableViewDelegate, UITableViewDataSource {
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let conversation = self.conversations[indexPath.row]
+    let conversationWrapper = self.conversationWrappers[indexPath.row]
     let sb = UIStoryboard(name: "Main", bundle: nil)
     let vc = sb.instantiateViewController(withIdentifier: "ChatVC") as! ChatVC
     vc.conversationWrapper = conversationWrapper

@@ -67,7 +67,19 @@ public var kAppCGColors: [CGColor] {
     return [ AppColors.lightGreen.cgColor, AppColors.darkGreen.cgColor ]
 }
 
-
+//  MARK:- Typography Strings
+let kFontTitle = "AvenirNext-Bold"
+let kFontSubHeader = "AvenirNext-Italic"
+let kFontMenu = "AvenirNext-Regular"
+let kFontBody = "AvenirNext-Regular"
+let kFontCaption = "AvenirNext-UltraLight"
+let kFontButton = "AvenirNext-Medium"
+public var kFontSizeTitle: CGFloat { return 28 }
+public var kFontSizeSubHeader: CGFloat { return 24 }
+public var kFontSizeMenu: CGFloat { return 18 }
+public var kFontSizeBody: CGFloat { return 18 }
+public var kFontSizeCaption: CGFloat { return 12 }
+public var kFontSizeButton: CGFloat { return 16 }
 
 // MARK:- Observer Strings
 let kLocationAccessCheckObservationKey = "observeLocationAccessCheck"
@@ -85,6 +97,7 @@ let kLoginText = "Sign In"
 let kSignUpText = "Sign Up"
 let kLoginSwitchText = kLoginText
 let kSignUpSwitchText = kSignUpText
+let kMobileApiAgent = "mobile"
 
 //  MARK:- Colors
 let kEnabledTextColor: UIColor = .darkText

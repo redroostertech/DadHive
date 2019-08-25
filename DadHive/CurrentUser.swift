@@ -1,13 +1,17 @@
 import Foundation
 import Firebase
+import FirebaseAuth
 
-class CurrentUser {
+public class CurrentUser {
     static let shared = CurrentUser()
     
     private var defaults = DefaultsManager()
     private var apiRepo = APIRepository()
 
     var user: User?
+    var isSessionActive: Bool {
+        return Auth.auth().currentUser != nil
+    }
 
     private init() { }
 
@@ -59,42 +63,56 @@ class CurrentUser {
 
 // MARK: - Class methods
 extension CurrentUser {
-    func signout(_ completion: ((Bool) -> Void)? = nil) {
+    func signout(_ completion: ((Bool) -> Void)) {
         do {
             try Auth.auth().signOut()
             self.setNilUser()
             self.defaults.setNilDefault(forKey: kLastUser)
             self.defaults.setNilDefault(forKey: kAuthorizedUser)
-            completion?(true)
+            completion(true)
         } catch {
-            completion?(false)
+            completion(false)
         }
     }
     
-    func refresh(_ completion: (() -> Void)? = nil) {
-        guard let user = Auth.auth().currentUser else {
-            signout()
-            completion?()
-            return
-        }
-        retrieveUser(withId: user.uid, completion: { (user, error, data) in
-            if let user = user, let data = data {
-                self.defaults.setDefault(withData: data, forKey: kAuthorizedUser)
-                self.setUser(user)
-                completion?()
-            } else {
-                self.signout()
-                completion?()
+    func refresh(_ completion: @escaping (() -> Void)) {
+        if let user = self.user, let uid = user.uid {
+          retrieveUser(withId: uid, completion: { (user, error, data) in
+              if let user = user, let data = data {
+                  self.defaults.setDefault(withData: data, forKey: kAuthorizedUser)
+                  self.setUser(user)
+                  completion()
+              } else {
+                  FIRAuthentication.signout()
+              }
+          })
+        } else {
+          if let uid = FIRAuthentication.uid {
+            retrieveUser(withId: uid) { (user, error, data) in
+                if let user = user, let data = data {
+                  self.defaults.setDefault(withData: data, forKey: kAuthorizedUser)
+                  self.setUser(user)
+                  completion()
+                } else {
+                  FIRAuthentication.signout()
+                }
             }
-        })
+          } else {
+            FIRAuthentication.signout()
+          }
+      }
     }
+
+  func handleUserResponse(user: User?, error: Error?, data: [String: Any]?) {
+
+  }
 
     func updateProfile(withData data: [String: Any?], completion: @escaping (Error?) -> Void) {
         guard let user = self.user else {
             completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]))
             return
         }
-        var params = data
+      var params: [String: Any] = data
         params["userId"] = user.uid ?? ""
         updateUser(params) { (user, error, userDict) in
             if let err = error {

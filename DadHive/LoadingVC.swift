@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RRoostSDK
 
 class LoadingVC: UIViewController {
 

@@ -1,5 +1,6 @@
 import UIKit
 import SVProgressHUD
+import RRoostSDK
 
 private let notificationCenter = NotificationCenter.default
 private let notificationManager = NotificationsManagerModule.shared

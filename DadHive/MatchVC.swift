@@ -8,13 +8,18 @@
 
 import UIKit
 import SDWebImage
+import RRoostSDK
+
+protocol MatchVCDelegate: class {
+  func goBack(_ viewController: UIViewController)
+}
 
 class MatchVC: UIViewController {
 
     @IBOutlet var imgMain: UIImageView!
-    @IBOutlet var btnMessage: UIButton!
     @IBOutlet var btnContinue: UIButton!
-    
+
+    weak var delegate: MatchVCDelegate?
     var user: User?
 
     init(user: User) {
@@ -38,37 +43,11 @@ class MatchVC: UIViewController {
                 self.imgMain.image = UIImage(named: "unknown")
             }
         }
-
-        //  MARK:- Create conversation object
-        let conversation: [String: String] = [
-            "id": Utilities.randomString(length: 25),
-            "senderId": CurrentUser.shared.user?.uid ?? "",
-            "recipientId": user?.uid ?? "",
-            "conversationKey": "\(CurrentUser.shared.user?.uid ?? "")\(user?.uid ?? "")",
-            "createdAt": Date().toString(format: CustomDateFormat.timeDate.rawValue),
-            "updatedAt": Date().toString(format: CustomDateFormat.timeDate.rawValue)
-        ]
-        //  MARK:- Add conversation object
-        FIRFirestoreDB.shared.add(data: conversation, to: kConversations, completion: { (success, docID, error) in
-
-            guard error == nil else {
-                print(error!.localizedDescription)
-                return
-            }
-
-            guard docID != nil else {
-                return
-            }
-
-            print("Conversation created")
-        })
-    }
-
-    @IBAction func sendMessage(_ sender: UIButton) {
     }
 
     @IBAction func continueSwiping(_ sender: UIButton) {
         self.dismissViewController()
+        self.delegate?.goBack(self)
     }
 }
 

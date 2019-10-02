@@ -31,10 +31,13 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-7049078720741277~8479527267</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>googlechromes</string>
 		<string>comgooglemaps</string>
+		<string>safari</string>
+		<string>googlechrome</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

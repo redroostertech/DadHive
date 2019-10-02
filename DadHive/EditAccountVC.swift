@@ -1,4 +1,5 @@
 import UIKit
+import RRoostSDK
 
 class EditAccountVC: UIViewController {
 
@@ -10,11 +11,10 @@ class EditAccountVC: UIViewController {
     var currentUser = CurrentUser.shared
     var type = 1
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        btnSave.applyCornerRadius()
-        btnSave.addGradientLayer(using: kAppCGColors)
-    }
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    self.navigationController?.navigationBar.tintColor = .darkText
+  }
 
     @IBAction func save(_ sender: UIButton) {
         let alert = UIAlertController(title: "Email Change", message: "You are about to change your email address on file. Are you sure", preferredStyle: .alert)

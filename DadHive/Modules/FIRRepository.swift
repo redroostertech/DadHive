@@ -1,5 +1,6 @@
 import Foundation
-import Firebase
+import FirebaseCore
+import FirebaseStorage
 
 class FIRRepository {
     static let shared = FIRRepository()

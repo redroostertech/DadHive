@@ -1,5 +1,6 @@
 import UIKit
 import SDWebImage
+import RRoostSDK
 
 class SettingsVC: UITableViewController {
 
@@ -8,23 +9,30 @@ class SettingsVC: UITableViewController {
     @IBOutlet weak var lblPreferences: UILabel!
     @IBOutlet weak var lblAccount: UILabel!
     @IBOutlet weak var btnRefresh: UIButton!
-    
+    @IBOutlet weak var lblMyPosts: UILabel!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         hideNavigationBarHairline()
-        hideNavigationBar()
         loadUI()
+      
+      self.tableView.cellForRow(at: IndexPath(row: 3, section: 0))?.isHidden = true
+      self.tableView.cellForRow(at: IndexPath(row: 3, section: 0))?.frame.size.height = .zero
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        hideNavigationBar()
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    CurrentUser.shared.refresh {
+      self.loadUI()
     }
+  }
     
     func loadUI() {
         lblFullname.font = UIFont(name: kFontBody, size: kFontSizeBody)
         lblFullname.text = CurrentUser.shared.user?.name?.fullName ?? ""
         lblPreferences.font = UIFont(name: kFontMenu, size: kFontSizeMenu)
         lblAccount.font = UIFont(name: kFontMenu, size: kFontSizeMenu)
+        lblMyPosts.font = UIFont(name: kFontMenu, size: kFontSizeMenu)
         btnProfilePicture.applyCornerRadius()
         
         if let mediaArray = CurrentUser.shared.user?.media, mediaArray.count > 0 {
@@ -48,7 +56,6 @@ class SettingsVC: UITableViewController {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        unHideNavigationBar()
         clearNavigationBackButtonText()
     }
 

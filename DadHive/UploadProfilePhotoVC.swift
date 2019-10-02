@@ -1,5 +1,6 @@
 import UIKit
-import Firebase
+import FirebaseStorage
+import RRoostSDK
 
 private var imagePicker: UIImagePickerController?
 

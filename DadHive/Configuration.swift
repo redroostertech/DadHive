@@ -5,8 +5,15 @@ import ChameleonFramework
 let kAppName = "DadHive"
 let kAdMobEnabled = false
 
-let kAdMobApplicationID = "ca-app-pub-7049078720741277~8479527267"
-let kAdMobInterstitialUnitID = "ca-app-pub-7049078720741277/2652485512"
+let kAdMobApplicationID = "ca-app-pub-7769322711110937~6128375604"
+//  let kAdMobBannerViewlUnitID = "ca-app-pub-7769322711110937/6918713095"
+//  let kAdMobInterstitialUnitID = "ca-app-pub-7769322711110937/1090497886"
+//  let kAdMobNativeUnitID = "ca-app-pub-7769322711110937/3832211297"
+//  let kAdMobRewardUnitID = "ca-app-pub-7769322711110937/7244842696"
+
+// Test
+let kAdMobInterstitialUnitID = "ca-app-pub-3940256099942544/4411468910"
+let kAdMobBannerViewlUnitID = "ca-app-pub-3940256099942544/2934735716"
 
 let kCloudServerKey = "AAAAJ40j48U:APA91bGS-kcu3AOqWNE7v6OUhR0HuelyqaJBAgX7zZTS065O1-_zktiCiHxASFWsF3nx7EDdbi6otwhmxxeCHaGFEi2r0YFiaULG8otoKADnGiforxN6Pc-9X4POYWMoQhr_AMzb3te2"
 
@@ -42,9 +49,12 @@ let kBarBtnPoint = CGPoint(x: 0.0, y: 0.0)
 
 let kTextFieldPadding: CGFloat = 10.0
 
-public let kTestBaseURL = "https://dadhive-test.herokuapp.com/" //"http://localhost:3000/"
-public let kTestURL = kTestBaseURL + "api/v1/"
+public let kLocalBaseURL = "http://localhost:3000/"
+public let kTestBaseURL = "https://dadhive-test.herokuapp.com/"
 public let kLiveBaseURL = "https://dadhive.herokuapp.com/"
+
+public let kLocalURL = kLocalBaseURL + "api/v1/"
+public let kTestURL = kTestBaseURL + "api/v1/"
 public let kLiveURL = kLiveBaseURL + "api/v1/"
 
 //  MARK:- Collections
@@ -60,6 +70,8 @@ public let kAuthorizedUser = "authorizedUser"
 public let kNotificationsAccessCheck = "notificationsAccessCheck"
 
 public var isLive = false
+public var isLocal = true
+
 public var appColors: [UIColor] {
     return [ AppColors.lightGreen, AppColors.darkGreen ]
 }
@@ -98,6 +110,12 @@ let kSignUpText = "Sign Up"
 let kLoginSwitchText = kLoginText
 let kSignUpSwitchText = kSignUpText
 let kMobileApiAgent = "mobile"
+let kGenericSaving = "Saving"
+let kLoadingPosts = "Loading Posts"
+let kLoadingPost = "Loading Post"
+let kGenericError = "Something went wrong."
+let kLoginError = "Invalid email/password combination. Please try again."
+let kCreatingPost = "Creating Post"
 
 //  MARK:- Colors
 let kEnabledTextColor: UIColor = .darkText

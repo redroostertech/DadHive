@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import UserNotifications
+import RRoostSDK
 
 class NotificationsManagerModule: NSObject {
     static let shared = NotificationsManagerModule()
@@ -34,11 +35,15 @@ class NotificationsManagerModule: NSObject {
                     } else {
                         self.getNotificationSettings { (access) in
                             NotificationCenter.default.post(name: Notification.Name(rawValue: kNotificationAccessCheckObservationKey), object: nil, userInfo: ["access": access])
+
+                            CurrentUser.shared.user?.setNotificationToggle(access)
+
                             if let _ = DefaultsManager().retrieveIntDefault(forKey: kNotificationsAccessCheck), access == false {
                                 completion(DadHiveError.notificationAccessDisabled)
                             } else {
                                 DefaultsManager().setDefault(withData: 1, forKey: kNotificationsAccessCheck)
                                 completion(nil)
+
                             }
                         }
                     }

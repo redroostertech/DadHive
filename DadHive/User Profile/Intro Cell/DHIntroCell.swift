@@ -1,4 +1,5 @@
 import UIKit
+import RRoostSDK
 
 class DHIntroCell: UITableViewCell {
 

@@ -1,4 +1,5 @@
 import UIKit
+import RRoostSDK
 
 class ProfileSetupFlowManager {
     static let shared = ProfileSetupFlowManager()

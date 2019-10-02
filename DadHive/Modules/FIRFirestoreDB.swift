@@ -1,7 +1,8 @@
 import Foundation
-import Firebase
+import FirebaseCore
 import FirebaseFirestore
 import CoreLocation
+import RRoostSDK
 
 /*
  Wrapper for Firebase Firestore DB. Contains functions needed to communicate standardized GET, PUT, DELETE, POST methods

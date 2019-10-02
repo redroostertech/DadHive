@@ -1,6 +1,7 @@
 import Foundation
 import ObjectMapper
-import Firebase
+import FirebaseAuth
+import RRoostSDK
 
 class Users: Mappable {
     var users: [User]?
@@ -42,6 +43,9 @@ class User: Mappable, CustomStringConvertible {
     var docId: String?
     var lastId: String?
     var matches: [String]?
+    var likes: [String]?
+
+    var actions: Actions?
     
     // MARK: - Public computed properties
     var media: [Media]? {
@@ -329,6 +333,7 @@ class User: Mappable, CustomStringConvertible {
         lastId <- map["lastId"]
         docId <- map["docId"]
         matches <- map["matches"]
+        actions <- map["actions_results"]
 
         if self.media != nil, self.media!.count > 1 {
             self.media!.sort { $0.order! < $1.order! }
@@ -357,7 +362,56 @@ class User: Mappable, CustomStringConvertible {
     func change(name: String, _ completion: @escaping(Error?) -> Void) {
         CurrentUser.shared.updateProfile(withData: ["type": "name", "value": name]) { (error) in
             if error == nil {
-                self.name?.fullName = name
+                completion(nil)
+            } else {
+                completion(error)
+            }
+        }
+    }
+
+    func change(dob: String, _ completion: @escaping(Error?) -> Void) {
+      CurrentUser.shared.updateProfile(withData: ["type": "dob", "value": dob]) { (error) in
+        if error == nil {
+          completion(nil)
+        } else {
+          completion(error)
+        }
+      }
+    }
+
+    func change(bio: String, _ completion: @escaping(Error?) -> Void) {
+      CurrentUser.shared.updateProfile(withData: ["type": "bio", "value": bio]) { (error) in
+        if error == nil {
+          completion(nil)
+        } else {
+          completion(error)
+        }
+      }
+    }
+
+    func change(companyName: String, _ completion: @escaping(Error?) -> Void) {
+        CurrentUser.shared.updateProfile(withData: ["type": "companyName", "value": companyName]) { (error) in
+            if error == nil {
+                completion(nil)
+            } else {
+                completion(error)
+            }
+        }
+    }
+
+    func change(type: String, value: String, _ completion: @escaping(Error?) -> Void) {
+        CurrentUser.shared.updateProfile(withData: ["type": type, "value": value]) { (error) in
+            if error == nil {
+                completion(nil)
+            } else {
+                completion(error)
+            }
+        }
+    }
+
+    func change(type: String, value: Int, _ completion: @escaping(Error?) -> Void) {
+      CurrentUser.shared.updateProfile(withData: ["type": type, "value": value]) { (error) in
+            if error == nil {
                 completion(nil)
             } else {
                 completion(error)
@@ -425,9 +479,7 @@ class User: Mappable, CustomStringConvertible {
 
     func disableSwiping() {
         guard let newNextDate = newNextSwipeDate else { return }
-        CurrentUser.shared.updateProfile(withData:[
-            "type": "canSwipe",
-            "value": false]) { (error) in
+        CurrentUser.shared.updateProfile(withData: ["type": "canSwipe", "value": false]) { (error) in
             if error == nil {
                 self.canSwipe = false
                 swipeDateTimestamp = newNextDate
@@ -446,7 +498,7 @@ class User: Mappable, CustomStringConvertible {
     func setNotificationToggle(_ state: Bool) {
         CurrentUser.shared.updateProfile(withData: [
             "type": "notifications",
-            "value": state]) { (error) in
+             "value": state]) { (error) in
             if error == nil {
                 self.settings?.notifications = state
             }
@@ -560,4 +612,83 @@ class User: Mappable, CustomStringConvertible {
             }
         }
     }
+}
+
+class Actions: Mappable, CustomStringConvertible {
+
+  // MARK: - Public properties
+  var _id: String?
+  var id: String?
+  private var createdAt: String?
+  var updatedAt: String?
+  var ownerID: String?
+  private var likedIDs: [String]? {
+    didSet {
+      guard let array = self.likedIDs else { return }
+      for i in array {
+        self.excludedIDs.append(i)
+      }
+    }
+  }
+  private var matchedIDs: [String]? {
+    didSet {
+      guard let array = self.matchedIDs else { return }
+      for i in array {
+        self.excludedIDs.append(i)
+      }
+    }
+  }
+  private var blockedIDs: [String]? {
+    didSet {
+      guard let array = self.blockedIDs else { return }
+      for i in array {
+        self.excludedIDs.append(i)
+      }
+    }
+  }
+  private var conversationIDs: [String]?
+
+  // MARK: - Public computer properties
+  var conversationDate: Date? {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "MMM d, yyyy"
+    guard let createdDate = self.createdAt, let date = formatter.date(from: createdDate) else {
+      return nil
+    }
+    return date
+  }
+
+  var date: String? {
+    if let conversationDate = self.conversationUpdatedDate {
+      return conversationDate.timeAgoDisplay()
+    } else {
+      return nil
+    }
+  }
+
+  var conversationUpdatedDate: Date? {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "MMM d, yyyy"
+    guard let updatedDate = self.updatedAt, let date = formatter.date(from: updatedDate) else {
+      return nil
+    }
+    return date
+  }
+
+  var excludedIDs = [String]()
+
+  // MARK: - Lifecycle methods
+  required public init?(map: Map) { }
+
+  public func mapping(map: Map) {
+    _id <- map["_id"]
+    id <- map["id"]
+    createdAt <- map["createdAt"]
+    updatedAt <- map["updatedAt"]
+    likedIDs <- map["likes"]
+    matchedIDs <- map["matches"]
+    ownerID <- map["owner"]
+    blockedIDs <- map["blocked"]
+    conversationIDs <- map["conversations"]
+  }
 }

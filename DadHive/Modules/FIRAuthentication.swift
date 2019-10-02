@@ -1,5 +1,5 @@
 import Foundation
-import Firebase
+import FirebaseCore
 import FirebaseAuth
 
 private let storyBoard = UIStoryboard(name: "Main", bundle: nil)
@@ -45,6 +45,16 @@ class FIRAuthentication {
             }
         }
     }
+
+  static func forgotPassword(email: String, completion: @escaping (Error?) -> Void) {
+    Auth.auth().sendPasswordReset(withEmail: email) { error in
+      if let err = error {
+        completion(error)
+      } else {
+        completion(nil)
+      }
+    }
+  }
 
     static func signout() {
         CurrentUser.shared.signout { (isSignedOut) in

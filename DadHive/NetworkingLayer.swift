@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RRoostSDK
 
 class NetworkingLayer {
     var url : String!

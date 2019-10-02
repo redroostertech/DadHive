@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 import MapKit
 import CoreLocation
+import RRoostSDK
 
 private let kUserMapPinImage = UIImage(named: "unknown")!.resize(withWidth: 32)
 private let kUserMapAnimationTime = 0.300

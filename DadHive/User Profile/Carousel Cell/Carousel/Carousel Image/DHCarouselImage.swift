@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import RRoostSDK
 
 class DHCarouselImage: UICollectionViewCell {
 

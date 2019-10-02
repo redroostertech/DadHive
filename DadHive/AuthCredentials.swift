@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RRoostSDK
 
 struct AuthCredentials {
     var email: String

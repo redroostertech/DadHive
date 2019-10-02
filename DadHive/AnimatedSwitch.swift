@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RRoostSDK
 
 // MARK: - AnimatedSegmentSwitch
 @IBDesignable open class AnimatedSegmentSwitch: UIControl {
@@ -47,15 +48,15 @@ import UIKit
         }
     }
 
-    @IBInspectable open var borderColor: UIColor = UIColor.white {
+    @IBInspectable open var bordercolor: UIColor? = UIColor.white {
         didSet {
-            layer.borderColor = borderColor.cgColor
+          layer.borderColor = bordercolor?.cgColor
         }
     }
 
-    @IBInspectable open var cornerRadius: CGFloat = 0.0 {
+    @IBInspectable open var cornerradius: CGFloat = 0.0 {
         didSet {
-            layer.cornerRadius = cornerRadius
+            layer.cornerRadius = cornerradius
         }
     }
 

@@ -1,5 +1,6 @@
 import Foundation
 import ObjectMapper
+import RRoostSDK
 
 class Conversations: Mappable {
     var count: Int?
@@ -66,6 +67,8 @@ class Conversation: Mappable, CustomStringConvertible {
     var id: String?
     private var createdAt: String?
     var updatedAt: String?
+    var ownerID: String?
+    var participantIDs: [String]?
     var lastMessageId: String?
     var lastMessageText: String?
 
@@ -106,5 +109,7 @@ class Conversation: Mappable, CustomStringConvertible {
         updatedAt <- map["updatedAt"]
         lastMessageId <- map["lastMessageId"]
         lastMessageText <- map["lastMessageText"]
+        ownerID <- map["owner"]
+        participantIDs <- map["participants"]
     }
 }

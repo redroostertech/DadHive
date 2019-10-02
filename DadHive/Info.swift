@@ -1,5 +1,6 @@
 import Foundation
 import ObjectMapper
+import RRoostSDK
 
 class Info: Mappable, CustomStringConvertible {
     var type: String?

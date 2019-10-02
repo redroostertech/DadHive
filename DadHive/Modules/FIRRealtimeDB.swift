@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Firebase
+import FirebaseDatabase
 import ObjectMapper
 
 class FIRRealtimeDB {
@@ -16,32 +16,8 @@ class FIRRealtimeDB {
     private init() {
         Database.database().isPersistenceEnabled = false
         self.dbRef = Database.database().reference()
-//        self.dbRef.child("conversations").childByAutoId().setValue([
-//            "id": "wuhoag347eoa8gsriubrg978",
-//            "sender": [
-//                "email": "mwestbrooksjr@gmail.com",
-//                "name": [
-//                    "fullName": "Michael Westbrooks II"
-//                ]
-//            ],
-//            "recipient": [
-//                "email": "test1@gmail.com",
-//                "name": [
-//                    "fullName": "test user 1"
-//                ]
-//            ],
-//            "lastMessage": [
-//                "sender": [
-//                    "email": "mwestbrooksjr@gmail.com",
-//                    "name": [
-//                        "fullName": "Michael Westbrooks II"
-//                    ]
-//                ],
-//                "message": "Sample Message.",
-//                "createdAt": "2018-12-29T22:28:12+0000"
-//            ]
-//        ])
     }
+  
     func retrieveDataOnce(atChild child: String,
                           completion: @escaping (Bool, DataSnapshot?, Error?) -> Void) {
         self.dbRef

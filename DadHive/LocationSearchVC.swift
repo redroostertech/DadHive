@@ -1,5 +1,6 @@
 import UIKit
 import MapKit
+import RRoostSDK
 
 protocol LocationSearchDelegate {
     func selectLocation(_ searchVC: LocationSearchVC, selectedLocation location: (MKMapItem, MKPlacemark))

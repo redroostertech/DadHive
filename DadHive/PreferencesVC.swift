@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RRoostSDK
 
 class TitleLabel: UILabel {
     override func awakeFromNib() {
@@ -43,7 +44,9 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+      DispatchQueue.main.async {
+        self.navigationController?.navigationBar.tintColor = .white
+      }
         DispatchQueue.global(qos: .background).async {
             FIRFirestoreDB.shared.retrieve(from: kMaxDistance) { (success, documents, error) in
                 if let err = error {
@@ -78,6 +81,7 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
         }
 
         hideNavigationBarHairline()
+      self.navigationController?.navigationBar.tintColor = .darkText
 
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -94,7 +98,7 @@ class PreferencesVC: UITableViewController, UIPickerViewDelegate, UIPickerViewDa
         let toolBar = UIToolbar()
         toolBar.barStyle = .default
         toolBar.isTranslucent = true
-        toolBar.tintColor = .lightGray
+        toolBar.tintColor = .darkText
         toolBar.sizeToFit()
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(PreferencesVC.pickerViewDone))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)

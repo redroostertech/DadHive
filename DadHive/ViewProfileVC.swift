@@ -2,6 +2,7 @@ import UIKit
 import SDWebImage
 import SVProgressHUD
 import APESuperHUD
+import RRoostSDK
 
 class ViewProfileVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 

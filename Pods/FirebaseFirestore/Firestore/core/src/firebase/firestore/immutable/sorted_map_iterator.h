@@ -60,7 +60,7 @@ class SortedMapIterator {
     }
   }
 
-  SortedMapIterator(SortedMapIterator&& other) : tag_(other.tag_) {
+  SortedMapIterator(SortedMapIterator&& other) noexcept : tag_(other.tag_) {
     switch (tag_) {
       case Tag::Array:
         new (&array_iter_) ArrayIter{std::move(other.array_iter_)};
@@ -99,7 +99,7 @@ class SortedMapIterator {
     return *this;
   }
 
-  SortedMapIterator& operator=(SortedMapIterator&& other) {
+  SortedMapIterator& operator=(SortedMapIterator&& other) noexcept {
     if (tag_ == other.tag_) {
       switch (tag_) {
         case Tag::Array:
@@ -119,7 +119,9 @@ class SortedMapIterator {
   pointer get() const {
     switch (tag_) {
       case Tag::Array:
-        return array_iter_;
+        // std::array::iterator is not guaranteed to be a bare pointer but will
+        // be a RandomAccessIterator which does have operator*().
+        return &*array_iter_;
       case Tag::Tree:
         return tree_iter_.get();
     }

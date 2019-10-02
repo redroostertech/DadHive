@@ -7,10 +7,10 @@
 //
 
 import UIKit
+import RRoostSDK
 
 protocol SwipingDelegate {
     func didLike(user: User)
-    func didNotLike()
 }
 
 class DHImageCell: UITableViewCell {

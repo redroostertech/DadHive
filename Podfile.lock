@@ -1,15 +1,9 @@
 PODS:
-  - Alamofire (4.8.1)
+  - Alamofire (4.9.0)
   - APESuperHUD (2.0.1)
-  - AWSCore (2.9.3)
-  - AWSS3 (2.9.3):
-    - AWSCore (= 2.9.3)
-  - Bolts (1.9.0):
-    - Bolts/AppLinks (= 1.9.0)
-    - Bolts/Tasks (= 1.9.0)
-  - Bolts/AppLinks (1.9.0):
-    - Bolts/Tasks
-  - Bolts/Tasks (1.9.0)
+  - AWSCore (2.11.0)
+  - AWSS3 (2.11.0):
+    - AWSCore (= 2.11.0)
   - BoringSSL-GRPC (0.0.3):
     - BoringSSL-GRPC/Implementation (= 0.0.3)
     - BoringSSL-GRPC/Interface (= 0.0.3)
@@ -21,230 +15,137 @@ PODS:
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
   - CVCalendar (1.6.2)
-  - DateTimePicker (2.1.3)
-  - FBSDKCoreKit (4.41.0):
-    - Bolts (~> 1.9)
-  - FBSDKLoginKit (4.41.0):
-    - FBSDKCoreKit
-  - Firebase (5.4.1):
-    - Firebase/Core (= 5.4.1)
-  - Firebase/AdMob (5.4.1):
-    - Firebase/Core
-    - Google-Mobile-Ads-SDK (= 7.31.0)
-  - Firebase/Auth (5.4.1):
-    - Firebase/CoreOnly
-    - FirebaseAuth (= 5.0.2)
-  - Firebase/Core (5.4.1):
-    - Firebase/CoreOnly
-    - FirebaseAnalytics (= 5.0.1)
-  - Firebase/CoreOnly (5.4.1):
-    - FirebaseCore (= 5.0.6)
-  - Firebase/Database (5.4.1):
-    - Firebase/CoreOnly
-    - FirebaseDatabase (= 5.0.2)
-  - Firebase/Firestore (5.4.1):
-    - Firebase/CoreOnly
-    - FirebaseFirestore (= 0.12.6)
-  - Firebase/Invites (5.4.1):
-    - Firebase/Core
-    - FirebaseInvites (= 3.0.0)
-  - Firebase/Messaging (5.4.1):
-    - Firebase/CoreOnly
-    - FirebaseMessaging (= 3.0.3)
-  - Firebase/Performance (5.4.1):
-    - Firebase/Core
-    - FirebasePerformance (= 2.0.1)
-  - Firebase/RemoteConfig (5.4.1):
-    - Firebase/Core
-    - FirebaseRemoteConfig (= 3.0.0)
-  - Firebase/Storage (5.4.1):
-    - Firebase/CoreOnly
-    - FirebaseStorage (= 3.0.0)
-  - FirebaseABTesting (2.0.0):
-    - FirebaseCore (~> 5.0)
-    - Protobuf (~> 3.5)
-  - FirebaseAnalytics (5.0.1):
-    - FirebaseCore (~> 5.0)
-    - FirebaseInstanceID (~> 3.0)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+  - DateTimePicker (2.2.0)
+  - EmptyDataSet-Swift (4.2.0)
+  - FirebaseAnalyticsInterop (1.4.0)
+  - FirebaseAuth (6.2.3):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.2)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.2)
+    - GoogleUtilities/Environment (~> 6.2)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - FirebaseAuthInterop (1.0.0)
+  - FirebaseCore (6.2.3):
+    - FirebaseCoreDiagnostics (~> 1.0)
+    - FirebaseCoreDiagnosticsInterop (~> 1.0)
+    - GoogleUtilities/Environment (~> 6.2)
+    - GoogleUtilities/Logger (~> 6.2)
+  - FirebaseCoreDiagnostics (1.0.1):
+    - FirebaseCoreDiagnosticsInterop (~> 1.0)
+    - GoogleDataTransportCCTSupport (~> 1.0)
+    - GoogleUtilities/Environment (~> 6.2)
+    - GoogleUtilities/Logger (~> 6.2)
+  - FirebaseCoreDiagnosticsInterop (1.0.0)
+  - FirebaseDatabase (6.1.0):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - leveldb-library (~> 1.18)
+  - FirebaseFirestore (1.5.0):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.2)
+    - FirebaseFirestore/abseil-cpp (= 1.5.0)
+    - "gRPC-C++ (= 0.0.9)"
+    - leveldb-library (~> 1.22)
+    - nanopb (~> 0.3.901)
+    - Protobuf (~> 3.1)
+  - FirebaseFirestore/abseil-cpp (1.5.0):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.2)
+    - "gRPC-C++ (= 0.0.9)"
+    - leveldb-library (~> 1.22)
+    - nanopb (~> 0.3.901)
+    - Protobuf (~> 3.1)
+  - FirebaseFunctions (2.5.1):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - FirebaseInstanceID (4.2.5):
+    - FirebaseCore (~> 6.0)
+    - GoogleUtilities/Environment (~> 6.0)
+    - GoogleUtilities/UserDefaults (~> 6.0)
+  - FirebaseMessaging (4.1.4):
+    - FirebaseAnalyticsInterop (~> 1.3)
+    - FirebaseCore (~> 6.2)
+    - FirebaseInstanceID (~> 4.1)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.2)
+    - GoogleUtilities/Environment (~> 6.2)
+    - GoogleUtilities/Reachability (~> 6.2)
+    - GoogleUtilities/UserDefaults (~> 6.2)
+    - Protobuf (~> 3.1)
+  - FirebaseStorage (3.4.1):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - Freedom (2.3.1)
+  - Google-Mobile-Ads-SDK (7.49.0):
+    - GoogleAppMeasurement (~> 6.0)
+  - GoogleAppMeasurement (6.1.1):
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
+    - GoogleUtilities/MethodSwizzler (~> 6.0)
+    - GoogleUtilities/Network (~> 6.0)
+    - "GoogleUtilities/NSData+zlib (~> 6.0)"
     - nanopb (~> 0.3)
-  - FirebaseAuth (5.0.2):
-    - FirebaseCore (~> 5.0)
-    - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseCore (5.0.6):
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-  - FirebaseDatabase (5.0.2):
-    - FirebaseCore (~> 5.0)
-    - leveldb-library (~> 1.18)
-  - FirebaseDynamicLinks (3.0.1):
-    - FirebaseAnalytics (~> 5.0)
-  - FirebaseFirestore (0.12.6):
-    - FirebaseCore (~> 5.0)
-    - FirebaseFirestore/abseil-cpp (= 0.12.6)
-    - gRPC-ProtoRPC (~> 1.0)
-    - leveldb-library (~> 1.18)
-    - nanopb (~> 0.3.8)
-    - Protobuf (~> 3.1)
-  - FirebaseFirestore/abseil-cpp (0.12.6):
-    - FirebaseCore (~> 5.0)
-    - gRPC-ProtoRPC (~> 1.0)
-    - leveldb-library (~> 1.18)
-    - nanopb (~> 0.3.8)
-    - Protobuf (~> 3.1)
-  - FirebaseInstanceID (3.1.1):
-    - FirebaseCore (~> 5.0)
-  - FirebaseInvites (3.0.0):
-    - FirebaseAnalytics (~> 5.0)
-    - FirebaseDynamicLinks (~> 3.0)
-    - GoogleAPIClientForREST (~> 1.0)
-    - GoogleSignIn (~> 4.1)
-    - GoogleToolboxForMac/Logger (~> 2.1)
-    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
-    - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
-    - GoogleToolboxForMac/StringEncoding (~> 2.1)
-    - GoogleToolboxForMac/URLBuilder (~> 2.1)
-    - GTMOAuth2 (~> 1.0)
-    - GTMSessionFetcher/Core (~> 1.1)
-    - GTMSessionFetcher/Full (~> 1.1)
-    - Protobuf (~> 3.5)
-  - FirebaseMessaging (3.0.3):
-    - FirebaseCore (~> 5.0)
-    - FirebaseInstanceID (~> 3.0)
-    - GoogleToolboxForMac/Logger (~> 2.1)
-    - Protobuf (~> 3.1)
-  - FirebasePerformance (2.0.1):
-    - FirebaseAnalytics (~> 5.0)
-    - FirebaseInstanceID (~> 3.1)
-    - FirebaseSwizzlingUtilities/ISASwizzling (~> 2.0)
-    - FirebaseSwizzlingUtilities/MethodSwizzling (~> 2.0)
-    - GoogleToolboxForMac/Logger (~> 2.1)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-    - GTMSessionFetcher/Core (~> 1.1)
-    - Protobuf (~> 3.5)
-  - FirebaseRemoteConfig (3.0.0):
-    - FirebaseABTesting (~> 2.0)
-    - FirebaseAnalytics (~> 5.0)
-    - FirebaseCore (~> 5.0)
-    - FirebaseInstanceID (~> 3.0)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-    - Protobuf (~> 3.5)
-  - FirebaseStorage (3.0.0):
-    - FirebaseCore (~> 5.0)
-    - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseSwizzlingUtilities/ISASwizzling (2.0.0)
-  - FirebaseSwizzlingUtilities/MethodSwizzling (2.0.0):
-    - FirebaseCore (~> 5.0)
-  - FirebaseUI (5.2.2):
-    - FirebaseUI/Anonymous (= 5.2.2)
-    - FirebaseUI/Auth (= 5.2.2)
-    - FirebaseUI/Database (= 5.2.2)
-    - FirebaseUI/Facebook (= 5.2.2)
-    - FirebaseUI/Firestore (= 5.2.2)
-    - FirebaseUI/Google (= 5.2.2)
-    - FirebaseUI/Phone (= 5.2.2)
-    - FirebaseUI/Storage (= 5.2.2)
-    - FirebaseUI/Twitter (= 5.2.2)
-  - FirebaseUI/Anonymous (5.2.2):
-    - FirebaseUI/Auth
-  - FirebaseUI/Auth (5.2.2):
-    - Firebase/Auth (~> 5.0)
-  - FirebaseUI/Database (5.2.2):
-    - Firebase/Database (~> 5.0)
-  - FirebaseUI/Facebook (5.2.2):
-    - FBSDKLoginKit (~> 4.0)
-    - FirebaseUI/Auth
-  - FirebaseUI/Firestore (5.2.2):
-    - Firebase/Firestore
-  - FirebaseUI/Google (5.2.2):
-    - FirebaseUI/Auth
-    - GoogleSignIn (~> 4.0)
-  - FirebaseUI/Phone (5.2.2):
-    - FirebaseUI/Auth
-  - FirebaseUI/Storage (5.2.2):
-    - Firebase/Storage (~> 5.0)
-    - SDWebImage (~> 4.0)
-  - FirebaseUI/Twitter (5.2.2):
-    - FirebaseUI/Auth
-    - TwitterKit (~> 3.0)
-  - Google-Mobile-Ads-SDK (7.31.0)
-  - GoogleAPIClientForREST (1.3.8):
-    - GoogleAPIClientForREST/Core (= 1.3.8)
-    - GTMSessionFetcher (>= 1.1.7)
-  - GoogleAPIClientForREST/Core (1.3.8):
-    - GTMSessionFetcher (>= 1.1.7)
-  - GoogleSignIn (4.4.0):
-    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
-    - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
-    - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleToolboxForMac/Core (2.2.0):
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-  - GoogleToolboxForMac/DebugUtils (2.2.0):
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-  - GoogleToolboxForMac/Defines (2.2.0)
-  - GoogleToolboxForMac/Logger (2.2.0):
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-  - "GoogleToolboxForMac/NSData+zlib (2.2.0)":
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.0)":
-    - GoogleToolboxForMac/DebugUtils (= 2.2.0)
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.0)"
-  - "GoogleToolboxForMac/NSString+URLArguments (2.2.0)"
-  - GoogleToolboxForMac/StringEncoding (2.2.0):
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-  - GoogleToolboxForMac/URLBuilder (2.2.0):
-    - GoogleToolboxForMac/Core (= 2.2.0)
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-    - "GoogleToolboxForMac/NSDictionary+URLArguments (= 2.2.0)"
-    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.0)"
-  - gRPC (1.19.0):
-    - gRPC-RxLibrary (= 1.19.0)
-    - gRPC/Main (= 1.19.0)
-  - gRPC-Core (1.19.0):
-    - gRPC-Core/Implementation (= 1.19.0)
-    - gRPC-Core/Interface (= 1.19.0)
-  - gRPC-Core/Implementation (1.19.0):
+  - GoogleDataTransport (1.2.0)
+  - GoogleDataTransportCCTSupport (1.0.3):
+    - GoogleDataTransport (~> 1.2)
+    - nanopb
+  - GoogleUtilities/AppDelegateSwizzler (6.2.5):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (6.2.5)
+  - GoogleUtilities/Logger (6.2.5):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/MethodSwizzler (6.2.5):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (6.2.5):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (6.2.5)"
+  - GoogleUtilities/Reachability (6.2.5):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (6.2.5):
+    - GoogleUtilities/Logger
+  - "gRPC-C++ (0.0.9)":
+    - "gRPC-C++/Implementation (= 0.0.9)"
+    - "gRPC-C++/Interface (= 0.0.9)"
+  - "gRPC-C++/Implementation (0.0.9)":
+    - "gRPC-C++/Interface (= 0.0.9)"
+    - gRPC-Core (= 1.21.0)
+    - nanopb (~> 0.3)
+  - "gRPC-C++/Interface (0.0.9)"
+  - gRPC-Core (1.21.0):
+    - gRPC-Core/Implementation (= 1.21.0)
+    - gRPC-Core/Interface (= 1.21.0)
+  - gRPC-Core/Implementation (1.21.0):
     - BoringSSL-GRPC (= 0.0.3)
-    - gRPC-Core/Interface (= 1.19.0)
+    - gRPC-Core/Interface (= 1.21.0)
     - nanopb (~> 0.3)
-  - gRPC-Core/Interface (1.19.0)
-  - gRPC-ProtoRPC (1.19.0):
-    - gRPC-ProtoRPC/Main (= 1.19.0)
-  - gRPC-ProtoRPC/Main (1.19.0):
-    - gRPC (= 1.19.0)
-    - gRPC-RxLibrary (= 1.19.0)
-    - Protobuf (~> 3.0)
-  - gRPC-RxLibrary (1.19.0)
-  - gRPC/Main (1.19.0):
-    - gRPC-Core (= 1.19.0)
-    - gRPC-RxLibrary (= 1.19.0)
-  - GTMOAuth2 (1.1.6):
-    - GTMSessionFetcher (~> 1.1)
-  - GTMSessionFetcher (1.2.1):
-    - GTMSessionFetcher/Full (= 1.2.1)
-  - GTMSessionFetcher/Core (1.2.1)
-  - GTMSessionFetcher/Full (1.2.1):
-    - GTMSessionFetcher/Core (= 1.2.1)
+  - gRPC-Core/Interface (1.21.0)
+  - GTMSessionFetcher/Core (1.2.2)
   - Hero (1.4.0)
-  - IQKeyboardManagerSwift (6.2.0)
-  - Kingfisher (5.2.0)
-  - leveldb-library (1.20)
+  - IQKeyboardManagerSwift (6.4.2)
+  - Kingfisher (5.7.1)
+  - leveldb-library (1.22)
   - LGButton (1.1.6)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
-  - ObjectMapper (3.4.2)
-  - Protobuf (3.7.0)
-  - Pulsator (0.5.3)
-  - SDWebImage (4.4.6):
-    - SDWebImage/Core (= 4.4.6)
-  - SDWebImage/Core (4.4.6)
+  - ObjectMapper (3.5.1)
+  - Protobuf (3.9.0)
+  - Pulsator (0.6.0)
+  - RRoostSDK (0.1.6)
+  - RSKGrowingTextView (5.0.2):
+    - RSKPlaceholderTextView (= 5.0.2)
+  - RSKPlaceholderTextView (5.0.2)
+  - SDWebImage (5.1.1):
+    - SDWebImage/Core (= 5.1.1)
+  - SDWebImage/Core (5.1.1)
+  - Sheeeeeeeeet (2.0.2)
   - SVProgressHUD (2.2.5)
-  - TwitterCore (3.2.0)
-  - TwitterKit (3.4.2):
-    - TwitterCore (>= 3.2.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
@@ -255,25 +156,26 @@ DEPENDENCIES:
   - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
   - CVCalendar
   - DateTimePicker
-  - Firebase (~> 5.0)
-  - Firebase/AdMob (~> 5.0)
-  - Firebase/Auth (~> 5.0)
-  - Firebase/Core (~> 5.0)
-  - Firebase/Database (~> 5.0)
-  - Firebase/Firestore (~> 5.0)
-  - Firebase/Invites (~> 5.0)
-  - Firebase/Messaging (~> 5.0)
-  - Firebase/Performance (~> 5.0)
-  - Firebase/RemoteConfig (~> 5.0)
-  - Firebase/Storage (~> 5.0)
-  - FirebaseUI (~> 5.0)
+  - EmptyDataSet-Swift
+  - FirebaseAuth
+  - FirebaseCore
+  - FirebaseDatabase
+  - FirebaseFirestore
+  - FirebaseFunctions
+  - FirebaseMessaging
+  - FirebaseStorage
+  - Freedom
+  - Google-Mobile-Ads-SDK
   - Hero
   - IQKeyboardManagerSwift
   - Kingfisher
   - LGButton
   - ObjectMapper (~> 3.1)
   - Pulsator
+  - RRoostSDK (from `https://github.com/redroostertech/RRoostSDK.git`)
+  - RSKGrowingTextView
   - SDWebImage
+  - Sheeeeeeeeet
   - SVProgressHUD
 
 SPEC REPOS:
@@ -281,38 +183,31 @@ SPEC REPOS:
     - Alamofire
     - AWSCore
     - AWSS3
-    - Bolts
     - BoringSSL-GRPC
     - Cachable
     - CVCalendar
     - DateTimePicker
-    - FBSDKCoreKit
-    - FBSDKLoginKit
-    - Firebase
-    - FirebaseABTesting
-    - FirebaseAnalytics
+    - EmptyDataSet-Swift
+    - FirebaseAnalyticsInterop
     - FirebaseAuth
+    - FirebaseAuthInterop
     - FirebaseCore
+    - FirebaseCoreDiagnostics
+    - FirebaseCoreDiagnosticsInterop
     - FirebaseDatabase
-    - FirebaseDynamicLinks
     - FirebaseFirestore
+    - FirebaseFunctions
     - FirebaseInstanceID
-    - FirebaseInvites
     - FirebaseMessaging
-    - FirebasePerformance
-    - FirebaseRemoteConfig
     - FirebaseStorage
-    - FirebaseSwizzlingUtilities
-    - FirebaseUI
+    - Freedom
     - Google-Mobile-Ads-SDK
-    - GoogleAPIClientForREST
-    - GoogleSignIn
-    - GoogleToolboxForMac
-    - gRPC
+    - GoogleAppMeasurement
+    - GoogleDataTransport
+    - GoogleDataTransportCCTSupport
+    - GoogleUtilities
+    - "gRPC-C++"
     - gRPC-Core
-    - gRPC-ProtoRPC
-    - gRPC-RxLibrary
-    - GTMOAuth2
     - GTMSessionFetcher
     - Hero
     - IQKeyboardManagerSwift
@@ -323,78 +218,79 @@ SPEC REPOS:
     - ObjectMapper
     - Protobuf
     - Pulsator
+    - RSKGrowingTextView
+    - RSKPlaceholderTextView
     - SDWebImage
+    - Sheeeeeeeeet
     - SVProgressHUD
-    - TwitterCore
-    - TwitterKit
 
 EXTERNAL SOURCES:
   APESuperHUD:
     :git: https://github.com/apegroup/APESuperHUD.git
   ChameleonFramework:
     :git: https://github.com/ViccAlexander/Chameleon.git
+  RRoostSDK:
+    :git: https://github.com/redroostertech/RRoostSDK.git
 
 CHECKOUT OPTIONS:
   APESuperHUD:
-    :commit: 0a7aecdf9d00094824b68d2f15e0f277ea3b767b
+    :commit: 7a94bfdcd78cb0b1795ce5e933cf911eac54ec89
     :git: https://github.com/apegroup/APESuperHUD.git
   ChameleonFramework:
     :commit: 6dd284bde21ea2e7f9fd89bc36f40df16e16369d
     :git: https://github.com/ViccAlexander/Chameleon.git
+  RRoostSDK:
+    :commit: 29fa8ce057197dd7d6cc60225dc9930692556767
+    :git: https://github.com/redroostertech/RRoostSDK.git
 
 SPEC CHECKSUMS:
-  Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
+  Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
   APESuperHUD: 18ce2f9f114dd38d8fef5a6831e71ae9634cfc26
-  AWSCore: 5cbb6c6ccfad4b55e494c2e8df87781512f7881e
-  AWSS3: f016dddb6de858f0cc328d4e10a551299a66a3bb
-  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
+  AWSCore: 63f0b3569679a497081c915985fbd549e6be64c1
+  AWSS3: 6838ee0a5e76e62297c5ee36effceaff5f8d53bb
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   Cachable: af3b7624756db339513c83fedeac67b046f22638
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   CVCalendar: 515092247b9c5059855643c2a2220f259bd5417f
-  DateTimePicker: 1d34181c5e9cd6a32ca87174fdf66c9710e483ef
-  FBSDKCoreKit: 974810fe3806173f3777c68062fa8ed6fa59b59d
-  FBSDKLoginKit: 159a5c2eebe6a0774c3b128f5085128679233d2b
-  Firebase: 355bd535bfdacaa82a7fe8d9784115edefd6fc03
-  FirebaseABTesting: 1f50b8d50f5e3469eea54e7463a7b7fe221d1f5e
-  FirebaseAnalytics: b3628aea54c50464c32c393fb2ea032566e7ecc2
-  FirebaseAuth: 096e457cdd4274412a66c4a35874787e411f5a03
-  FirebaseCore: 4c28e3b9708ba48a765e76515f913a71596eb5dd
-  FirebaseDatabase: 27be5ac5bc75e0b17537b2bbfada8258addcc8cd
-  FirebaseDynamicLinks: d624a7adc81a8fd70d52be5a6a47a2bc0644b923
-  FirebaseFirestore: d4a3a7787624e612298a320da95935b8dc036c1d
-  FirebaseInstanceID: f3f0657372592ecdfdfe2cac604a5a75758376a6
-  FirebaseInvites: 71abc38344976e74ae26f03d8a9a1282fb1c2d2c
-  FirebaseMessaging: f43eb0c0e1da096e659de6f713038e74862a62cd
-  FirebasePerformance: 1ebd87ffee5ca814582db1dc9e25651792ba02db
-  FirebaseRemoteConfig: 3c57e4644bd6976b671ae0b725cd709f198bd1f5
-  FirebaseStorage: 7ca4bb7b58a25fa647b04f524033fc7cb7eb272b
-  FirebaseSwizzlingUtilities: 6c22677c50d0b6f5f0dc637c1233f13694a3003f
-  FirebaseUI: 09519bf436a055cd696bf68687d624423150e4c0
-  Google-Mobile-Ads-SDK: 6e529e748b45507a2ca904e0b5a52669ba3920c4
-  GoogleAPIClientForREST: 5447a194eae517986cafe6421a5330b80b820591
-  GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
-  GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
-  gRPC: 77d2866b3ce1e187b2239d8adba48b98d9524c15
-  gRPC-Core: bd9472c8daa2e414b9f8038ba667bf56ce0e02b8
-  gRPC-ProtoRPC: cc498c1885e75a1fb6b892881b440707f131fb5e
-  gRPC-RxLibrary: 562e2a6d12137d15dfb93bbf652bd3f638e3eb8a
-  GTMOAuth2: e8b6512c896235149df975c41d9a36c868ab7fba
-  GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
+  DateTimePicker: f65c0ae594e85dcf39d2aaf6a8ce06dee7d15aa7
+  EmptyDataSet-Swift: 1fa0b35f530a35f852ecb2b53564728b0c300aaf
+  FirebaseAnalyticsInterop: d48b6ab67bcf016a05e55b71fc39c61c0cb6b7f3
+  FirebaseAuth: e7f86c2dfc57281cd01f7da5e4b40e01e4510a4a
+  FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
+  FirebaseCore: e9d9bd1dae61c1e82bc1e0e617a9d832392086a0
+  FirebaseCoreDiagnostics: 4c04ae09d0ab027c30179828c6bb47764df1bd13
+  FirebaseCoreDiagnosticsInterop: 6829da2b8d1fc795ff1bd99df751d3788035d2cb
+  FirebaseDatabase: 518cd94286de2ee999e19383a2a6ae04c81ce993
+  FirebaseFirestore: c5873e279490fbe02239ab2cdfb91c2d546261cc
+  FirebaseFunctions: 5af7c35d1c5e41608fecbb667eb6c4e672e318d0
+  FirebaseInstanceID: 550df9be1f99f751d8fcde3ac342a1e21a0e6c42
+  FirebaseMessaging: 9483ac438b7b223c09dad8712310e9ee7d562c99
+  FirebaseStorage: b7c6d00997bc21d4465453bdcc5cc65513110fed
+  Freedom: a742f914c224c2a9b3d68a9f3dd8bdb189d621c9
+  Google-Mobile-Ads-SDK: df315e371b29cf935f7ea872e7bdec39462a100e
+  GoogleAppMeasurement: 86a82f0e1f20b8eedf8e20326530138fd71409de
+  GoogleDataTransport: 8f9897b8e073687f24ca8d3c3a8013dec7d2d1cc
+  GoogleDataTransportCCTSupport: 51134d81fca795c60cc247d1cb6af63c3d67b8d8
+  GoogleUtilities: e7dc37039b19df7fe543479d3e4a02ac8d11bb69
+  "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
+  gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
+  GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
   Hero: bac92350d7201a1a940003e0767c7b52ce7c99a1
-  IQKeyboardManagerSwift: b07ccf9d8cafe993dcd6cb794eb4ba34611a0c4e
-  Kingfisher: 07067cfacf371117330dceb4b4b8f5c4b691ab42
-  leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
+  IQKeyboardManagerSwift: 79a3ec200dfb41cb66a89b8575417b5378107c5d
+  Kingfisher: 176d377ad339113c99ad4980cbae687f807e20fe
+  leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   LGButton: 9f0a7f9d3030e3f504108342f6b66d64a429371b
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
-  ObjectMapper: 0d4402610f4e468903ae64629eec4784531e5c51
-  Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
-  Pulsator: d58707c6827ec862cd89fd727424866795dabd24
-  SDWebImage: 3f3f0c02f09798048c47a5ed0a13f17b063572d8
+  ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
+  Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
+  Pulsator: eb5a9f9be4bdcbd19903984c65deca6aabe50a17
+  RRoostSDK: 49c99ba5fdb3b4fcef2ba48757683af7bfc48ce0
+  RSKGrowingTextView: 9fdc68c8dabaacd54e23c316ff14b73aef034594
+  RSKPlaceholderTextView: df72ca93edfac185b98f51cb85e445f54ce8a163
+  SDWebImage: 96d7f03415ccb28d299d765f93557ff8a617abd8
+  Sheeeeeeeeet: c3e93fa430d8b5259ab8c526e8c3a81ba515b07f
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
-  TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: 9ed80cc01a309f56660937d945f18e232dec5310
+PODFILE CHECKSUM: e90cc59f8c07e9ed810fc983ca7e39cc309d3aca
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.7.5

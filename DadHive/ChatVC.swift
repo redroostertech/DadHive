@@ -1,9 +1,10 @@
 import UIKit
 import APESuperHUD
-import Firebase
+import FirebaseDatabase
 import ChameleonFramework
 import SDWebImage
 import Foundation
+import RRoostSDK
 
 class SenderCell: UITableViewCell {
     @IBOutlet weak var lblMessage: ValueLabel!
@@ -53,20 +54,21 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     func getMessages(conversationId id: String) {
         FIRRealtimeDB.shared.retrieveData(atChild: "messages", whereKey: "conversationId", isEqualTo: id) { (success, snapshot, error) in
+            self.hideHUD()
             self.messagesToDisplay = [Message]()
             if let err = error {
                 print(err.localizedDescription)
                 self.showError("There was an error retrieving messages. Please try again later.")
                 self.tblMain.reloadData()
-                self.scrollToBottom(of: self.tblMain, completion: {
-                    self.dismissHUD()
-                })
+              self.tblMain.scrollToBottom(completion: {
+                self.dismissHUD()
+              })
             } else {
                 guard let messages = snapshot else {
                     self.tblMain.reloadData()
-                    self.scrollToBottom(of: self.tblMain, completion: {
-                        self.dismissHUD()
-                    })
+                  self.tblMain.scrollToBottom(completion: {
+                    self.dismissHUD()
+                  })
                     return
                 }
                 for i in messages.children {
@@ -76,7 +78,7 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     self.messagesToDisplay.append(message!)
                 }
                 self.tblMain.reloadData()
-                self.scrollToBottom(of: self.tblMain, completion: {
+              self.tblMain.scrollToBottom(completion: {
                     self.txtField.text = ""
                     self.dismissHUD()
                 })
@@ -107,6 +109,7 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
 
     @IBAction func sendMessage(_ sender: UIButton) {
+      showHUD()
       guard let conversationwrapper = self.conversationWrapper, let conversation = conversationwrapper.conversation, let id = conversation.id else {
         self.showError("Conversation no longer exists. Please go back.")
         return
@@ -120,6 +123,7 @@ class ChatVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
         FIRRealtimeDB.shared.add(data: parameters, atChild: "messages", completion: {
             (success, results, error) in
+            self.hideHUD()
             if let err = error {
                 print(err.localizedDescription)
                 self.showError("There was an error sending message. Please try again.")

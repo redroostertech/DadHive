@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import RRoostSDK
 
 struct AppColors {
     static var darkGreen: UIColor {

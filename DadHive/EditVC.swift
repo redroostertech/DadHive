@@ -1,5 +1,6 @@
 import UIKit
 import SVProgressHUD
+import RRoostSDK
 
 enum EditVCPickerViewTypesString: String {
     case AgeRange = "AgeRange"
@@ -28,9 +29,9 @@ class EditVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        btnSave.applyCornerRadius()
-        btnSave.addGradientLayer(using: kAppCGColors)
-        lblTitle.text = userInfo?.title ?? ""
+      self.navigationController?.navigationBar.tintColor = .darkText
+      
+        lblTitle.text = "Edit \(userInfo?.title ?? "")"
 
         if let type = userInfo?.type, type == "dob" {
             showDatePicker()
@@ -82,30 +83,10 @@ class EditVC: UIViewController {
                     (error) in
                     if let err = error {
                         print(err)
-                    } else {
                         DispatchQueue.main.async {
-                            self.hideHUD()
-                            self.popViewController()
+                          self.showError("There was an error. Please try again.")
+                          self.hideHUD()
                         }
-                    }
-                })
-            } else if let type = userInfo.type, type == "kidsCount" {
-                self.currentUser.user?.setInformation(atKey: userInfo.type ?? "", withValue: selectedKidsCount, {
-                    (error) in
-                    if let err = error {
-                        print(err)
-                    } else {
-                        DispatchQueue.main.async {
-                            self.hideHUD()
-                            self.popViewController()
-                        }
-                    }
-                })
-            } else {
-                self.currentUser.user?.setInformation(atKey: userInfo.type ?? "", withValue: txtField.text, {
-                    (error) in
-                    if let err = error {
-                        print(err)
                     } else {
                         DispatchQueue.main.async {
                             self.hideHUD()
@@ -114,7 +95,97 @@ class EditVC: UIViewController {
                     }
                 })
             }
-            userInfo.info = txtField.text
+
+            if let type = userInfo.type, type == "dob" {
+              self.currentUser.user?.change(dob: txtField.text, {
+                (error) in
+                if let err = error {
+                  print(err)
+                  DispatchQueue.main.async {
+                    self.showError("There was an error. Please try again.")
+                    self.hideHUD()
+                  }
+                } else {
+                  DispatchQueue.main.async {
+                    self.hideHUD()
+                    self.popViewController()
+                  }
+                }
+              })
+            }
+
+            if let type = userInfo.type, type == "bio" {
+              self.currentUser.user?.change(bio: txtField.text, {
+                (error) in
+                if let err = error {
+                  print(err)
+                  DispatchQueue.main.async {
+                    self.showError("There was an error. Please try again.")
+                    self.hideHUD()
+                  }
+                } else {
+                  DispatchQueue.main.async {
+                    self.hideHUD()
+                    self.popViewController()
+                  }
+                }
+              })
+            }
+
+            if let type = userInfo.type, type == "companyName" {
+              self.currentUser.user?.change(companyName: txtField.text, {
+                (error) in
+                if let err = error {
+                  print(err)
+                  DispatchQueue.main.async {
+                    self.showError("There was an error. Please try again.")
+                    self.hideHUD()
+                  }
+                } else {
+                  DispatchQueue.main.async {
+                    self.hideHUD()
+                    self.popViewController()
+                  }
+                }
+              })
+            }
+
+            if let type = userInfo.type, type == "kidsCount" {
+              self.currentUser.user?.change(type: type, value: selectedKidsCount, {
+                (error) in
+                if let err = error {
+                  print(err)
+                  DispatchQueue.main.async {
+                    self.showError("There was an error. Please try again.")
+                    self.hideHUD()
+                  }
+                } else {
+                  DispatchQueue.main.async {
+                    self.hideHUD()
+                    self.popViewController()
+                  }
+                }
+              })
+            }
+
+            if let type = userInfo.type {
+              self.currentUser.user?.change(type: type, value: txtField.text, {
+                (error) in
+                if let err = error {
+                  print(err)
+                  DispatchQueue.main.async {
+                    self.showError("There was an error. Please try again.")
+                    self.hideHUD()
+                  }
+                } else {
+                  DispatchQueue.main.async {
+                    self.hideHUD()
+                    self.popViewController()
+                  }
+                }
+              })
+            }
+
         } else {
             self.showError("Field cannot be empty.")
         }
@@ -143,7 +214,6 @@ class EditVC: UIViewController {
         txtField.inputAccessoryView = toolBar
         // add datepicker to textField
         txtField.inputView = datePicker
-
     }
 
     func showAgeRangePicker() {

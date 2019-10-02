@@ -2,6 +2,7 @@ import UIKit
 import CoreLocation
 import MapKit
 import DateTimePicker
+import RRoostSDK
 
 class StartHiveVC: UIViewController {
     

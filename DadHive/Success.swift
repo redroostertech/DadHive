@@ -8,6 +8,7 @@
 
 import Foundation
 import ObjectMapper
+import RRoostSDK
 
 class Success: Mappable, CustomStringConvertible {
     var result: Bool?

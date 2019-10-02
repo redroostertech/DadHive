@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MatchVC" customModule="DadHive" customModuleProvider="target">
             <connections>
-                <outlet property="btnContinue" destination="bRc-a0-ea9" id="bkt-g3-lf1"/>
-                <outlet property="btnMessage" destination="rko-v8-nX7" id="hBb-Kw-aXX"/>
                 <outlet property="imgMain" destination="sam-g8-Tvx" id="jsA-IX-Xaz"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -38,24 +36,11 @@
                         <constraint firstAttribute="width" constant="175" id="MFz-Lo-Uc6"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                    <state key="normal" title="SEND MESSAGE">
-                        <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                    </state>
-                    <connections>
-                        <action selector="sendMessage:" destination="-1" eventType="touchUpInside" id="6s4-Zb-4vo"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRc-a0-ea9">
-                    <rect key="frame" x="100" y="486.5" width="175" height="42"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="42" id="LJQ-HJ-Pi3"/>
-                    </constraints>
                     <state key="normal" title="CONTINUE">
                         <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                     </state>
                     <connections>
-                        <action selector="continueSwiping:" destination="-1" eventType="touchUpInside" id="p2T-eU-sFg"/>
+                        <action selector="continueSwiping:" destination="-1" eventType="touchUpInside" id="PPc-2v-nEj"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Congratulations! You have a playdate!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rcu-lS-Jjh">
@@ -71,11 +56,8 @@
                 <constraint firstItem="sam-g8-Tvx" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="7uE-5g-3AB"/>
                 <constraint firstItem="rko-v8-nX7" firstAttribute="top" secondItem="sam-g8-Tvx" secondAttribute="bottom" constant="24" id="Fr5-dG-Qcd"/>
                 <constraint firstItem="sam-g8-Tvx" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="G0l-Dt-Icr"/>
-                <constraint firstItem="bRc-a0-ea9" firstAttribute="trailing" secondItem="rko-v8-nX7" secondAttribute="trailing" id="MOd-dy-QCS"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Rcu-lS-Jjh" secondAttribute="trailing" constant="16" id="Nak-Da-Ndd"/>
                 <constraint firstItem="Rcu-lS-Jjh" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="ONS-lF-5QI"/>
-                <constraint firstItem="bRc-a0-ea9" firstAttribute="leading" secondItem="rko-v8-nX7" secondAttribute="leading" id="QCT-QO-Mis"/>
-                <constraint firstItem="bRc-a0-ea9" firstAttribute="top" secondItem="rko-v8-nX7" secondAttribute="bottom" constant="32" id="VP3-oI-QS6"/>
                 <constraint firstItem="rko-v8-nX7" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="ibA-Q6-b3v"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>

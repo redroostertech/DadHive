@@ -1,5 +1,6 @@
 import UIKit
 import SDWebImage
+import RRoostSDK
 
 protocol UserDetailMapViewDelegate: class {
     func detailsRequestedForUser(person: User)

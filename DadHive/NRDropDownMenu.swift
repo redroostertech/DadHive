@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import RRoostSDK
 
 protocol NRDropDownMenuDelegate {
     func didSelect(atIndex index: Int)

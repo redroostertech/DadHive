@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RRoostSDK
 
 enum Errors: Error {
     case InvalidCredentials

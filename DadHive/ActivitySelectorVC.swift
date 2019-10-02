@@ -1,5 +1,6 @@
 import UIKit
 import LGButton
+import RRoostSDK
 
 protocol ActivitySelectorDelegate: class {
     func didStartHive(_ viewController: UIViewController, button: LGButton)

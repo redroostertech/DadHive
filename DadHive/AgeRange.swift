@@ -1,5 +1,6 @@
 import Foundation
 import ObjectMapper
+import RRoostSDK
 
 class AgeRange: Mappable, CustomStringConvertible {
 
@@ -10,9 +11,9 @@ class AgeRange: Mappable, CustomStringConvertible {
     required init?(map: Map) { }
 
     func mapping(map: Map) {
-        id <- map["ageRangeId"]
-        min <- map["ageRangeMin"]
-        max <- map["ageRangeMax"]
+        id <- map["id"]
+        min <- map["min"]
+        max <- map["max"]
     }
 
     public var toDict: [String: Any] {

@@ -1,6 +1,7 @@
 import Foundation
-import Firebase
+import FirebaseCore
 import FirebaseAuth
+import RRoostSDK
 
 public class CurrentUser {
     static let shared = CurrentUser()
@@ -32,8 +33,8 @@ public class CurrentUser {
                 print(err)
                 completion(nil, err, nil)
             } else {
-                if let res = response as? [String: Any], let data = res["data"] as? [String: Any], let userData = data["user"] as? [String: Any], let user = User(JSON: userData) {
-                    completion(user, nil, userData)
+                if let res = response as? [String: Any], let data = res["data"] as? [String: Any], let user = User(JSON: data) {
+                    completion(user, nil, data)
                 } else {
                     FIRAuthentication.signout()
                 }
@@ -42,17 +43,19 @@ public class CurrentUser {
     }
     
     fileprivate func updateUser(_ data: [String: Any],  completion: @escaping (User?, Error?, [String: Any]?) -> Void) {
-        guard let convertedData = data as? [String: String] else {
+        guard let convertedData = data as? [String: Any] else {
             return completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]), nil)
         }
-        let parameters: [String: String] = convertedData
+        let parameters: [String: Any] = convertedData
         apiRepo.performRequest(path: Api.Endpoint.editUserProfile, method: .post, parameters: parameters) { (response, error) in
             if let err = error {
                 print(err)
                 completion(nil, err, nil)
             } else {
-                if let res = response as? [String: Any], let data = res["data"] as? [String: Any], let userData = data["user"] as? [String: Any], let user = User(JSON: userData) {
-                    completion(user, nil, userData)
+                if let res = response as? [String: Any], let data = res["data"] as? [String: Any] {
+                    self.refresh {
+                      completion(self.user, nil, data)
+                    }
                 } else {
                     FIRAuthentication.signout()
                 }
@@ -107,20 +110,18 @@ extension CurrentUser {
 
   }
 
-    func updateProfile(withData data: [String: Any?], completion: @escaping (Error?) -> Void) {
-        guard let user = self.user else {
+    func updateProfile(withData data: [String: Any]?, completion: @escaping (Error?) -> Void) {
+        guard let user = self.user, let data = data else {
             completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : DadHiveError.emptyAPIResponse.rawValue]))
             return
         }
-      var params: [String: Any] = data
+        var params: [String: Any] = data
         params["userId"] = user.uid ?? ""
         updateUser(params) { (user, error, userDict) in
             if let err = error {
                 completion(err)
             } else {
-                self.refresh({
-                    completion(nil)
-                })
+                completion(nil)
             }
         }
     }

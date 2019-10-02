@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RRoostSDK
 
 public enum UserType {
     case sudo

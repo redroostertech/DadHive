@@ -1,6 +1,7 @@
 import Foundation
 import ObjectMapper
 import SDWebImage
+import RRoostSDK
 
 class Media: Mappable, CustomStringConvertible {
 
@@ -16,7 +17,7 @@ class Media: Mappable, CustomStringConvertible {
         order <- map["order"]
 
         if let urlString = self.urlString, let url = URL(string: urlString) {
-            SDWebImageManager().loadImage(with: url, options: .progressiveDownload, progress: { (time, time2, url) in
+          SDWebImageManager().loadImage(with: url, options: .progressiveLoad, progress: { (time, time2, url) in
 //                print("Is loading \(time) with \(time2) for \(url)")
             }) { (image, data, error, cacheType, success, url) in
 //                print("A lot happened with the image")

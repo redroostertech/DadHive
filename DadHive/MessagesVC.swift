@@ -2,6 +2,7 @@ import UIKit
 import Foundation
 import APESuperHUD
 import SDWebImage
+import RRoostSDK
 
 class ConversationCell: UITableViewCell {
     @IBOutlet weak var imgvwRecipient: UIImageView!
@@ -14,15 +15,15 @@ class ConversationCell: UITableViewCell {
             guard let conversationwrapper = self.conversationWrapper, let conversation = conversationwrapper.conversation, let participants = conversationwrapper.participants else { return }
           self.lblRecipientName.text = conversationwrapper.getChatParticipants()
 
-            self.lblLastMessage.text = conversation.lastMessageText ?? "No message."
+            self.lblLastMessage.text = conversation.lastMessageText ?? "Be the first to send a message."
             self.lblMessageSentDate.text = conversation.conversationDate?.toString()
-//            self.imgvwRecipient.sd_setImage(with: conversation.trueRecipient?.imageSectionOne[0].url, placeholderImage: UIImage(named: "unknown")!, options: SDWebImageOptions.continueInBackground, completed: nil)
+            self.imgvwRecipient.sd_setImage(with: conversationwrapper.getRecipients()[0].imageSectionOne[0].url, placeholderImage: UIImage(named: "unknown")!, options: SDWebImageOptions.continueInBackground, completed: nil)
         }
     }
 
     override func awakeFromNib() {
+        imgvwRecipient.makeCircular()
         imgvwRecipient.applyClipsToBounds(true)
-        imgvwRecipient.makeAspectFill()
         lblRecipientName.makeOneLine()
         lblLastMessage.makeOneLine()
         lblMessageSentDate.makeOneLine()
@@ -60,6 +61,7 @@ class MessagesVC: UIViewController {
 
   // MARK: - Public member methods
     func getConversations(_ completion: @escaping () -> Void) {
+      hideHUD()
       guard let currentuser = CurrentUser.shared.user else { return }
         conversationWrappers.removeAll()
         let parameters: [String: Any] = [

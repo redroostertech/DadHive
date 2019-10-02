@@ -1,5 +1,6 @@
 import UIKit
-import Firebase
+import FirebaseStorage
+import RRoostSDK
 
 class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
@@ -43,6 +44,7 @@ class MyProfileVC: UITableViewController, UINavigationControllerDelegate, UIImag
         super.viewDidLoad()
         
         hideNavigationBarHairline()
+      self.navigationController?.navigationBar.tintColor = .white
         self.tableView.estimatedRowHeight = 100
         self.tableView.rowHeight = UITableViewAutomaticDimension
 
@@ -333,7 +335,7 @@ extension MyProfileVC {
                     btn.removeTarget(self, action: #selector(MyProfileVC.uploadPhoto(_:)), for: .touchUpInside)
                     btn.addTarget(self, action: #selector(MyProfileVC.deletePhoto(_:)), for: .touchUpInside)
                 } else {
-                    btn.setImage(UIImage(named: "placeholder"), for: .normal)
+                    btn.setImage(UIImage(named: "unknown"), for: .normal)
                 }
                 i += 1
             }

@@ -1,4 +1,5 @@
 import UIKit
+import RRoostSDK
 
 class ViewController: UIViewController {
 
@@ -8,6 +9,7 @@ class ViewController: UIViewController {
     @IBOutlet private var txtPassword: UITextField!
     @IBOutlet private var txtEmail: UITextField!
     @IBOutlet private var imageLogo: UIImageView!
+    @IBOutlet weak var btnForgotPassword: UIButton!
 
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
@@ -62,6 +64,46 @@ class ViewController: UIViewController {
       guard credentials.isValid() else { return showErrorAlert(message: DadHiveError.signInCredentialsError.rawValue) }
       login(withCredentials: credentials)
     }
+  @IBAction func forgotPassword(_ sender: UIButton) {
+    let alert = UIAlertController(style: .alert, title: "Forgot Password")
+
+    var email: String?
+
+    let config: TextField.Config = { textField in
+      textField.becomeFirstResponder()
+      textField.textColor = .black
+      textField.placeholder = "Email Address"
+      textField.left(image: UIImage(named: "ic_account"), color: .black)
+      textField.leftViewPadding = 12
+      textField.borderWidth = 1
+      textField.cornerRadius = 8
+      textField.borderColor = UIColor.lightGray.withAlphaComponent(0.5)
+      textField.backgroundColor = nil
+      textField.keyboardAppearance = .default
+      textField.keyboardType = .default
+      textField.isSecureTextEntry = false
+      textField.returnKeyType = .done
+      textField.action { textField in
+        guard let text = textField.text else { return }
+        email = text
+      }
+    }
+    alert.addOneTextField(configuration: config)
+    alert.addAction(image: nil, title: "OK", color: nil, style: .default, isEnabled: true) { action in
+      guard let text = email else { return }
+      FIRAuthentication.forgotPassword(email: text, completion: { error in
+        DispatchQueue.main.async {
+          alert.dismiss(animated: true, completion: nil)
+        }
+        if let _ = error {
+          self.showError("Something went wrong trying to reset your password. Please try again.")
+        } else {
+          self.showHUD("Success! Check your email for the password reset link.")
+        }
+      })
+    }
+    self.present(alert, animated: true, completion: nil)
+  }
 }
 
 // MARK: - UITextFieldDelegate

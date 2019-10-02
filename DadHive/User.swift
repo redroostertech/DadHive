@@ -2,6 +2,7 @@ import Foundation
 import ObjectMapper
 import FirebaseAuth
 import RRoostSDK
+import FirebaseInstanceID
 
 class Users: Mappable {
     var users: [User]?
@@ -496,12 +497,39 @@ class User: Mappable, CustomStringConvertible {
     }
 
     func setNotificationToggle(_ state: Bool) {
-        CurrentUser.shared.updateProfile(withData: [
-            "type": "notifications",
-             "value": state]) { (error) in
-            if error == nil {
-                self.settings?.notifications = state
+        var device_id = ""
+        InstanceID.instanceID().instanceID { (result, error) in
+          if let error = error {
+            print("Error fetching remote instance ID: \(error)")
+          } else if let result = result {
+            print("Remote instance ID token: \(result.token)")
+            device_id = "\(result.token)"
+            CurrentUser.shared.updateProfile(withData: [
+              "type": "notifications",
+              "value": state]) { (error) in
+                if error == nil {
+                  self.settings?.notifications = state
+                }
             }
+            if (state) {
+
+              self.change(type: "deviceId", value: device_id) { error in
+                if let _ = error {
+                  print("There was an error saving device id.")
+                } else {
+                  print("Device ID saved")
+                }
+              }
+            } else {
+              self.change(type: "deviceId", value: "") { error in
+                if let _ = error {
+                  print("There was an error saving device id.")
+                } else {
+                  print("Device ID was removed")
+                }
+              }
+            }
+          }
         }
     }
 

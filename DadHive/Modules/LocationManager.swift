@@ -31,24 +31,21 @@ class LocationManager: NSObject {
         geoCoder = CLGeocoder()
         super.init()
         print(" \(kAppName) | LocationManagerModule Handler Initialized")
-        if let locationmanager = manager {
-            locationmanager.delegate = self
-            locationmanager.desiredAccuracy = kCLLocationAccuracyBest
-            requestWhenInUserAuthorization()
-        }
     }
 
     func checkPermissions() {
         if isAuthorizationGranted {
             delegate?.didRetrieveStatus(self, authorizationStatus: isAuthorizationGranted)
         } else {
-            requestWhenInUserAuthorization()
+            requestLocation()
         }
     }
 
     func requestLocation() {
-        if let locationmanager = manager, isAuthorizationGranted {
-            locationmanager.requestLocation()
+        if let locationmanager = manager {
+            locationmanager.delegate = self
+            locationmanager.desiredAccuracy = kCLLocationAccuracyBest
+            requestWhenInUserAuthorization()
         } else {
             self.delegate?.willShowError(self, error: Errors.LocationAccessDisabled)
         }

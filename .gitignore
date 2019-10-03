@@ -90,3 +90,10 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+DadHive.xcodeproj/xcuserdata/mwestbrooks.xcuserdatad/xcschemes/xcschememanagement.plist
+DadHive.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+DadHive.xcworkspace/xcuserdata/mwestbrooks.xcuserdatad/IDEFindNavigatorScopes.plist
+DadHive.xcworkspace/xcuserdata/mwestbrooks.xcuserdatad/UserInterfaceState.xcuserstate
+DadHive.xcworkspace/xcuserdata/mwestbrooks.xcuserdatad/WorkspaceSettings.xcsettings
+Pods/Pods.xcodeproj/xcuserdata/mwestbrooks.xcuserdatad/xcschemes/xcschememanagement.plist

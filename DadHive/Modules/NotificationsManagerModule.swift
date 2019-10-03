@@ -25,31 +25,20 @@ class NotificationsManagerModule: NSObject {
         }
     }
 
-    func checkNotificationPermissions(_ completion: @escaping (DadHiveError?) -> Void) {
+    func checkNotificationPermissions(_ completion: @escaping (Bool) -> Void) {
         getNotificationSettings { (access) in
             if (!access) {
                 self.notificationManager.requestAuthorization(options: [.alert, .badge, .sound]) {
                     (success, error) in
                     if let _ = error {
-                        completion(nil)
+                        completion(false)
                     } else {
-                        self.getNotificationSettings { (access) in
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: kNotificationAccessCheckObservationKey), object: nil, userInfo: ["access": access])
+                        completion(access)
 
-                            CurrentUser.shared.user?.setNotificationToggle(access)
-
-                            if let _ = DefaultsManager().retrieveIntDefault(forKey: kNotificationsAccessCheck), access == false {
-                                completion(DadHiveError.notificationAccessDisabled)
-                            } else {
-                                DefaultsManager().setDefault(withData: 1, forKey: kNotificationsAccessCheck)
-                                completion(nil)
-
-                            }
-                        }
                     }
                 }
             } else {
-                completion(DadHiveError.notificationAccessDisabled)
+                completion(true)
             }
         }
     }

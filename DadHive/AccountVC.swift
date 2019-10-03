@@ -44,6 +44,7 @@ class AccountVC: UITableViewController {
             self.showError("Please go to your settings and turn on notifications.")
             self.popViewController()
           }
+          return
         }
 
         currentuser.setDeviceID(forState: access, completion: { (error, deviceIDSaved) in

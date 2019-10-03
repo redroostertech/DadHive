@@ -45,6 +45,22 @@ class ViewMyPostsViewController: UIViewController {
     topicsTable.delegate = self
     topicsTable.dataSource = self
     topicsTable.register(TopicsCell.nib, forCellReuseIdentifier: TopicsCell.identifier)
+    topicsTable.emptyDataSetView { view in
+      view.titleLabelString(NSAttributedString(string: "Welcome to DadHive"))
+        .detailLabelString(NSAttributedString(string: "You have not posted to Dadhive. Share today!"))
+        .image(UIImage(named: "dadhive-hive-sm"))
+        .dataSetBackgroundColor(UIColor.white)
+        .shouldDisplay(true)
+        .shouldFadeIn(true)
+        .isTouchAllowed(true)
+        .isScrollAllowed(true)
+        .verticalOffset(-40.0)
+        .verticalSpace(24.0)
+        .buttonTitle(NSAttributedString(string: "Share a Topic"), for: .normal)
+        .didTapDataButton {
+          self.performSegue(withIdentifier: "presentCreateTopicFromMyActivity", sender: self)
+      }
+    }
   }
 
   func loadPosts() {

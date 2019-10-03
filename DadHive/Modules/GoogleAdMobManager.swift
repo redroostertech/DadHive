@@ -20,7 +20,7 @@ class GoogleAdMobManager: NSObject {
       ad.delegate = self
       let adRequest = GADRequest()
       if !isLive {
-        adRequest.testDevices = [kGADSimulatorID]
+        adRequest.testDevices = [kGADSimulatorID, "e74c3e5db67134eb3dfc9e5182f9cd6c"]
       }
       ad.load(GADRequest())
       return ad
@@ -32,7 +32,7 @@ class GoogleAdMobManager: NSObject {
     ad.delegate = self
     let adRequest = GADRequest()
     if !isLive {
-      adRequest.testDevices = [kGADSimulatorID]
+      adRequest.testDevices = [kGADSimulatorID, "e74c3e5db67134eb3dfc9e5182f9cd6c"]
     }
     ad.load(GADRequest())
     return ad

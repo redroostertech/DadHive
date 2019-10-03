@@ -42,15 +42,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     if var currentCount = defaultsManager.retrieveIntDefault(forKey: kNotificationCount) {
       currentCount += 1
       defaultsManager.setDefault(withData: currentCount, forKey: kNotificationCount)
-      UIApplication.shared.applicationIconBadgeNumber = currentCount
+      application.applicationIconBadgeNumber = currentCount
     } else {
-      UIApplication.shared.applicationIconBadgeNumber = 1
+      resetBadgeCount(application)
     }
+  }
+
+  func resetBadgeCount(_ application: UIApplication) {
+    application.applicationIconBadgeNumber = 0
+    defaultsManager.setDefault(withData: 0, forKey: kNotificationCount)
   }
 
   func applicationDidBecomeActive(_ application: UIApplication) {
     // reset badge count
-    updateBadgeCount(application)
+    resetBadgeCount(application)
   }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {

@@ -47,17 +47,22 @@
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Need your photo album</string>
+	<string>We need access to your media library to enable you to upload a photo for your profile picture</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Need your camera</string>
+	<string>We need access to your camera to enable you to take a photo for your profile</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Need your location</string>
+	<string>We need your location to show you localized content and connect you with other mem bers</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Need your location</string>
+	<string>We need your location to show you localized content and connect you with other mem bers</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Need your camera</string>
+	<string>We need access to your microphone to enable you to record video and audio content for the platform</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Need your photo album</string>
+	<string>We need access to youf library to enable you to upload a photo for your profile picture</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

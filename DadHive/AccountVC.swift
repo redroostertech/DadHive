@@ -29,12 +29,33 @@ class AccountVC: UITableViewController {
     }
 
     @IBAction func toggleNotifications(_ sender: UISwitch) {
-        CurrentUser.shared.user?.setNotificationToggle(sender.isOn)
+      guard let currentuser = CurrentUser.shared.user else { return }
+
+      if sender.isOn == false {
+        currentuser.setNotificationToggle(false)
+        return
+      }
+
+      NotificationsManagerModule.shared.checkNotificationPermissions { access in
+
+        if access == false {
+          DispatchQueue.main.async {
+            sender.isOn = false
+            self.showError("Please go to your settings and turn on notifications.")
+            self.popViewController()
+          }
+        }
+
+        currentuser.setDeviceID(forState: access, completion: { (error, deviceIDSaved) in
+            currentuser.setNotificationToggle(deviceIDSaved)
+        })
+      }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         setupUI()
     }
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 5
     }
@@ -159,6 +180,18 @@ class AccountVC: UITableViewController {
 extension AccountVC {
     func setupUI() {
         lblEmail.text = String(describing: CurrentUser.shared.user?.email ?? "No Response")
-        swPushNotifications.isOn = CurrentUser.shared.user?.settings?.notifications ?? false
+        NotificationsManagerModule.shared.checkNotificationPermissions { access in
+
+          if access == false {
+            DispatchQueue.main.async {
+              self.swPushNotifications.isOn = false
+            }
+            return
+          }
+
+          DispatchQueue.main.async {
+            self.swPushNotifications.isOn = CurrentUser.shared.user?.settings?.notifications ?? false
+          }
+        }
     }
 }

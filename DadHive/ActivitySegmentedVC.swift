@@ -41,6 +41,9 @@ class ActivitySegmentedVC: UIViewController {
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
+    NotificationCenter.default.post(name: Notification.Name(kResetNotificationCount), object: self, userInfo: [
+      "updateBadgeCount": 1
+      ])
     let parameters: [CAPSPageMenuOption] = [
       .menuItemSeparatorWidth(0),
       .useMenuLikeSegmentedControl(true),

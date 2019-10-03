@@ -496,41 +496,54 @@ class User: Mappable, CustomStringConvertible {
         }
     }
 
-    func setNotificationToggle(_ state: Bool) {
-        var device_id = ""
-        InstanceID.instanceID().instanceID { (result, error) in
-          if let error = error {
-            print("Error fetching remote instance ID: \(error)")
-          } else if let result = result {
-            print("Remote instance ID token: \(result.token)")
-            device_id = "\(result.token)"
-            CurrentUser.shared.updateProfile(withData: [
-              "type": "notifications",
-              "value": state]) { (error) in
-                if error == nil {
-                  self.settings?.notifications = state
-                }
-            }
-            if (state) {
+  func setDeviceID(forState state: Bool, completion: @escaping (Error?, Bool) -> Void) {
+    if state {
+      var device_id = ""
+      InstanceID.instanceID().instanceID { (result, error) in
+        if let error = error {
 
-              self.change(type: "deviceId", value: device_id) { error in
-                if let _ = error {
-                  print("There was an error saving device id.")
-                } else {
-                  print("Device ID saved")
-                }
-              }
+          print("Error fetching remote instance ID: \(error)")
+          completion(error, false)
+
+        } else if let result = result {
+
+          print("Remote instance ID token: \(result.token)")
+          device_id = "\(result.token)"
+
+          self.change(type: "deviceId", value: device_id) { error in
+            if let err = error {
+              print("There was an error saving device id.")
+              completion(err, false)
             } else {
-              self.change(type: "deviceId", value: "") { error in
-                if let _ = error {
-                  print("There was an error saving device id.")
-                } else {
-                  print("Device ID was removed")
-                }
-              }
+              print("Device ID saved")
+              completion(nil, true)
             }
           }
+        } else {
+          print("Do nothing")
         }
+      }
+    } else {
+
+      self.change(type: "deviceId", value: "") { error in
+        if let err = error {
+          print("There was an error saving device id.")
+          completion(err, false)
+        } else {
+          print("Device ID was removed")
+          completion(nil, false)
+        }
+      }
+    }
+  }
+    func setNotificationToggle(_ state: Bool) {
+      CurrentUser.shared.updateProfile(withData: [
+        "type": "notifications",
+        "value": state]) { (error) in
+          if error == nil {
+            self.settings?.notifications = state
+          }
+      }
     }
 
     func setMaximumDistance(_ distance: Double) {

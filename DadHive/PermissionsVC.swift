@@ -18,36 +18,18 @@ class PermissionsVC: UIViewController {
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        notificationCenter.addObserver(self,
-                                       selector: #selector(PermissionsVC.observeNotificationsAccessCheck(_:)),
-                                       name: Notification.Name(rawValue: kNotificationAccessCheckObservationKey),
-                                       object: nil)
         locationManager.delegate = self
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateLocationButton(access: locationManager.isAuthorizationGranted)
-
         notificationManager.getNotificationAccess { (access) in
-            self.updateNotificationButton(access: access)
+             self.updateNotificationButton(access: access)
         }
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        notificationCenter.removeObserver(self, name: Notification.Name(rawValue: kNotificationAccessCheckObservationKey), object: nil)
-    }
-    
+
     // MARK: - Public member functions
-    @objc
-    func observeNotificationsAccessCheck(_ notification: Notification) {
-        if let access = notification.userInfo?["access"] as? Bool {
-            self.updateNotificationButton(access: access)
-        } else {
-            self.updateNotificationButton(access: false)
-        }
-    }
     
     private func updateLocationButton(access: Bool) {
         DispatchQueue.main.async {
@@ -70,12 +52,14 @@ class PermissionsVC: UIViewController {
     }
 
     @IBAction func enableNotification(_ sender: UIButton) {
-        notificationManager.checkNotificationPermissions { (error) in
-            if let error = error {
-                self.showErrorAlert(error)
-            } else {
-                print("Check notifications permissions finished")
-            }
+        notificationManager.checkNotificationPermissions { access in
+              self.updateNotificationButton(access: access)
+              CurrentUser.shared.user?.setNotificationToggle(access)
+              if let _ = DefaultsManager().retrieveIntDefault(forKey: kNotificationsAccessCheck), access == false {
+                DefaultsManager().setDefault(withData: 0, forKey: kNotificationsAccessCheck)
+              } else {
+                DefaultsManager().setDefault(withData: 1, forKey: kNotificationsAccessCheck)
+              }
         }
     }
 

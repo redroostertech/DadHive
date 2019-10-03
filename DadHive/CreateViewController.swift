@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import HTagView
 
 private var layout: UICollectionViewLayout {
   let layout = UICollectionViewFlowLayout()
@@ -29,7 +30,8 @@ private var currentSelection: CategoryCell?
 
 class CreateViewController: UIViewController {
 
-  @IBOutlet private weak var categoriesCollection: UICollectionView!
+  @IBOutlet weak var scrollView: UIScrollView!
+  @IBOutlet weak var categoriesCollection: HTagView!
   @IBOutlet weak var textView: UITextView!
   @IBOutlet weak var lblSelectCategory: TitleLabel!
 
@@ -61,10 +63,10 @@ class CreateViewController: UIViewController {
   }
 
   private func setupCategoriesCollection() {
-    categoriesCollection.setCollectionViewLayout(layout, animated: true)
-    categoriesCollection.delegate = self
-    categoriesCollection.dataSource = self
-    categoriesCollection.register(CategoryCell.nib, forCellWithReuseIdentifier: CategoryCell.identifier)
+    DispatchQueue.main.async {
+      self.categoriesCollection.delegate = self
+      self.categoriesCollection.dataSource = self
+    }
   }
 
   func loadCategories() {
@@ -72,7 +74,8 @@ class CreateViewController: UIViewController {
       if let _ = error {
         self.showHUD(kGenericError)
       } else {
-        categories = cats
+        guard let container = cats else { return }
+        categories = container
         self.categoriesCollection.reloadData()
       }
     }
@@ -147,40 +150,7 @@ class CreateViewController: UIViewController {
       self.dismiss(animated: true, completion: nil)
     }
   }
-}
 
-extension CreateViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return categoriesCount
-  }
-
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCell.identifier, for: indexPath) as? CategoryCell, let categories = categories?.categories else { return UICollectionViewCell() }
-    let category = categories[indexPath.row]
-    cell.configure(category: category)
-    return cell
-  }
-
-  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    guard let categories = categories?.categories, let selectedCell = collectionView.cellForItem(at: indexPath) as? CategoryCell else { return }
-
-    let category = categories[indexPath.row]
-
-    currentSelection?.showSelectionIndicator = false
-    currentSelection = selectedCell
-
-    selectedCell.showSelectionIndicator = true
-
-    for unselectedCell in collectionView.visibleCells {
-      guard let unselectedcell = unselectedCell as? CategoryCell else { return }
-      if unselectedcell != selectedCell {
-        unselectedcell.showSelectionIndicator = false
-      }
-    }
-
-    selectedCategory = category
-  }
 }
 
 extension CreateViewController: UITextViewDelegate {
@@ -195,4 +165,40 @@ extension CreateViewController: UITextViewDelegate {
       textView.text = ""
     }
   }
+}
+
+extension CreateViewController: HTagViewDelegate, HTagViewDataSource {
+  // MARK: - HTagViewDataSource
+  func numberOfTags(_ tagView: HTagView) -> Int {
+    guard let cats = categories?.categories else { return 0 }
+    return cats.count
+  }
+
+  func tagView(_ tagView: HTagView, titleOfTagAtIndex index: Int) -> String {
+    guard let cats = categories?.categories else { return "" }
+    let item = cats[index]
+    return item.label ?? ""
+  }
+
+  func tagView(_ tagView: HTagView, tagTypeAtIndex index: Int) -> HTagType {
+    return .select
+    // return .cancel
+  }
+
+  func tagView(_ tagView: HTagView, tagWidthAtIndex index: Int) -> CGFloat {
+    return .HTagAutoWidth
+    // return 150
+  }
+
+  func tagView(_ tagView: HTagView, tagSelectionDidChange selectedIndices: [Int]) {
+    guard let cats = categories?.categories, let selectedIndex = selectedIndices.first else { return }
+    selectedCategory = cats[selectedIndex]
+  }
+
+  func tagView(_ tagView: HTagView, didReceiveNewFrame frame: CGRect) {
+    if self.scrollView.contentSize != frame.size {
+      self.scrollView.contentSize != frame.size
+    }
+  }
+  
 }

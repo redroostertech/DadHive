@@ -928,7 +928,7 @@
                             </button>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="qFS-fZ-8eG">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1T4-Ho-yh4">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1T4-Ho-yh4">
                                 <rect key="frame" x="311" y="0.0" width="48" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -2507,38 +2507,82 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7EH-Ne-bOI">
-                                <rect key="frame" x="0.0" y="267" width="375" height="58"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="58" id="Vjk-rV-oqt"/>
-                                </constraints>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="AEa-hq-f1d">
-                                    <size key="itemSize" width="50" height="50"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells/>
-                            </collectionView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a Category" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="THK-ep-AZm" customClass="TitleLabel" customModule="DadHive" customModuleProvider="target">
                                 <rect key="frame" x="16" y="238" width="343" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aPY-Na-R4l">
+                                <rect key="frame" x="0.0" y="267" width="375" height="400"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1cv-pV-9X7" customClass="HTagView" customModule="HTagView">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="400"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" priority="250" constant="400" id="89c-43-3tM"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                                <color key="value" red="0.42655369640000002" green="0.475846082" blue="0.4802647531" alpha="1" colorSpace="calibratedRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="selectedTextColor">
+                                                <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="tagBackgroundColor">
+                                                <color key="value" red="0.90823972230000005" green="0.92638683320000004" blue="0.93171715740000005" alpha="1" colorSpace="calibratedRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="tagSelectedBackgroundColor">
+                                                <color key="value" red="0.58431372550000005" green="0.81176470590000005" blue="0.49019607840000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="enableRemoveButton" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="btwTags">
+                                                <real key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="multiselect" value="NO"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="tagMainBackColor">
+                                                <color key="value" red="0.58431372550000005" green="0.81176470590000005" blue="0.49019607840000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="tagMainTextColor">
+                                                <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="tagSecondTextColor">
+                                                <color key="value" red="0.42655369640000002" green="0.475846082" blue="0.4802647531" alpha="1" colorSpace="calibratedRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="tagSecondBackColor">
+                                                <color key="value" red="0.90823972230000005" green="0.92638683320000004" blue="0.93171715740000005" alpha="1" colorSpace="calibratedRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="btwLines">
+                                                <real key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="1cv-pV-9X7" firstAttribute="top" secondItem="aPY-Na-R4l" secondAttribute="top" id="AlN-LJ-QR5"/>
+                                    <constraint firstItem="1cv-pV-9X7" firstAttribute="height" secondItem="aPY-Na-R4l" secondAttribute="height" id="CWW-rP-cP1"/>
+                                    <constraint firstAttribute="trailing" secondItem="1cv-pV-9X7" secondAttribute="trailing" id="Dgl-W4-dIM"/>
+                                    <constraint firstAttribute="bottom" secondItem="1cv-pV-9X7" secondAttribute="bottom" id="n71-yh-a93"/>
+                                    <constraint firstItem="1cv-pV-9X7" firstAttribute="leading" secondItem="aPY-Na-R4l" secondAttribute="leading" id="svG-ET-XAJ"/>
+                                    <constraint firstItem="1cv-pV-9X7" firstAttribute="width" secondItem="aPY-Na-R4l" secondAttribute="width" id="y5W-cA-UFW"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="THK-ep-AZm" firstAttribute="leading" secondItem="iWC-J1-HQy" secondAttribute="leading" constant="16" id="1OF-2s-fYm"/>
+                            <constraint firstItem="aPY-Na-R4l" firstAttribute="top" secondItem="THK-ep-AZm" secondAttribute="bottom" constant="8" id="4Hd-tR-r3j"/>
                             <constraint firstItem="THK-ep-AZm" firstAttribute="top" secondItem="FTZ-fp-AbG" secondAttribute="bottom" constant="8" id="5zm-eD-1Qm"/>
-                            <constraint firstItem="7EH-Ne-bOI" firstAttribute="top" secondItem="THK-ep-AZm" secondAttribute="bottom" constant="8" id="DSY-hF-68s"/>
+                            <constraint firstItem="aPY-Na-R4l" firstAttribute="leading" secondItem="iWC-J1-HQy" secondAttribute="leading" id="6Vj-4m-dsJ"/>
+                            <constraint firstItem="aPY-Na-R4l" firstAttribute="trailing" secondItem="iWC-J1-HQy" secondAttribute="trailing" id="CaB-Dl-ZYC"/>
+                            <constraint firstItem="iWC-J1-HQy" firstAttribute="bottom" secondItem="aPY-Na-R4l" secondAttribute="bottom" id="DKe-hl-Xsw"/>
                             <constraint firstItem="FTZ-fp-AbG" firstAttribute="leading" secondItem="iWC-J1-HQy" secondAttribute="leading" constant="16" id="EUG-CQ-TbA"/>
                             <constraint firstItem="iWC-J1-HQy" firstAttribute="trailing" secondItem="FTZ-fp-AbG" secondAttribute="trailing" constant="16" id="Zf9-rK-gbH"/>
                             <constraint firstItem="iWC-J1-HQy" firstAttribute="trailing" secondItem="THK-ep-AZm" secondAttribute="trailing" constant="16" id="ZqO-Q1-2hb"/>
-                            <constraint firstItem="7EH-Ne-bOI" firstAttribute="leading" secondItem="iWC-J1-HQy" secondAttribute="leading" id="axU-me-5FB"/>
                             <constraint firstItem="FTZ-fp-AbG" firstAttribute="top" secondItem="iWC-J1-HQy" secondAttribute="top" constant="16" id="sly-tP-sws"/>
-                            <constraint firstItem="7EH-Ne-bOI" firstAttribute="trailing" secondItem="iWC-J1-HQy" secondAttribute="trailing" id="yzO-em-Nys"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="iWC-J1-HQy"/>
                     </view>
@@ -2571,14 +2615,15 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="categoriesCollection" destination="7EH-Ne-bOI" id="WgJ-47-hpj"/>
+                        <outlet property="categoriesCollection" destination="1cv-pV-9X7" id="UC0-yY-jOb"/>
                         <outlet property="lblSelectCategory" destination="THK-ep-AZm" id="ENS-vk-g1k"/>
+                        <outlet property="scrollView" destination="aPY-Na-R4l" id="IIb-tw-JyA"/>
                         <outlet property="textView" destination="FTZ-fp-AbG" id="pDo-3x-u8v"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9SY-2M-hKZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2766" y="3715"/>
+            <point key="canvasLocation" x="2765.5999999999999" y="3714.6926536731639"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hti-4I-tjM">

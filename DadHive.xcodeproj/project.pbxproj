@@ -192,6 +192,9 @@
 		D75DBBE42315E151000F6D98 /* ThoughtCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75DBBE22315E151000F6D98 /* ThoughtCell.swift */; };
 		D75DBBE52315E151000F6D98 /* ThoughtCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D75DBBE32315E151000F6D98 /* ThoughtCell.xib */; };
 		D75DBBE72315E4A3000F6D98 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75DBBE62315E4A3000F6D98 /* Post.swift */; };
+		D79409122345820000FE0981 /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D794090E234581FE00FE0981 /* CloseButton.swift */; };
+		D79409132345820000FE0981 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D794090F234581FE00FE0981 /* TagView.swift */; };
+		D79409142345820000FE0981 /* TagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7940910234581FE00FE0981 /* TagListView.swift */; };
 		D7DDF1E42329110800C3BC67 /* UIViewController+Chameleon+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DDF1E32329110800C3BC67 /* UIViewController+Chameleon+Extensions.swift */; };
 		D7DDF1E62329150500C3BC67 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DDF1E52329150500C3BC67 /* Category.swift */; };
 		D7DDF1E92329181300C3BC67 /* TopicsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7DDF1E72329181300C3BC67 /* TopicsCell.swift */; };
@@ -389,6 +392,9 @@
 		D75DBBE22315E151000F6D98 /* ThoughtCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThoughtCell.swift; sourceTree = "<group>"; };
 		D75DBBE32315E151000F6D98 /* ThoughtCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ThoughtCell.xib; sourceTree = "<group>"; };
 		D75DBBE62315E4A3000F6D98 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		D794090E234581FE00FE0981 /* CloseButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloseButton.swift; sourceTree = "<group>"; };
+		D794090F234581FE00FE0981 /* TagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		D7940910234581FE00FE0981 /* TagListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagListView.swift; sourceTree = "<group>"; };
 		D7DDF1E32329110800C3BC67 /* UIViewController+Chameleon+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Chameleon+Extensions.swift"; sourceTree = "<group>"; };
 		D7DDF1E52329150500C3BC67 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		D7DDF1E72329181300C3BC67 /* TopicsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsCell.swift; sourceTree = "<group>"; };
@@ -529,6 +535,7 @@
 		BA8D933721CF018F003A76FC /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D794090C234581FE00FE0981 /* TagListView */,
 				D70C5FA4233CEC8200A6DB61 /* Source */,
 				BA8D939521CFE26C003A76FC /* JSONStringToIntTransform.swift */,
 				BA8D939621CFE26D003A76FC /* JSONStringToStringTransform.swift */,
@@ -976,6 +983,16 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		D794090C234581FE00FE0981 /* TagListView */ = {
+			isa = PBXGroup;
+			children = (
+				D794090E234581FE00FE0981 /* CloseButton.swift */,
+				D794090F234581FE00FE0981 /* TagView.swift */,
+				D7940910234581FE00FE0981 /* TagListView.swift */,
+			);
+			path = TagListView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -988,6 +1005,7 @@
 				9BAEE40B1FC309920034356D /* Frameworks */,
 				9BAEE40C1FC309920034356D /* Resources */,
 				5C3864A7578F0D47FAE638EA /* [CP] Embed Pods Frameworks */,
+				D794090B2345792B00FE0981 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1012,6 +1030,9 @@
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Keychain = {
 								enabled = 0;
 							};
@@ -1102,6 +1123,7 @@
 				"${BUILT_PRODUCTS_DIR}/Freedom/Freedom.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/HTagView/HTagView.framework",
 				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
@@ -1135,6 +1157,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Freedom.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HTagView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hero.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
@@ -1176,6 +1199,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D794090B2345792B00FE0981 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1183,6 +1224,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D79409142345820000FE0981 /* TagListView.swift in Sources */,
+				D79409132345820000FE0981 /* TagView.swift in Sources */,
+				D79409122345820000FE0981 /* CloseButton.swift in Sources */,
 				BA8D939A21CFE272003A76FC /* JSONStringToIntTransform.swift in Sources */,
 				D72A45CA2337D13C00C3AF57 /* CAPSPageMenu+UIScrollViewDelegate.swift in Sources */,
 				BA714EE822AD6A2300B32BA8 /* LocationSearchVC.swift in Sources */,

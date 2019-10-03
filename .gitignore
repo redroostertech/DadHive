@@ -40,7 +40,7 @@ playground.xcworkspace
 Packages/
 Package.pins
 Package.resolved
-*.xcodeproj
+# *.xcodeproj
 
 # Xcode automatically generates this directory with a .xcworkspacedata file and xcuserdata
 # hence it is not needed unless you have added a package configuration file to your project
@@ -54,9 +54,13 @@ Package.resolved
 # https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
 #
 Pods/
+Podfile.lock
+forcemaps-ios_Example/Pods/
+forcemaps-ios_Example/Podfile.lock
+
 #
 # Add this line if you want to avoid checking in source code from the Xcode workspace
-*.xcworkspace
+# *.xcworkspace
 
 # Carthage
 #
@@ -86,10 +90,3 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
-
-DadHive.xcodeproj/xcuserdata/mwestbrooks.xcuserdatad/xcschemes/xcschememanagement.plist
-DadHive.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
-DadHive.xcworkspace/xcuserdata/mwestbrooks.xcuserdatad/IDEFindNavigatorScopes.plist
-DadHive.xcworkspace/xcuserdata/mwestbrooks.xcuserdatad/UserInterfaceState.xcuserstate
-DadHive.xcworkspace/xcuserdata/mwestbrooks.xcuserdatad/WorkspaceSettings.xcsettings
-Pods/Pods.xcodeproj/xcuserdata/mwestbrooks.xcuserdatad/xcschemes/xcschememanagement.plist
